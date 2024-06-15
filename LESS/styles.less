@@ -1,0 +1,79 @@
+@charset "utf-8";
+
+@maincoler: #444444;
+@titlecolor: (@maincoler - #222222);
+@linkcolor: (@maincoler + #222222);
+@mainFontSize: 12px;
+@titleFontSize: (@mainFontSize *2.0);
+
+@baseUrl : "http://www.abc.com";
+
+body{
+  background-image: url(@baseUrl);
+}
+
+.bordred{
+  border-top: dotted 1px red;
+  border-bottom: 1px 2px blue;
+}
+
+.rounded-corners(@radius:5px) {
+  border-radius: @radius;
+}
+
+
+
+
+//////////////////////
+
+#content h1 {
+  .rounded-corners;
+  background: silver;
+}
+
+nav h1 {
+  .bordred;
+}
+
+nav h1, #container > h1 {
+  .bordred;
+}
+
+body{
+  color: @maincoler;
+  font-size: @mainFontSize;
+  // 호출
+}
+h1{
+  color: @titlecolor;
+  font-size: @titleFontSize;
+}
+a{
+  color: @linkcolor;
+}
+
+#header {
+  color: black;
+  nav{
+    font-size: 16px;
+    a{
+      color: red;
+      &:hover {color: blueviolet;}
+    }
+    
+  }
+}
+
+
+// #header nav {
+//   font-size: 16px;
+// }
+// #header nav a{
+//   color: red;
+// }
+
+// #header nav a:hover{
+//   color: blue;
+// }
+
+

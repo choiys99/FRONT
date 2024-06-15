@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body{padding:50px}
+  .container div {text-align: center; color:#fff;font-size: 2em;}
+  .container div:nth-child(1) {background: #96ceb4;}
+  .container div:nth-child(2) {background: #ff6f69;}
+  .container div:nth-child(3) {background: #88d8b0;}
+  .container div:nth-child(4) {background: #ffcc5c;}
+  .container div:nth-child(5) {background: #96ceb4;}
+  .container div:nth-child(6) {background: #ff6f69;}
+  
+  .container{
+    display: grid;
+    gap: 3px;
+    /* grid-template-columns: repeat(3,1fr); */
+    /* 하나의 비율로 차지 1:1:1 */
+    /* grid-template-rows: repeat(2,150px) */
+    grid-template: repeat(2,150px) / repeat(3,1fr);
+  }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+    <div>6</div>
+  </div>
+  
+</body>
+</html>
+

@@ -1,0 +1,136 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Open Sans";
+    line-height: 1.618em;
+}
+
+.wrapper {
+    max-width: 60rem;
+    width: 100%;
+    margin: 5rem auto;
+    position: relative;
+    
+}
+
+a {
+    text-decoration: none;
+}
+
+nav {
+    display: flex;
+    justify-content: center; /* 가운데로 정렬 */
+    font-style: 1.2em;
+}
+.menu_item{
+    height: 3em; line-height: 3em;
+    /* 높이를 주고 높이 가운데로 지정 */
+
+}
+.menu_item a {
+    display: block;
+    /* 링크를 블럭속성으로 */
+    background: #3498db; color: #fff;
+    /* 배경 파란색 글자색 흰색 */
+    border-right: 0.2em solid #fff;
+    /* 각링크 오른쪽에 배경색과 같은 흰색을 넣음 */
+    padding-right: 2em;
+    position: relative;
+    z-index: 1;
+
+    overflow: hidden;
+}
+.menu_item:last-child a {
+    border-right:0;
+}
+.menu_item .fa {
+    background: #2980b9; width: 3em; line-height: inherit;
+    text-align: center; height: 100%; position: absolute;
+    left: 0;
+    transition: all 0.35s;
+}
+.menu_item span {
+    margin-left: 4.5em;
+    display: block;
+    /* 온전하게 속성을 먹일려면 block 속성이 되어야한다. */
+}
+.menu_item a::before{
+    content: '';
+    position: absolute;
+    left: -100%; top: 0; bottom: 0; right: 100%;
+    background: #2980b9;
+    transition: all 0.35s;
+    z-index: -1;
+    /* 컨텐츠 밑으로 깔리고 백그라운드 위로 */
+    
+}
+.open_menu,.burger {
+    display: none;
+}
+
+@media screen and (min-width:55rem){
+    .menu_item a:hover::before{
+        left: 0; right: 0;
+    }
+    .menu_item a:hover .fa {
+        font-size: 1.25em;
+        width: 3.6em;
+        
+    }        
+}
+@media screen and (max-width:55rem){
+    .menu_item span {
+        margin-left: 1em;
+        width: 0;
+        transition: 0.5s ease;
+    }
+    .menu_item a:hover span {
+        width: auto;
+        /* 너비 원래로 */
+        margin-left: 4.5em;
+        
+    }
+}
+@media screen and (max-width:30rem) {
+    .burger {
+        display: block;
+        width: 3em; height: 3em; background: #3498db; 
+        color: #fff; text-align: center; line-height: 3em;
+        margin-bottom: 0.25em; 
+        cursor: pointer;
+        transition: all 0.35s;
+    }
+    .open_menu:checked + .burger {
+        background: #2980b9;
+    }
+    .open_menu:checked ~ nav {
+        left: 0; right: 0;
+    }
+    
+    nav{
+        flex-direction: column;
+        position: absolute; width: 100%;
+        left: -100%; right: 100%;
+        transition: 0.35s;
+    }
+    .menu_item {
+        border-bottom: 0.25em solid #fff;
+        box-sizing: content-box;
+    }
+    .menu_item a {
+        border-right: 0; 
+    }
+    .menu_item a:hover::before{
+        left: 0; right: 0;
+    }
+    .menu_item a:hover .fa {
+        font-size: 1.25em;
+        width: 3.6em;        
+    }  
+    .menu_item span {
+        margin-left: 4.5em;
+    }      
+    
+}

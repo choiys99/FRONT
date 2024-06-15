@@ -1,0 +1,32 @@
+<style>
+  body{padding:50px}
+.container div {text-align: center; color:#fff;font-size: 2em;}
+.container div:nth-child(1) {background: #96ceb4;}
+.container div:nth-child(2) {background: #ff6f69;}
+.container div:nth-child(3) {background: #88d8b0;}
+.container div:nth-child(4) {background: #ffcc5c;}
+.container div:nth-child(5) {background: #96ceb4;}
+.container div:nth-child(6) {background: #ff6f69;}
+
+.container{
+  display: grid;
+  grid-template-columns: 100px auto ;
+  /* 앞에 100px 가운데는 나머지 뒤에는 100px */
+  grid-template-rows: 50px 50px 100px;
+  /* 가로 두줄 50px */
+  /*grid-gap: 5px*/ /* 권장하지않음 */
+  gap: 20px;
+  /* 차라리 이게 쓰는게좋다고함 */
+  
+  
+}
+
+</style>
+<div class="container">
+	<div>1</div>
+	<div>2</div>
+	<div>3</div>
+	<div>4</div>
+	<div>5</div>
+	<div>6</div>
+</div>

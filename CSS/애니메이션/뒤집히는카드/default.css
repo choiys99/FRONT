@@ -1,0 +1,25 @@
+body {
+  margin: 12px;
+}
+img {
+  border: 1px solid;
+  border-radius: 15px;
+}
+.card-container {
+  position: relative;
+  cursor: pointer;
+  height: 150px;
+  width: 150px;
+  margin: 100px;
+
+  perspective: 600px;
+}
+.card {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  transition: 1s;
+}
+.card:hover{
+  transform: rotateY(180deg);
+}

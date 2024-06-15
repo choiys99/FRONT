@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .todo {
+      display: inline;
+      padding-left: 0;
+    }
+
+    .todo li {
+      display: inline;
+    }
+    .todo li:last-child::before{
+      content: "and ";
+      font-size: 20px;
+    }
+
+    .todo li:not(:last-child)::after{
+      content: ",";
+      font-size: 40px;
+      
+    }
+
+    .todo li:last-child::after{
+      content: ". ";
+      font-size: 20px;
+    }
+    /* 마지막 list 제외하고 다 선택 */
+  </style>
+</head>
+
+<body>
+  <span>Things to do today:</span>
+  <ul class="todo">
+    <li>eat bacon</li>
+    <li>change the AC filter</li>
+    <li>pick up another gallon of milk</li>
+    <li>invade Antarctica</li>
+  </ul>
+
+
+</body>
+
+</html>

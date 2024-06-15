@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #4caf50;
+        color: white;
+        text-align: center;
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 36px;
+        margin-bottom: 20px;
+      }
+
+      .game-container {
+        background-color: white;
+        color: black;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .number-display {
+        font-size: 48px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      .button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      .button:hover {
+        background-color: #45a049;
+      }
+
+      .score-display {
+        font-size: 18px;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Guess My Number!</h1>
+      <p class="between">(Between 1 and 20)</p>
+      <button class="btn agin">Again!</button>
+      <div class="number">?</div>
+    </header>
+    <main>
+      <section class="left">
+        <input type="number" class="guess" />
+        <button class="btn check">Check!</button>
+      </section>
+      <section class="right">
+        <p class="message">Start guessing...</p>
+        <p class="Label-score">
+          Score:
+          <span class="score">20</span>
+        </p>
+        <p class="label-highscore">
+          Highscore:
+          <span class="highscore">0</span>
+        </p>
+      </section>
+    </main>
+    <script>
+      "use strict";
+
+      // console.log(document.querySelector(".message").textContent);
+      // document.querySelector(".message").textContent = "Correct Number";
+      // console.log(document.querySelector(".message").textContent);
+
+      // document.querySelector(".number").textContent = 13;
+      // document.querySelector(".score").textContent = 20;
+      // console.log(document.querySelector(".guess").value);
+      // document.querySelector(".guess").value = 23;
+
+      const number = document.querySelector(".number");
+      // number = Math.floor(Math.random() * 21);
+      // 랜덤값 설정
+      document.querySelector(".agin").addEventListener("click", function () {
+        number.textContent = Math.floor(Math.random() * 21);
+        const score = document.querySelector(".score");
+        score.textContent = 20;
+      }); // 랜덤값 다시 설정
+
+      document.querySelector(".check").addEventListener("click", function () {
+        const guess = Number(document.querySelector(".guess").value);
+        console.log(typeof guess, guess);
+
+        if (guess !== Number(number.textContent)) {
+          const scoreElement = document.querySelector(".score");
+          let score = Number(scoreElement.textContent);
+          score -= 1;
+          if (Number(number.textContent) > guess) {
+            document.querySelector(".message").textContent = "큼";
+          } else {
+            document.querySelector(".message").textContent = "작음";
+          }
+          scoreElement.textContent = score;
+        } else if (guess === Number(number.textContent)) {
+          alert("ㅊㅋㅊㅋ");
+          document.querySelector("body").style.background = "#fff";
+          number.textContent = Math.floor(Math.random() * 21);
+        }
+      });
+    </script>
+  </body>
+</html>

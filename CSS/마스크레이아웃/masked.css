@@ -1,0 +1,53 @@
+*{
+  box-sizing: border-box;
+}
+html{
+  font-size: 1em; font-family: 'Alike';
+  background-color: #262626; color: #d9d9d9;
+}
+body{
+  margin: 0;
+}
+img{max-width: 100%; height: auto;}
+h1,h2,h3,h4,h5,h6{
+  font-family: 'Roboto'; line-height: 1.313em;
+}
+h1{font-size: 1.5em; margin: 0.563em 0;}
+h2{font-size: 1.4em; margin: 0.625em 0;}
+h3{font-size: 1.3em; margin: 0.313em 0;}
+h4{font-size: 1.2em; margin: 0.313em 0;}
+h5{font-size: 1.125em; margin: 0.313em 0;}
+h6{font-size: 1em; margin: 0.75em 0;}
+
+
+.illustration_01{
+  background: #00c17b;
+  background-image:url(https://flexible.img.hani.co.kr/flexible/normal/970/777/imgdb/resize/2019/0926/00501881_20190926.JPG);
+  background-position: 0 50%;
+}
+.illustration_02{
+  background: lightcoral;
+  background-image:url(https://flexible.img.hani.co.kr/flexible/normal/970/777/imgdb/resize/2019/0926/00501881_20190926.JPG);
+  background-position: 100% 50%;
+}
+
+
+.content {
+  font-size: 1.3rem;
+  color: #262626;
+  background-repeat: no-repeat;
+  background-size: 49% auto;
+  background-attachment: fixed;
+}
+
+.separator{
+  text-align: center;
+}
+
+
+.right{
+  padding: 1.618em 6.472em 3.236em 50%;
+}
+.left{
+  padding: 1.618em  50% 6.472em 3.236em ;
+}

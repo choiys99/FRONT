@@ -1,0 +1,50 @@
+<script>
+  'use strict'
+
+
+  // for(let rep = 1; rep <= 10; rep++){
+  //   console.log(`반복문입니다 ${rep}`)
+  // }
+
+  const jon = [
+  'jons',
+  'test',
+  2037 -1991,
+  'teacher',
+  ['mc','무현','김대중'],
+  true
+  ];
+  
+  
+  const types = [];
+
+
+  for(let i = 0; i <jon.length; i++) {
+    console.log(jon[i],typeof jon[i]);
+
+    types.push(typeof jon[i]);
+    types[i] = typeof jon[i];
+
+    // 푸쉬랑 같은결과
+  }
+  // types[0] = 'string';
+
+  console.log(types);
+  //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+  const years = [1991, 2007, 1969, 2020];
+  const ages = [];
+  for (let i = 0; i < years.length; i++) {
+    ages[i] = 2024 - years[i];
+  }
+  console.log(ages);
+  console.log('==============================')
+
+  for (let index = 0; index < jon.length; index++) {
+    if(typeof jon[index] !== 'number' ) {
+      continue;
+    }
+    console.log(jon[index], typeof[index]);
+    
+  }
+</script>

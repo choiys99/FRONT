@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+
+body{
+	padding-top: 150px;
+}
+.container > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    color: #ffeead;
+}
+
+html, body {
+    box-sizing: border-box;
+    background-color: #ffeead;
+    height: 100%;
+    padding: 10px;
+    margin: 0px;
+}
+
+.container > div:nth-child(1n) {
+    background-color: #96ceb4;	
+}
+
+.container > div:nth-child(3n) {
+    background-color: #88d8b0;
+}
+
+.container > div:nth-child(2n) {
+    background-color: #ff6f69;
+}
+
+.container > div:nth-child(4n) {
+    background-color: #ffcc5c;
+}
+body{
+	padding-top: 150px;
+}
+.container {
+    height: 100%; 
+    display: grid;
+    grid-gap: 3px;
+    grid-template-columns: [main-start] 1fr [content-start] 5fr [content-end main-end];
+    /* 1fr [첫번째컬럼이름] 5fr [마지막컬럼이름] */
+    grid-template-rows: [main-start] 40px [content-start] auto [content-end] 40px [ main-end];
+}
+.header {
+  grid-column: main;
+}
+.menu {
+  /* grid-column: 1/2; */
+}
+.content {
+  grid-column: content;
+}
+.footer {   
+  grid-column: main;
+
+}
+
+  
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">HEADER</div>
+    <div class="menu">MENU</div>
+    <div class="content">CONTENT</div>
+    <div class="footer">FOOTER</div>
+  </div>
+  
+</body>
+</html>
+

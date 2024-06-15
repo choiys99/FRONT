@@ -1,0 +1,59 @@
+<script>
+  'use strict'
+  const jonas = {
+    firstName : '최',
+    lastName : '예성',
+    age : 2024-1999,
+    birthYeah :1999,
+    job : 'non',
+    friends: ['Michael','Peter','Steven'],
+    hasDriversLicense: true,
+
+    // calcAge:function(birthYeah) {
+    //   return 2037 -birthYeah;
+    // }
+    calcAge:function() {
+      // console.log(this);
+      this.age = 2024 - this.birthYeah;
+      return this.age;
+    },
+    getSummary:function() {
+      return `${this.lastName} 이는 ${this.calcAge()}살이며 운전면허증으`
+    }
+  };
+  // const calcAge = function(birthYeah) {
+  //   return 2037 + birthYeah;
+  // }
+  console.log(jonas.calcAge());
+  // console.log(calcAge(4));
+  console.log(jonas.age);
+  console.log(jonas.age);
+  console.log(jonas.age);
+
+  console.log(jonas.getSummary());
+
+  const mark = {
+    firstName:'마크',
+    mass: 78,
+    height:1.69,
+
+    calcBMI :function() {
+      this.bmi = this.mass /this.height **2;
+      return this.bmi;
+
+    }
+  };
+  const john = {
+    firstName:'존스미수',
+    mass: 92,
+    height:1.95,
+  }
+  mark.calcBMI();
+  console.log(mark.bmi);
+
+  
+  
+
+
+
+</script>

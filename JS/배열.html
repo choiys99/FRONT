@@ -1,0 +1,25 @@
+<script>
+  'use strict';
+  const friends = ['최예성','남건이','김주영'];
+  console.log(friends);
+
+  const y = new Array (1999, 2000, 2001);
+  console.log(friends[0]);
+  console.log(friends[friends.length-1]);
+  friends[2] = '보고싶도';
+  console.log(friends);
+
+  //Exercise
+  const calcAge = function(birthYeah) {
+    return 2037 - birthYeah;
+  }
+  const years = [1999, 1990, 1967, 2002, 2010];
+  console.log(calcAge[years]); 
+
+  const age1 =calcAge(years[0]);
+  const age2 =calcAge(years[1]);
+  const age3 =calcAge(years[years.length-1]);
+  console.log(age1,age2,age3);
+
+  
+</script>

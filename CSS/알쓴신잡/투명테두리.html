@@ -1,0 +1,71 @@
+<style>
+  * { box-sizing: border-box; }
+body {
+  font-family: sans-serif;
+  margin: 0;
+  background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/409269/flowers.jpg') top center no-repeat;
+}
+.container {
+  width: 600px;
+  margin: 40px auto;
+  background: #fff;
+  color: #777;
+  padding: 20px;
+  position: relative;
+/*   
+  border:10px solid rgba(255,255,255,.5);
+  background-clip:padding-box; 
+  box-shadow:0 0 0 10px rgba(255,255,255,.5);
+  border:5px solid silver;
+  */
+  position: relative;
+  border:10px solid silver;
+  outline:10px solid rgba(255,255,255,.5);
+  box-shadow:0 0 0 10px rgba(255,255,255,.5);
+}
+.container:before{
+  content:'';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom:0;
+  border:2px solid #3498db;
+  opacity: 0;
+  transition:0.1s ease-in;
+}
+.container:after{
+  content:'';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom:0;
+  opacity: 0;
+  border:1px solid #fff;
+  transition:0.1s ease-in;
+}
+
+.container h2 {
+  margin-top: 0;
+  font-family: 'Arial Narrow', sans-serif;
+  font-weight: normal;
+  text-transform: uppercase;
+}
+.container:hover:before{
+  left: 10px;right: 10px;top: 10px;bottom: 10px;
+  opacity: 1;
+}
+.container:hover:after{
+  left: -20px;right: -20px;top: -20px;bottom: -20px;
+  opacity: 1;
+}
+</style>
+<div class="container">
+  <h2>Transparent Borders</h2>
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur maiores accusamus non veniam repellat ab delectus
+    autem cupiditate dignissimos, blanditiis nisi nesciunt earum esse odit iusto nihil consequatur doloremque dicta?</p>
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis et nulla dignissimos corporis ab pariatur
+    magnam, impedit incidunt, iure at porro voluptate, iste architecto voluptas commodi blanditiis suscipit perferendis
+    quas!</p>
+</div>
