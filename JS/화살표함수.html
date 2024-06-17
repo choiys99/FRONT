@@ -1,7 +1,34 @@
 <script>
   // 일반함수 function
+  'use strict';
 
-  /*
-  함수 선언식
-  */
+  // main();
+  // function main() {
+  //   console.log('호이스팅 된 main 함수');
+  // }
+  // 함수 선언식으로는 익명함수 불가
+
+  // 익명함수는 함수 표현식으로 해야함
+
+  const main = function () {
+    console.log('함수표현식');
+  }; // << 표현식 함수 = 호이스팅안됨
+  main();
+
+  //화살표 함수
+
+  const main2 = () => {
+    console.log('화살표 함수');
+  };
+  main2();
+
+  const main3 = () => console.log('생략됨');
+  main3();
+
+  const add = (a, b) => a + b;
+  // 화살표 함수는 한 줄을 경우 리턴과 중괄호가 필요없다
+  console.log(add(1, 2));
+
+  const getObj = () => ({ name: '예성' });
+  console.log(getObj());
 </script>

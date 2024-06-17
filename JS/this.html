@@ -1,0 +1,32 @@
+<script>
+  'use strict';
+
+  const obj = {
+    name: '예성',
+    main: function () {
+      console.log(this);
+    },
+  };
+  // obj.main();
+  const obj2 = {
+    name: '다른객체',
+    main: obj.main,
+  };
+
+  obj2.main();
+  // this 는 런타임바인딩이라고 한다. 일반함수의 this값은 함수가 호출되는 시점에서 결정
+  // (주인).(노예this) = 주인꺼 사용한다.
+
+  const object = {
+    name: 'dd',
+    main: function () {
+      const innerFunction = function () {
+        console.log(this); // window
+        // 화살표 함수로 할 경우 오브젝트 객체로 나옴
+      };
+      innerFunction();
+    },
+  };
+
+  object.main();
+</script>

@@ -224,10 +224,14 @@ const jessica2 = {
 const jessicaCopy = Object.assign({}, jessica2);
 jessicaCopy.lastName = 'Davis';
 
+두개를 함쳐서 하나의 객체로
+Object.assign()으로 객체를 복사했을 때
+객체의 값이 원시자료형인 경우 깊은 복사가 되지만
+객체의 값이 참조자료형인 경우 얕은 복사가 된다.
+
 jessicaCopy.family.push('Mary');
 jessicaCopy.family.push('John');
 
 console.log('Before marriage:', jessica2);
 console.log('After marriage: ', jessicaCopy);
 */
-
