@@ -12,10 +12,6 @@ const restaurant = {
   starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
   mainMenu: ['Pizza', 'Pasta', 'Risotto'],
 
-  order: function (starterIndex, mainIndex) {
-    return [this.starterMenu[starterIndex], this.mainMenu[mainIndex]];
-  },
-
   openingHours: {
     thu: {
       open: 12,
@@ -30,7 +26,56 @@ const restaurant = {
       close: 24,
     },
   },
+  order: function (starterIndex, mainIndex) {
+    return [this.starterMenu[starterIndex], this.mainMenu[mainIndex]];
+  },
+  orderDeliverty: function ({ starterIndex, mainIndex, time, address }) {
+    console.log(
+      `order received! ${this.starterMenu[starterIndex]} and 
+      ${this.mainMenu[mainIndex]} 
+      and ${time} 
+      and ${address}`
+    );
+  },
+  orderPasta: function (ing1, ing2, ing3) {
+    console.log(`here is your declicious pasta with${ing1},${ing2},${ing3}`);
+  },
 };
+
+// 스프레드연산자
+const arrr = [1, 2, ...[3, 4]];
+
+const [a1, b1, ...others] = [1, 2, 3, 4, 5];
+
+console.log(a1, b1, others); // [a1=1,b1=2, others = 나머지 값]
+
+const [Pizza, , Risotto, ...otherFood] = [
+  ...restaurant.mainMenu,
+  ...restaurant.starterMenu,
+];
+console.log(Pizza, Risotto, otherFood);
+
+//obj
+const { sat, ...weekdays } = restaurant.openingHours;
+console.log(weekdays);
+
+//functions
+const add = function (...numbers) {
+  let sum = 0;
+  for (let i = 0; i < numbers.length; i++) {}
+  console.log(numbers);
+};
+add(2, 3);
+add(5, 3, 7, 2);
+add(8, 2, 5, 3, 2, 1, 4); // 값을 다 합쳐서 하나의 배열로 압축함,.
+
+restaurant.orderDeliverty({
+  tiem: '22:30',
+  address: 'Via del Sole, 21',
+  mainIndex: 2,
+  starterIndex: 2,
+});
+
 //객체파괴
 const { name, openingHours, categories } = restaurant;
 console.log(name, openingHours, categories);
@@ -51,6 +96,7 @@ const obj = { aaaa: 23, bbbb: 7, c: 14 };
 // {aaaa,bbbb} = obj; // 에러발생 중괄호로 실행할때 js는 코드블록을 기대
 ({ aaaa, bbbb } = obj);
 console.log(aaaa, bbbb);
+console.log('==========구분용=========');
 
 // 구조 분해 할당 구문은 배열이나 객체의 속성을 해체하여 그 값을 개별 변수에 담을 수 있게 하는
 //예시
@@ -100,3 +146,52 @@ console.log(i, j, k);
 
 const [p = 1, q = 1, r = 1] = [8, 9]; // 기본값 설정..? 값을 가져올때 없으면 발생
 console.log(p, q, r); // 8 9 1 r은 없자나
+
+//중첩객체의 구조분해할당
+// const { fri } = openingHours; // opinghours에서 fri 속성을 추출하여 fri 라는 새로운 변수에 할당
+// console.log(fri); //fri  변수에는 openinghours 의 fri속성값이 저장
+console.log('구분용===============');
+const {
+  fri: { open: o, close: c },
+} = openingHours;
+console.log(o, c);
+
+const newMenu = [...restaurant.mainMenu, 'gnocci'];
+console.log(newMenu);
+// 배ㅕㅇㄹ복사
+
+const mainMenuCopy = [...restaurant.mainMenu];
+// 두개 합치기
+
+const menu2 = [...restaurant.starterMenu, ...restaurant.mainMenu];
+console.log(menu2);
+
+//문자열을 하나하나 쪼갬
+const str = 'jonas';
+const letters = [...str, ' ', 'S.'];
+console.log(letters); // ['j', 'o', 'n', 'a', 's', ' ', 'S.']
+console.log(str);
+console.log(...str); // j o n a s
+
+// console.log(`${...str} Schmedtmann`);
+
+const ingredients = [
+  // prompt('lets make pasta! Ingredinet 1?'),
+  // prompt('lets make pasta! Ingredinet 2?'),
+  // prompt('lets make pasta! Ingredinet 3?'),
+];
+
+console.log(ingredients);
+
+restaurant.orderPasta(ingredients[0], ingredients[1], ingredients[2]);
+restaurant.orderPasta(...ingredients);
+
+//objects
+
+const newRestaurant = { foundedIn: 1998, ...restaurant, founder: 'guiseppe' };
+console.log(newRestaurant);
+
+const restaurantCopy = { ...restaurant };
+restaurantCopy.name = 'Ristorante Roma';
+console.log(restaurantCopy.name);
+console.log(restaurant.name);

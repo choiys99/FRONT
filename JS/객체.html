@@ -48,4 +48,108 @@
   console.log(
     `${jonas.firstName} has ${jonas.friends.length} and his friend is called ${jonas.friends[0]}`
   );
+
+  ////////////////////////
+
+  /*
+
+  let user = new Object(); // '객체 생성자' 문법
+  let user = {};  // '객체 리터럴' 문법
+
+    let user = {     // 객체
+    name: "John",  // 키: "name",  값: "John"
+    age: 30        // 키: "age", 값: 30
+  };
+  콜론: 을 기준으로 왼쪽 키 오른쪽 값
+
+  delete 연산자를 사용하면 프로퍼티를 삭제가능
+  delete user.age;
+
+    let user = {
+    name: "John",
+    age: 30,
+    "likes birds": true  // 복수의 단어는 따옴표로 묶어야 합니다.
+  };
+
+  상수 객체는 수정이 가능하다 .
+
+  const user = {
+  name: "John"
+};
+
+user.name = "Pete"; // (*)
+
+alert(user.name); // Pete
+
+
+===========================================
+
+// 문법 에러가 발생합니다.
+user.likes birds = true// 유효한 식별자가 아니라면 대괄호 표기법으로 하면 ok 
+
+let user = {};
+
+// set
+user["likes birds"] = true;
+
+// get
+alert(user["likes birds"]); // true
+
+// delete
+delete user["likes birds"];
+
+
+let key = "likes birds";
+
+// user["likes birds"] = true; 와 같습니다.
+user[key] = true;
+
+let user = {
+  name: "John",
+  age: 30
+};
+
+let key = prompt("사용자의 어떤 정보를 얻고 싶으신가요?", "name");
+
+// 변수로 접근
+alert( user[key] ); // John (프롬프트 창에 "name"을 입력한 경우)
+
+/////////////////!!! 하지만점 표기법은 이런 방식이 불가능
+
+let user = {
+  name: "John",
+  age: 30
+};
+
+let key = "name";
+alert( user.key ) // undefined  <<<<<<<<<<<<<<<<<<<<불가능
+
+
+// 구분용=============================
+
+객체를 만들 때 객체 리터럴 안의 프로퍼티 키가 대괄호로 둘러싸여 있는 경우
+, 이를 계산된 프로퍼티(computed property) 라고 부릅니다.
+
+let fruit = prompt("어떤 과일을 구매하시겠습니까?", "apple");
+
+let bag = {
+  [fruit]: 5, // 변수 fruit에서 프로퍼티 이름을 동적으로 받아 옵니다.
+};
+
+alert( bag.apple ); // fruit에 "apple"이 할당되었다면, 5가 출력됩니다.
+
+
+================ 위랑 동일하게 작동
+let fruit = prompt("어떤 과일을 구매하시겠습니까?", "apple");
+let bag = {};
+
+// 변수 fruit을 사용해 프로퍼티 이름을 만들었습니다.
+bag[fruit] = 5;
+
+*/
+  let fruit = 'apple';
+  let bag = {
+    [fruit + 'Computers']: 5, // bag.appleComputers = 5
+  };
+  alert(bag);
 </script>

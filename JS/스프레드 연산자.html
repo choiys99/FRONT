@@ -1,0 +1,12 @@
+<script>
+  'use strict';
+
+  const arr = [7, 8, 9];
+  const badNewArr = [1, 2, arr[0], arr[1], arr[2]];
+  console.log(badNewArr);
+  // 스프레드연산자로 더 쉽게
+
+  const newArr = [1, 2, ...arr];
+  console.log(newArr); // 배열
+  console.log(...newArr); // 배열이아님
+</script>
