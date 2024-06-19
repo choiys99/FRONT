@@ -241,6 +241,7 @@ const game = {
       'Gnarby',
       'Lewandowski',
     ],
+
     [
       'Burki',
       'Schulz',
@@ -282,6 +283,40 @@ const {
 } = game;
 console.log(team1, draw, team2);
 
-const printGoals = function () {
-  printGoals('Davies', 'Muller', 'Lewandowski', 'kimmich');
+const printGoals = function (...players) {
+  console.log(`${players.length} gole were scored`);
 };
+// printGoals('Davies', 'Muller', 'Lewandowski', 'kimmich');
+// printGoals('Davies', 'Muller');
+printGoals(...game.scored);
+
+team1 < team2 && console.log('Team 1 is more likely to win');
+team1 > team2 && console.log('Team 2 is more likely to win');
+
+const menu3 = [...restaurant.starterMenu, ...restaurant.mainMenu];
+
+for (const item of menu3) console.log(item); // 자바랑 비슷함 item = 타입 같은거 menu 반복할 대상
+
+for (const item of menu3.entries()) {
+  console.log(`${item[0] + 1} : ${item[1]}`); // entries 객체를 배열로 변환 key: value형식을 배열 형태의 [키:밸류] 변환
+}
+for (const [i, el] of menu3.entries()) {
+  console.log(`${i + 1} : ${el}`);
+}
+// console.log(...menu3.entries());
+
+const openingHours: {
+  thu: {
+    open: 12,
+    close: 22,
+  },
+  fri: {
+    open: 11,
+    close: 23,
+  },
+  sat: {
+    open: 0, // Open 24 hours
+    close: 24,
+  },
+},
+

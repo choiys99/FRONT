@@ -1,0 +1,81 @@
+<script>
+  'use strict';
+  const openingHours = {
+    월: {
+      open: 12,
+      close: 22,
+    },
+    화: {
+      open: 11,
+      close: 23,
+    },
+    수: {
+      open: 0, // Open 24 hours
+      close: 24,
+    },
+  };
+  const restaurant = {
+    name: 'Classico Italiano',
+    location: 'Via Angelo Tavanti 23, Firenze, Italy',
+    categories: ['Italian', 'Pizzeria', 'Vegetarian', 'Organic'],
+    starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
+    mainMenu: ['Pizza', 'Pasta', 'Risotto'],
+    openingHours: openingHours, // 이름같으면 알아서 가져옴 ㅋ
+
+    // order: function (starterIndex, mainIndex) {
+    //   return [this.starterMenu[starterIndex], this.mainMenu[mainIndex]];
+    // },
+
+    order(starterIndex, mainIndex) {
+      // 위랑 같다.. function 없어도 ㄱㅊ//
+      return [this.starterMenu[starterIndex], this.mainMenu[mainIndex]];
+    },
+
+    orderDeliverty({ starterIndex, mainIndex, time, address }) {
+      console.log(
+        `order received! ${this.starterMenu[starterIndex]} and 
+      ${this.mainMenu[mainIndex]} 
+      and ${time} 
+      and ${address}`
+      );
+    },
+    orderPasta(ing1, ing2, ing3) {
+      console.log(`here is your declicious pasta with${ing1},${ing2},${ing3}`);
+    },
+
+    orderPizza(mainIngredient, ...otherIngredients) {
+      console.log(mainIngredient);
+      console.log(otherIngredients);
+    },
+  };
+  if (restaurant.openingHours && restaurant.openingHours.mon)
+    console.log(restaurant.openingHours.mon.open);
+
+  //옵셔널체이닝
+  console.log(restaurant.openingHours.mon?.open);
+  console.log(restaurant.openingHours?.mon?.open);
+  // ?.은 ?.'앞’의 평가 대상이 undefined나 null이면 평가를 멈추고 undefined를 반환
+
+  const days = ['월', '화', '수', '목', '금', '토', '일'];
+  for (const day of days) {
+    const open = restaurant.openingHours[day]?.open ?? '닫혀있음';
+    // 널리쉬 ?? = 는 o 와 false 도 해줌 옵셔널체이닝 안해줌
+
+    console.log(`On${day}, we open at ${open}`);
+  }
+
+  // 메서드
+  console.log(restaurant.order?.(0, 1) ?? 'ㅋㅋ');
+  //배열
+
+  const users = [{ name: '예성', email: 'hello@gmail.com' }];
+  console.log(users[0]?.email ?? 'user array empty');
+  console.log(users[0]);
+
+  const properties = Object.keys(openingHours);
+  console.log(properties);
+
+  for (const day of Object.keys(openingHours)) {
+    console.log(day);
+  }
+</script>
