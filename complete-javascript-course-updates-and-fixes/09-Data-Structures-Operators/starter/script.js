@@ -40,7 +40,25 @@ const restaurant = {
   orderPasta: function (ing1, ing2, ing3) {
     console.log(`here is your declicious pasta with${ing1},${ing2},${ing3}`);
   },
+
+  orderPizza: function (mainIngredient, ...otherIngredients) {
+    console.log(mainIngredient);
+    console.log(otherIngredients);
+  },
 };
+//널리쉬 왼쪽 피연산자가 null 또는 undefined일 때 오른쪽 피연산자를 반환하고, 그렇지 않으면 왼쪽 피연산자를 반환하는 논리 연산자이다.
+//  aa ?? bb << aa가 null 이거나 und.. 일경우 bb 반환 아니면 aa
+const foo = null ?? 'default string';
+console.log(foo);
+// Expected output: "default string"
+
+const guest = restaurant.numGuests || 10;
+console.log(guest);
+
+const guestCorrect = restaurant.numGuests || 10;
+console.log(guestCorrect);
+
+restaurant.orderPizza('버섯', '마늘', '고등어', '고양이');
 
 // 스프레드연산자
 const arrr = [1, 2, ...[3, 4]];
@@ -62,8 +80,10 @@ console.log(weekdays);
 //functions
 const add = function (...numbers) {
   let sum = 0;
-  for (let i = 0; i < numbers.length; i++) {}
-  console.log(numbers);
+  for (let i = 0; i < numbers.length; i++) {
+    sum += numbers[i];
+    console.log(sum);
+  }
 };
 add(2, 3);
 add(5, 3, 7, 2);
@@ -117,7 +137,7 @@ console.log(rest); // 나머지 요소들을 rest에 담음
 const arr = [2, 3, 4];
 const aa = arr[0];
 const bb = arr[1];
-const cc = arr[2];
+// const cc = arr[2];
 
 const [x, y, z] = arr;
 console.log(x, y, z);
@@ -195,3 +215,73 @@ const restaurantCopy = { ...restaurant };
 restaurantCopy.name = 'Ristorante Roma';
 console.log(restaurantCopy.name);
 console.log(restaurant.name);
+
+console.log('======================================');
+console.log('======================================');
+console.log('======================================');
+console.log('======================================');
+console.log('======================================');
+console.log('======================================');
+console.log('======================================');
+
+const game = {
+  team1: 'Bayern Munich',
+  team2: 'Borrussia Dortmund',
+  players: [
+    [
+      'Neuer',
+      'Pavard',
+      'Martinez',
+      'Alaba',
+      'Davies',
+      'Kimmich',
+      'Goretzka',
+      'Coman',
+      'Muller',
+      'Gnarby',
+      'Lewandowski',
+    ],
+    [
+      'Burki',
+      'Schulz',
+      'Hummels',
+      'Akanji',
+      'Hakimi',
+      'Weigl',
+      'Witsel',
+      'Hazard',
+      'Brandt',
+      'Sancho',
+      'Gotze',
+    ],
+  ],
+  score: '4:0',
+  scored: ['Lewandowski', 'Gnarby', 'Lewandowski', 'Hummels'],
+  date: 'Nov 9th, 2037',
+  odds: {
+    team1: 1.33,
+    x: 3.25,
+    team2: 6.5,
+  },
+};
+
+const [players1, players2] = game.players;
+console.log(players1, players2);
+
+const [gk, ...fieldPlayers] = players1;
+console.log(gk, fieldPlayers);
+
+const allPlayers = [...players1, ...players2];
+console.log(allPlayers);
+
+const players1Final = [...players1, '최', '에', '성'];
+console.log(players1Final);
+
+const {
+  odds: { team1, x: draw, team2 },
+} = game;
+console.log(team1, draw, team2);
+
+const printGoals = function () {
+  printGoals('Davies', 'Muller', 'Lewandowski', 'kimmich');
+};

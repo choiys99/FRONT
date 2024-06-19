@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      'use strict';
+
+      const rest1 = {
+        name: '예성',
+        // numguests: 20,
+        numguests: 0,
+      };
+      const rest2 = {
+        name: '예성2',
+        owner: '초이',
+      };
+
+      rest1.numguests = rest1.numguests || 10; // 값이 있으니 20
+      rest2.numguests = rest2.numguests || 10; // 값이 없으니 10
+
+      //논리 분할 or
+      // rest1.numguests = rest1.numguests || 10; 이거랑 같다..
+
+      // rest1.numguests ||= 10;
+      // rest2.numguests ||= 10;
+
+      //널리시할당연산자
+      rest1.numguests ??= 10;
+      rest2.numguests ??= 10;
+
+      //논리 할당 연산자
+
+      // rest1.owner = rest1.owner && '<익명>'; // 얘는 오너값이 없어서 false
+      // rest2.owner = rest2.owner && '<익명>'; // 2는 오너의 값이 있기때문에 true
+
+      rest1.owner &&= '익명'; // 위랑 같다..
+      rest2.owner &&= '익명';
+
+      console.log(rest1);
+      console.log(rest2);
+      //=========================================
+      const player1 = ['gk', ...'fildplayer'];
+    </script>
+  </body>
+</html>
