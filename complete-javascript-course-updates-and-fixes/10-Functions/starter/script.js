@@ -178,7 +178,6 @@ const addVAT = addTax.bind(null, 0.23); // addtax 화살표함수 사용하고�
 const poll = {
   question: `What is your favourite programming language?`,
   options: ['0: JavaScript', '1: Python', '2: rust', '3: C++'],
-
   answers: new Array(4).fill(0), // 결과를 저장하는 배열 , 초기값은 모두 0
   registerNewAnswer() {
     // 사용자로부터 투표응답을 받는 메서드
@@ -214,5 +213,72 @@ document
   .querySelector('.poll')
   .addEventListener('click', poll.registerNewAnswer.bind(poll));
 
-poll.displayResults.call({ answers: [5, 2, 3] });
-poll.displayResults.call({ answers: [5, 2, 3] }, 'string');
+// poll.displayResults.call({ answers: [5, 2, 3] });
+// poll.displayResults.call({ answers: [5, 2, 3] }, 'string');
+
+////////////////////////////////////////////////
+
+console.log('=======================');
+console.log('=======================');
+console.log('=======================');
+console.log('=======================');
+console.log('=======================');
+
+/*
+1. 코드 캡슐화하여 전역 스코프와 충돌 방지
+2.다른 전역 변수와 겹치지 않음
+
+3.모듈패턴구현하는데 사용
+4.변수 유효범위 관리 유용
+
+5. 초기화 코드 실행 유용
+*/
+
+const run0nce = function () {
+  console.log('This will never run again');
+};
+run0nce();
+
+(function () {
+  console.log('This will never run again'); // 즉시호출함수표현식 iife 위 코드랑 같다
+  const isPrivate = 23;
+})();
+
+(() => console.log('이건 좀 신기한데?'))(); // 얘도 즉시 호출한다.
+
+console.log('=======================');
+console.log('=======================');
+console.log('=======================');
+console.log('=======================');
+console.log('=========클로저===========');
+
+const secureBooking = function () {
+  let passengerCount = 0;
+
+  return function () {
+    passengerCount++;
+    console.log(`${passengerCount} passengers`);
+  };
+};
+const booker = secureBooking();
+booker();
+booker();
+booker();
+console.dir(booker);
+
+console.log('==================================================');
+console.log('==================================================');
+console.log('==================================================');
+console.log('==================================================');
+console.log('==================================================');
+
+let f;
+
+const g = function () {
+  const a = 23;
+  f = function () {
+    console.log(a * 2);
+  };
+};
+g(); // 함수 g 가 실행되면 a 변수가 선언되고 23이 할당 그다음 f 함수가 정의
+f();
