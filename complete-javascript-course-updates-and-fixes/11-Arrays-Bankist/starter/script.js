@@ -65,12 +65,104 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // LECTURES
 
+// const currencies = new Map([
+//   ['USD', 'United States dollar'],
+//   ['EUR', 'Euro'],
+//   ['GBP', 'Pound sterling'],
+// ]);
+
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+/////////////////////////////////////////////////
+
+let arr = ['a', 'b', 'c', 'd', 'e'];
+console.log('==================슬라이스============');
+
+//슬라이스
+console.log(arr.slice(2)); // 새로운 배열 ['c', 'd', 'e'] 출력 원본은 건드지 x
+console.log(arr.slice(2, 4)); // 새로운 배열 ['c', 'd'] 출력 원본은 건드지 x
+console.log(arr.slice(-2)); // ['d', 'e']
+console.log(arr.slice(-1)); // ['e']
+console.log(arr.slice(1, -2)); // ['b', 'c']
+console.log(arr.slice()); // 값 다 출력
+
+console.log([...arr]); // 값 다 출력
+console.log('==================스플라이스============');
+
+//스플라이스
+// console.log(arr.splice(2)); // 원본은 건듬 ㄷㄷ ['c', 'd', 'e']
+arr.splice(-1); // ( -1 은 마지막요소)
+arr.splice(1, 2); // ( 두번째 세번째 요소 건듬 ㄷㄷ)
+console.log(arr);
+
+console.log('==================리버스============');
+//리버스
+arr = ['a', 'b', 'c', 'd', 'e'];
+const arr2 = ['j', 'i', 'h', 'g', 'f'];
+console.log(arr2.reverse()); // 순서 변경시킨다.. 원본 건듬
+console.log(arr2);
+
+//컨캣 배열연결
+console.log('==================컨캣============');
+const letters = arr.concat(arr2);
+console.log(letters);
+//조인
+console.log('==================조인============');
+console.log(letters.join('-')); // 배열을 -로 구분된 문자열로 변경시킨다.a-b-c-d-e-f-g-h-i-j
+
+//at
+console.log('==================at메소드============');
+const ree = [23, 11, 64];
+console.log(arr[0]); // 동일한 결과
+console.log(arr.at(0)); // 동일한 결과
+
+console.log(ree[ree.length - 1]); // 마지막요소 얻는법
+console.log(ree.slice(-1)[0]);
+console.log(ree.at(-1)); // 얘는 문자열에서도 가능
+
+///foreach
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300]; //
+
+// for (const movement of movements) {
+for (const [i, movement] of movements.entries()) {
+  if (movement > 0) {
+    console.log(` ${i + 1} : you deposited${movement}`);
+  } else {
+    console.log(` ${i + 1}  you withdrew ${Math.abs(movement)}`); // 지정된 숫자의 절대값을 반환
+  }
+}
+
+console.log('------foreach------');
+
+movements.forEach(function (mov, i, arr) {
+  // (요소:배열의 각요소에대한 참조, 인덱스:현재 요소의 인덱스 배열:반목문을 호출한 배열자체)
+  // 순서중요함
+  if (mov > 0) {
+    console.log(` ${i + 1} : you deposited${mov}`);
+  } else {
+    console.log(` ${i + 1}  you withdrew ${Math.abs(mov)}`); // 지정된 숫자의 절대값을 반환
+  }
+});
+
+//foreach map and set
+console.log('=====foreach map and set=====');
+
+//map
 const currencies = new Map([
   ['USD', 'United States dollar'],
   ['EUR', 'Euro'],
   ['GBP', 'Pound sterling'],
 ]);
 
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+currencies.forEach(function (value, key, map) {
+  console.log(`${key}:${value}`);
+});
 
-/////////////////////////////////////////////////
+//set
+const currenciesUnique = new Set(['USD', 'GBP', 'USD', 'EUR', 'EUR']);
+console.log(currenciesUnique);
+currenciesUnique.forEach(function (value, _, map) {
+  // 일회용변수를 의미하는 _
+  console.log(`${key}: ${value}`); //set 에서는 키와 밸류 값이 똑같다..
+});

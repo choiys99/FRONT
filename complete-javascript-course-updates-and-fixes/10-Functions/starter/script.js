@@ -280,5 +280,46 @@ const g = function () {
     console.log(a * 2);
   };
 };
+
+const h = function () {
+  const b = 777;
+  f = function () {
+    console.log(b * 2);
+  };
+};
+
 g(); // 함수 g 가 실행되면 a 변수가 선언되고 23이 할당 그다음 f 함수가 정의
 f();
+
+h();
+f();
+
+// 2222 타이머
+
+const boardPassengers = function (n, wait) {
+  const perGroup = n / 3; //(1) 순서
+
+  setTimeout(function () {
+    //(2) 타이머설정
+    console.log(`we are now boarding all ${n} passengers`);
+    console.log(`Htere are 3groups, each with ${perGroup} passengers`);
+  }, wait * 1000);
+
+  console.log(`will start boarding in ${wait} seconds`); //(3)  3번이지만 즉시실행 타이머아님
+};
+
+// setTimeout(function () {
+//   console.log('타임'); // 1초후 실행, 콜백함수
+// }, 1000);
+
+const perGroup = 50; // 변수 이름이 같으면 함수는 내부 변수를 우선으로 사용함..
+boardPassengers(180, 3);
+
+(function () {
+  const header = document.querySelector('h1');
+  header.style.color = 'red';
+
+  document.querySelector('body').addEventListener('click', function () {
+    header.style.color = 'blue';
+  });
+})();
