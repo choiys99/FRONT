@@ -82,6 +82,15 @@ const displayMovements = function (movements) {
 };
 displayMovements(account1.movements);
 
+const calcPrintBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance} EUR`;
+};
+
+calcPrintBalance(account1.movements);
+
+// console.log(containerMovements.innerHTML);
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -182,8 +191,82 @@ currencies.forEach(function (value, key, map) {
 
 //set
 const currenciesUnique = new Set(['USD', 'GBP', 'USD', 'EUR', 'EUR']);
-console.log(currenciesUnique);
-currenciesUnique.forEach(function (value, _, map) {
-  // 일회용변수를 의미하는 _
-  console.log(`${key}: ${value}`); //set 에서는 키와 밸류 값이 똑같다..
+// console.log(currenciesUnique);
+// currenciesUnique.forEach(function (value, _, map) {
+//   // 일회용변수를 의미하는 _
+//   console.log(`${key}: ${value}`); //set 에서는 키와 밸류 값이 똑같다..
+// });
+
+//map 메소드는 새로운 배열을 만든다.
+
+const eurToUsd = 1.1;
+
+const movemnetsUSD = movements.map(mov => mov * eurToUsd);
+console.log(movemnetsUSD); // 모든 요소 다 사용
+
+const movementsUSDfor = [];
+for (const mov of movements) movementsUSDfor.push(mov * eurToUsd);
+console.log(movementsUSDfor);
+
+// const movement
+const movementsDescriptions = movements.map((mov, i, arr) => {
+  return `Movement ${i + 1} : you ${
+    mov > 0 ? 'depositd' : 'withdrew'
+  } ${Math.abs(mov)}}`;
+
+  // if (mov > 0) {
+  //   return `Movement ${i + 1} :You deposited ${mov}`;
+  // } else {
+  //   return `Movement ${i + 1} :You withdrew ${Math.abs(mov)}`;
+  // }
 });
+
+console.log(movementsDescriptions);
+
+const user = 'Steven Thomas Williams;';
+
+const createUsernames = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+  });
+};
+
+createUsernames(accounts);
+
+//const test = moventes.filter(function(mov) {
+// return mov > 0
+// });
+const withdrawals = movements.filter(mov => mov > 0);
+
+//reduce
+
+// const balance = movements.reduce(function (acc, cur, i, arr) {
+//   // acc 누산기 cur 배열요소 i 인덱스 arr 호출된 원래의 배ㅕㅇㄹ
+//   console.log(`Iteration ${i}:${acc}`);
+//   return acc + cur;
+// });
+
+const balance = movements.reduce((acc, cur) => acc + cur, 0);
+
+console.log(balance);
+
+// let numbers = [1, 2, 3, 4, 5];
+// let sum = numbers.reduce((accumulator, currentValue, currentIndex, arr) => {
+//   console.log(
+//     `Processing element ${currentValue} at index ${currentIndex} in array ${arr}`
+//   );
+//   return accumulator + currentValue;
+// }, 0);
+// console.log(`Sum of all numbers: ${sum}`);
+
+let balance2 = 0;
+for (const mov of movements) {
+  balance2 += mov;
+}
+console.log(balance2);
+
+// console.log(balance);

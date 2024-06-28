@@ -1,0 +1,22 @@
+<script>
+  // const dogJulia = [3, 5, 2, 12, 7];
+  // const dogKate = [4, 1, 15, 8, 3];
+
+  // const copyJulia = dogJulia.slice(0, -1);
+  // const copyKate = dogKate.slice(0, -1);
+
+  // const withDog = copyJulia.concat(copyKate);
+
+  // withDog.forEach(function (dog, i, arr) {
+  //   const type = dog > 3 ? '어른' : '개시키';
+  //   if (condition) {
+  //   }
+  // });
+
+  const checkDogs = function (dogJulia, dogKate) {
+    const dogJuliaCorrected = dogJulia.slice();
+    dogJuliaCorrected.splice(0, 1);
+    dogJuliaCorrected.splice(-2);
+  };
+  checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3]);
+</script>
