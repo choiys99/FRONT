@@ -72,7 +72,7 @@ const displayMovements = function (movements) {
           <div class="movements__type movements__type--${type}">
           ${i + 1} ${type}
           </div>
-          <div class="movements__value">${mov}</div>
+          <div class="movements__value">${mov}€</div>
         </div>
         `;
     containerMovements.insertAdjacentHTML('afterbegin', html);
@@ -88,6 +88,15 @@ const calcPrintBalance = function (movements) {
 };
 
 calcPrintBalance(account1.movements);
+
+const calcDisplaySummary = function (movements) {
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, arr) => acc + arr, 0);
+
+  labelSumIn.textContent = `${incomes}€`;
+};
+calcDisplaySummary(account1.movements);
 
 // console.log(containerMovements.innerHTML);
 
@@ -270,3 +279,26 @@ for (const mov of movements) {
 console.log(balance2);
 
 // console.log(balance);
+
+const calcAverageHumanAge = function (ages) {
+  const humanAges = ages.map(age => (age <= 2 ? 2 * age : 16 + age * 4));
+  const adults = humanAges.filter(age => age >= 18);
+  console.log(humanAges);
+  console.log(adults);
+
+  // const avg = adults.reduce((acc, cur) => acc + cur) / adults.length;
+  const avg = adults.reduce((acc, age, i, arr) => acc + age / arr.length, 0);
+
+  console.log(avg);
+};
+
+calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3], [16, 6, 10, 5, 6, 1, 4]);
+
+const totalDepositsUSD = movements
+  .filter(mov => mov > 0) // 0보다 클때
+  // .map(mov => mov * eurToUsd) // 모든 값들을 달러로 변환 하고
+  .map((mov, i, arr) => {
+    mov * eurToUsd;
+  }) // 모든 값들을 달러로 변환 하고
+  .reduce((acc, mov) => acc + mov, 0); //총 금액
+console.log(totalDepositsUSD); // 출력
