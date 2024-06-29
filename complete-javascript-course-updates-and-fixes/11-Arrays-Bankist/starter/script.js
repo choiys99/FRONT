@@ -82,21 +82,76 @@ const displayMovements = function (movements) {
 };
 displayMovements(account1.movements);
 
-const calcPrintBalance = function (movements) {
+const createUsernames = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+  });
+};
+
+createUsernames(accounts);
+
+console.log(account1);
+
+const calcDisplayBalance = function (movements) {
   const balance = movements.reduce((acc, mov) => acc + mov, 0);
   labelBalance.textContent = `${balance} EUR`;
 };
 
-calcPrintBalance(account1.movements);
+calcDisplayBalance(account1.movements);
 
-const calcDisplaySummary = function (movements) {
-  const incomes = movements
+const calcDisplaySummary = function (acc) {
+  const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, arr) => acc + arr, 0);
 
+  const out = acc.movements
+    .filter(mov => mov < 0)
+    .reduce((acc, arr) => acc + arr, 0);
+
+  labelSumOut.textContent = `${Math.abs(out)}`;
   labelSumIn.textContent = `${incomes}€`;
+
+  const interest = acc.movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * 1.2) / 100)
+    .filter((int, i, arr) => {
+      console.log(arr);
+      return int >= 1;
+    })
+    .reduce((acc, int) => acc + int, 0);
+  labelSumInterest.textContent = `${interest}€`;
 };
 calcDisplaySummary(account1.movements);
+
+let currentAccount;
+btnLogin.addEventListener('click', function (e) {
+  e.preventDefault(); // 기본동작방지
+
+  // console.log('login');
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
+  console.log(currentAccount);
+
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    // .?속성값이 null 또는 undefined경우에도 객체속성에접근가능하게헤주는 옵셔널체이닝
+    // console.log('login');
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(' ')[0]
+    }`;
+    containerApp.style.opacity = 1;
+    inputLoginUsername.value = inputLoginPin.value = '';
+    inputLoginPin.blur();
+
+    displayMovements(currentAccount.movements);
+    calcDisplaySummary(currentAccount.movements);
+    calcDisplayBalance(currentAccount.movements);
+  }
+});
 
 // console.log(containerMovements.innerHTML);
 
@@ -234,18 +289,6 @@ console.log(movementsDescriptions);
 
 const user = 'Steven Thomas Williams;';
 
-const createUsernames = function (accs) {
-  accs.forEach(function (acc) {
-    acc.username = acc.owner
-      .toLowerCase()
-      .split(' ')
-      .map(name => name[0])
-      .join('');
-  });
-};
-
-createUsernames(accounts);
-
 //const test = moventes.filter(function(mov) {
 // return mov > 0
 // });
@@ -280,19 +323,31 @@ console.log(balance2);
 
 // console.log(balance);
 
-const calcAverageHumanAge = function (ages) {
-  const humanAges = ages.map(age => (age <= 2 ? 2 * age : 16 + age * 4));
-  const adults = humanAges.filter(age => age >= 18);
-  console.log(humanAges);
-  console.log(adults);
+// const calcAverageHumanAge = function (ages) {
+//   const humanAges = ages.map(age => (age <= 2 ? 2 * age : 16 + age * 4));
+//   const adults = humanAges.filter(age => age >= 18);
+//   console.log(humanAges);
+//   console.log(adults);
 
-  // const avg = adults.reduce((acc, cur) => acc + cur) / adults.length;
-  const avg = adults.reduce((acc, age, i, arr) => acc + age / arr.length, 0);
+//   // const avg = adults.reduce((acc, cur) => acc + cur) / adults.length;
+//   const avg = adults.reduce((acc, age, i, arr) => acc + age / arr.length, 0);
 
-  console.log(avg);
-};
+//   console.log(avg);
+// };
 
-calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3], [16, 6, 10, 5, 6, 1, 4]);
+const calcAverageHumanAge = ages =>
+  ages
+    .map(age => (age <= 2 ? 2 * age : 16 + age * 4))
+    .filter(age => age >= 18)
+    .reduce((acc, age, i, arr) => acc + age / arr.length, 0);
+
+// const avg1 = [5, 2, 4, 1, 15, 8, 3];
+// const avg2 = [16, 6, 10, 5, 6, 1, 4];
+// console.log(calcAverageHumanAge(avg1, avg2)); // 이렇게 해도 하나만 값이 들어감
+
+const avg1 = calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
+const avg2 = calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
+console.log(avg1, avg2);
 
 const totalDepositsUSD = movements
   .filter(mov => mov > 0) // 0보다 클때
