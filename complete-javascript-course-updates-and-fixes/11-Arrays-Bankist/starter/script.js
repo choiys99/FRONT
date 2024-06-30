@@ -101,7 +101,7 @@ const calcDisplayBalance = function (movements) {
   labelBalance.textContent = `${balance} EUR`;
 };
 
-calcDisplayBalance(account1.movements);
+// calcDisplayBalance(account1);
 
 const calcDisplaySummary = function (acc) {
   const incomes = acc.movements
@@ -125,7 +125,7 @@ const calcDisplaySummary = function (acc) {
     .reduce((acc, int) => acc + int, 0);
   labelSumInterest.textContent = `${interest}€`;
 };
-calcDisplaySummary(account1.movements);
+calcDisplaySummary(account1);
 
 let currentAccount;
 btnLogin.addEventListener('click', function (e) {
@@ -148,7 +148,7 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginPin.blur();
 
     displayMovements(currentAccount.movements);
-    calcDisplaySummary(currentAccount.movements);
+    calcDisplaySummary(currentAccount);
     calcDisplayBalance(currentAccount.movements);
   }
 });
