@@ -58,6 +58,7 @@ const inputLoginPin = document.querySelector('.login__input--pin');
 const inputTransferTo = document.querySelector('.form__input--to');
 const inputTransferAmount = document.querySelector('.form__input--amount');
 const inputLoanAmount = document.querySelector('.form__input--loan-amount');
+
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
@@ -96,9 +97,10 @@ createUsernames(accounts);
 
 console.log(account1);
 
-const calcDisplayBalance = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance} EUR`;
+const calcDisplayBalance = function (acc) {
+  const balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+  acc.balance = balance;
+  labelBalance.textContent = `${acc.balance} €`;
 };
 
 // calcDisplayBalance(account1);
@@ -125,9 +127,17 @@ const calcDisplaySummary = function (acc) {
     .reduce((acc, int) => acc + int, 0);
   labelSumInterest.textContent = `${interest}€`;
 };
-calcDisplaySummary(account1);
+// calcDisplaySummary(account1);
+
+//업데이트
+const updateUi = function (acc) {
+  displayMovements(acc.movements);
+  calcDisplaySummary(acc);
+  calcDisplayBalance(acc);
+};
 
 let currentAccount;
+
 btnLogin.addEventListener('click', function (e) {
   e.preventDefault(); // 기본동작방지
 
@@ -147,9 +157,63 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
 
-    displayMovements(currentAccount.movements);
-    calcDisplaySummary(currentAccount);
-    calcDisplayBalance(currentAccount.movements);
+    updateUi(currentAccount);
+  }
+});
+
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  const amount = Number(inputLoanAmount.value);
+  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+    currentAccount.movements.push(amount);
+
+    updateUi(currentAccount);
+  }
+});
+
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value); // 입력한 금액을 숫자로 변환
+  const receiverAcc = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+  console.log(amount, receiverAcc);
+
+  inputTransferAmount.value = inputTransferTo.value = '';
+
+  if (
+    amount > 0 && // 송금금액이 0보다 크며
+    receiverAcc && // 존재하는 아이디 이어야하며
+    currentAccount.balance >= amount && // 보유자산보다 적으며
+    receiverAcc.username !== currentAccount.username //자기자신이 아니다
+  ) {
+    // console.log('이체완료');
+    currentAccount.movements.push(-amount); //로그인 유저
+    receiverAcc.movements.push(amount); // 상대방
+
+    updateUi(currentAccount);
+  }
+});
+
+//계정 탈퇴
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+  // console.log('Delete');
+
+  if (
+    currentAccount.username === inputCloseUsername.value &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+    console.log(index);
+
+    accounts.splice(index, 1);
+
+    containerApp.style.opacity = 0;
+    inputCloseUsername.value = inputClosePin.value = '';
   }
 });
 
@@ -357,3 +421,78 @@ const totalDepositsUSD = movements
   }) // 모든 값들을 달러로 변환 하고
   .reduce((acc, mov) => acc + mov, 0); //총 금액
 console.log(totalDepositsUSD); // 출력
+
+console.log('================================');
+console.log('================================');
+console.log('================================');
+
+console.log(movements);
+console.log(movements.includes(-130)); // 특정 문자열 찾음
+
+//some
+const anyDeposits = movements.some(mov => mov > 0); //배열내부 반복하면서 하나라도 통과하면 true
+console.log(anyDeposits);
+
+//every = 배열의 모든 요소가 true 인경우 통과
+
+console.log(movements.every(mov => mov > 0));
+console.log(account4.movements.every(mov => mov > 0));
+
+const deposit = mov => mov > 0;
+
+console.log(movements.some(deposit)); // tr
+console.log(movements.every(deposit)); // fa
+console.log(movements.filter(deposit)); // [,.,.,.,.,]
+
+//flat and faltmap
+const arrr = [[1, 2, 3], [4, 5, 6], 78];
+console.log(arrr.flat()); //[1, 2, 3, 4, 5, 6, 78]
+
+const arrrDeep = [[[1, 2], 3], [4, [5, 6]], 78];
+console.log(arrrDeep.flat()); // [[1,2],3,4,[5,6],78]
+console.log(arrrDeep.flat(2)); // [1, 2, 3, 4, 5, 6, 78]
+
+// 서로 다른이유는 flat는 깊이?의 정도다
+
+// const accountMovements = accounts.map(acc => acc.movements); // 새로운배열만듬
+// console.log(accountMovements); // 결과물
+// const allMovements = accountMovements.flat();
+// console.log(allMovements);
+// const overalBalance = allMovements.reduce((acc, mov) => acc + mov, 0);
+// console.log(overalBalance);
+
+//flat
+const overalBalance = accounts
+  .map(acc => acc.movements)
+  .flat()
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(overalBalance);
+
+//flatMap << 얘는 무조건 1수준
+const overalBalance2 = accounts
+  .flatMap(acc => acc.movements)
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(overalBalance);
+
+//정렬 sort
+const owners = ['Jonas', 'Zach', 'Adam', 'Martha'];
+console.log(owners);
+console.log(owners.sort());
+console.log(owners); // 원본 건든다
+
+console.log(movements);
+
+//return < 0, a,b
+//return > 0, b,a
+
+// movements.sort((a, b) => {
+//   return a > b ? 1 : -1;
+// });
+
+// b에는 배열 첫번째값 a에는 배열두번째값
+movements.sort((a, b) => a - b); // 오름차순
+console.log(movements);
+
+movements.sort((a, b) => b - a); // 내림차순
+console.log(movements);
+// 그래서 lodash 라이브러리 사용한다.. 편하다고하네요
