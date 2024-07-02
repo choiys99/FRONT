@@ -82,7 +82,7 @@ const inputClosePin = document.querySelector('.form__input--pin');
 // Functions
 
 const displayMovements = function (movements, sort = false) {
-  containerMovements.innerHTML = '';
+  containerMovements.innerHTML = ''; //HTML 요소의 내부 HTML을 빈 문자열(‘’)로 설정합니다. 즉, 해당 요소의 모든 내용을 제거
 
   const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
 
@@ -90,44 +90,19 @@ const displayMovements = function (movements, sort = false) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const html = `
-      <div class="movements__row">
-        <div class="movements__type movements__type--${type}">${
-      i + 1
-    } ${type}</div>
-        <div class="movements__value">${mov}€</div>
-      </div>
-    `;
-
+        <div class="movements__row">
+          <div class="movements__type movements__type--${type}">
+          ${i + 1} ${type}
+          </div>
+          <div class="movements__value">${mov.toFixed(2)}€</div>
+        </div>
+        `;
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
+
+  // const html = ``
 };
-
-const calcDisplayBalance = function (acc) {
-  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${acc.balance}€`;
-};
-
-const calcDisplaySummary = function (acc) {
-  const incomes = acc.movements
-    .filter(mov => mov > 0)
-    .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${incomes}€`;
-
-  const out = acc.movements
-    .filter(mov => mov < 0)
-    .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(out)}€`;
-
-  const interest = acc.movements
-    .filter(mov => mov > 0)
-    .map(deposit => (deposit * acc.interestRate) / 100)
-    .filter((int, i, arr) => {
-      // console.log(arr);
-      return int >= 1;
-    })
-    .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${interest}€`;
-};
+displayMovements(account1.movements);
 
 const createUsernames = function (accs) {
   accs.forEach(function (acc) {
@@ -138,116 +113,207 @@ const createUsernames = function (accs) {
       .join('');
   });
 };
+
 createUsernames(accounts);
 
-const updateUI = function (acc) {
-  // Display movements
-  displayMovements(acc.movements);
+console.log(account1);
 
-  // Display balance
-  calcDisplayBalance(acc);
-
-  // Display summary
-  calcDisplaySummary(acc);
+const calcDisplayBalance = function (acc) {
+  const balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+  acc.balance = balance;
+  labelBalance.textContent = `${acc.balance.toFixed(2)} €`;
 };
 
-///////////////////////////////////////
-// Event handlers
+// calcDisplayBalance(account1);
+
+const calcDisplaySummary = function (acc) {
+  const incomes = acc.movements
+    .filter(mov => mov > 0)
+    .reduce((acc, arr) => acc + arr, 0);
+
+  const out = acc.movements
+    .filter(mov => mov < 0)
+    .reduce((acc, arr) => acc + arr, 0);
+
+  labelSumOut.textContent = `${Math.abs(out).toFixed(2)}`;
+  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
+
+  const interest = acc.movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * 1.2) / 100)
+    .filter((int, i, arr) => {
+      console.log(arr);
+      return int >= 1;
+    })
+    .reduce((acc, int) => acc + int, 0);
+  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
+};
+// calcDisplaySummary(account1);
+
+//업데이트
+const updateUi = function (acc) {
+  displayMovements(acc.movements);
+  calcDisplaySummary(acc);
+  calcDisplayBalance(acc);
+};
+
 let currentAccount;
 
 btnLogin.addEventListener('click', function (e) {
-  // Prevent form from submitting
-  e.preventDefault();
+  e.preventDefault(); // 기본동작방지
 
+  // console.log('login');
   currentAccount = accounts.find(
     acc => acc.username === inputLoginUsername.value
   );
   console.log(currentAccount);
 
-  if (currentAccount?.pin === Number(inputLoginPin.value)) {
-    // Display UI and message
+  if (currentAccount?.pin === +inputLoginPin.value) {
+    // .?속성값이 null 또는 undefined경우에도 객체속성에접근가능하게헤주는 옵셔널체이닝
+    // console.log('login');
     labelWelcome.textContent = `Welcome back, ${
       currentAccount.owner.split(' ')[0]
     }`;
-    containerApp.style.opacity = 100;
-
-    // Clear input fields
+    containerApp.style.opacity = 1;
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
 
-    // Update UI
-    updateUI(currentAccount);
-  }
-});
-
-btnTransfer.addEventListener('click', function (e) {
-  e.preventDefault();
-  const amount = Number(inputTransferAmount.value);
-  const receiverAcc = accounts.find(
-    acc => acc.username === inputTransferTo.value
-  );
-  inputTransferAmount.value = inputTransferTo.value = '';
-
-  if (
-    amount > 0 &&
-    receiverAcc &&
-    currentAccount.balance >= amount &&
-    receiverAcc?.username !== currentAccount.username
-  ) {
-    // Doing the transfer
-    currentAccount.movements.push(-amount);
-    receiverAcc.movements.push(amount);
-
-    // Update UI
-    updateUI(currentAccount);
+    updateUi(currentAccount);
   }
 });
 
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
 
-  const amount = Number(inputLoanAmount.value);
-
+  const amount = Math.floor(inputLoanAmount.value);
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-    // Add movement
     currentAccount.movements.push(amount);
 
-    // Update UI
-    updateUI(currentAccount);
+    updateUi(currentAccount);
   }
-  inputLoanAmount.value = '';
 });
 
-btnClose.addEventListener('click', function (e) {
+btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
+  const amount = +inputTransferAmount.value; // 입력한 금액을 숫자로 변환
+  const receiverAcc = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+  console.log(amount, receiverAcc);
+
+  inputTransferAmount.value = inputTransferTo.value = '';
 
   if (
-    inputCloseUsername.value === currentAccount.username &&
-    Number(inputClosePin.value) === currentAccount.pin
+    amount > 0 && // 송금금액이 0보다 크며
+    receiverAcc && // 존재하는 아이디 이어야하며
+    currentAccount.balance >= amount && // 보유자산보다 적으며
+    receiverAcc.username !== currentAccount.username //자기자신이 아니다
+  ) {
+    // console.log('이체완료');
+    currentAccount.movements.push(-amount); //로그인 유저
+    receiverAcc.movements.push(amount); // 상대방
+
+    updateUi(currentAccount);
+  }
+});
+
+//계정 탈퇴
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+  // console.log('Delete');
+
+  if (
+    currentAccount.username === inputCloseUsername.value &&
+    +inputClosePin.value === currentAccount.pin
   ) {
     const index = accounts.findIndex(
       acc => acc.username === currentAccount.username
     );
     console.log(index);
-    // .indexOf(23)
 
-    // Delete account
     accounts.splice(index, 1);
 
-    // Hide UI
     containerApp.style.opacity = 0;
+    inputCloseUsername.value = inputClosePin.value = '';
   }
-
-  inputCloseUsername.value = inputClosePin.value = '';
 });
+//
 
-let sorted = false;
+let sorted = false; // 정렬x
 btnSort.addEventListener('click', function (e) {
   e.preventDefault();
-  displayMovements(currentAccount.movements, !sorted);
+  displayMovements(currentAccount.movements, !sorted); //true 전달해서 정렬
   sorted = !sorted;
 });
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
+console.log(23 === 23.0); // true
+console.log(0.1 + 0.2); // 0.30000000000000004 ... 2진법으로 표현하기 힘들어서..
+console.log(0.1 + 0.2 === 0.3); //false
+
+console.log(Number('23')); //23 숫자
+console.log(+'23'); //23 숫자
+
+console.log(Number.parseInt('30px')); //30
+//parseInt 메소드는 문자열의 시작 부분에서 숫자를 찾아 변환하며, 숫자가 아닌 문자를 만나면 변환을 중단
+console.log(Number.parseInt('e23')); //NaN
+
+console.log(Number.parseFloat('2.5rem')); //2.5
+console.log(Number.parseInt('2.5rem')); //2
+
+// not a number = 숫자가아니냐
+console.log(Number.isNaN(20)); // false
+console.log(Number.isNaN('20')); // false
+console.log(Number.isNaN(+'20X')); // true
+console.log(Number.isNaN(23 / 0)); // false
+
+//isFinite 유한한 숫자인지 확인
+console.log(Number.isFinite(23)); // true
+console.log(Number.isFinite('23')); // false
+console.log(Number.isFinite(+'20X')); // false
+
+console.log(Number.isInteger(23)); //true
+console.log(Number.isInteger(23.0)); //true
+console.log(Number.isInteger(23 / 0)); // false
+
+//=====================================
+
+console.log(Math.sqrt(25)); // 5 제곱근나옴
+console.log(25 ** 1 / 2); //12.5
+console.log(25 ** (1 / 2)); //5
+
+console.log(8 ** (1 / 3)); //2
+console.log(Math.max(5, 18, 23, 11, 2)); // 최댓값 찾아줌 23
+console.log(Math.max(5, 18, '23', 11, 2)); //  최댓값 찾아줌 23
+console.log(Math.max(5, 18, '23px', 11, 2)); // nan
+
+console.log(Math.min(5, 18, 23, 11, 2)); // 2
+
+console.log(Math.PI * Number.parseFloat('10px') ** 2);
+console.log(Math.random()); // 0~ 1 사이
+
+const rendomint = (min, max) =>
+  Math.trunc(Math.random() * (max - min) + 1) + min;
+console.log(rendomint(5, 20));
+
+// 소수점 자름
+console.log(Math.trunc(23.3)); //23
+console.log(Math.round(23.3)); //23
+console.log(Math.round(23.9)); //24 << 반오름 0.5 기준
+
+console.log(Math.ceil(23.9)); //24 << 무 조건 오름
+console.log(Math.ceil(23.3)); //24 << 마찬가지
+
+console.log(Math.floor(23.3)); //23 <<  무조건내림
+console.log(Math.floor(23.3)); //23 << 마찬가지
+console.log(Math.floor('23.3')); //23 << 마찬가지
+
+console.log(Math.trunc(-23.3)); //-23 <<
+console.log(Math.floor(-23.3)); //-24 <<
+
+//소수점 설정
+console.log((2.7).toFixed(0)); // 3 << 문자열로나옴.. tofixed는 항상 문자열을 반환
+console.log((2.7).toFixed(3)); // 2.700 <<
+console.log((2.345).toFixed(2)); // 2.35
