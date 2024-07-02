@@ -317,3 +317,92 @@ console.log(Math.floor(-23.3)); //-24 <<
 console.log((2.7).toFixed(0)); // 3 << 문자열로나옴.. tofixed는 항상 문자열을 반환
 console.log((2.7).toFixed(3)); // 2.700 <<
 console.log((2.345).toFixed(2)); // 2.35
+
+// 나머지 연산자
+
+console.log(5 % 2); //1 .. 나누고 남은값 나머지
+console.log(5 / 2); //2.5 // 나눈값
+
+console.log(8 % 3); // 2
+console.log(8 / 3); // 2.666..
+
+console.log(6 % 2); // 0 ... 남은게 없으니 짝수다
+console.log(6 / 2); // 3
+
+console.log(7 / 2); // 1... 남은게 1이니 홀 수
+console.log(7 / 2); // 3.5 ...
+
+const isEven = n => n % 2 === 0; //짝수냐?
+console.log(isEven(8)); // true
+console.log(isEven(23)); //false
+console.log(isEven(514)); // true
+
+labelBalance.addEventListener('click', function () {
+  [...document.querySelectorAll('.movements__row')].forEach(function (row, i) {
+    if (i % 2 === 0) row.style.backgroundColor = 'orangered'; //0,2,4,6
+    if (i % 3 === 0) row.style.backgroundColor = 'blue'; //0,3,6,9
+  });
+});
+
+const diameter = 287_460_000_000;
+console.log(diameter);
+
+console.log(Number('230_000')); //nan ... 구분못해서 안댐
+
+console.log(2 ** 53 - 1); //9007199254740991
+console.log(Number.MAX_SAFE_INTEGER); // 9007199254740991 << js가 안전하게 나타 낼 수 있는 가장 큰 수
+// 이 수 ㅓㄴㅁ어가면 정밀도가 떨어짐
+
+console.log(4654543545343453453354351234n); // n는 bigint
+console.log(BigInt(53453354351234));
+
+console.log(10000n + 10000n); // 20000n
+console.log(54646546515464n * 100000n);
+
+const huge = 20215648678784n;
+const num = 23;
+// console.log(huge * num); 안됨.. 타입같아야함
+
+console.log(huge * BigInt(num));
+
+console.log(20n > 15); //true
+console.log(20n === 20); //false
+console.log(typeof 20n); // bigint
+console.log(20n == 20); //true
+
+console.log(huge + 'is really big!!');
+
+console.log(10n / 3n); // 3n << 기본적으로 소수부분 잘라낸다.
+console.log(10 / 3); //3.333
+
+//js 날짜 생성
+
+const now = new Date();
+console.log(now); //Tue Jul 02 2024 21:04:39 GMT+0900 (한국 표준시)
+console.log(new Date('Tue Jul 02 2024 21:04:39')); // 자동으로 시간을 구문 분석
+console.log(new Date('December 24,2015'));
+
+console.log(new Date(account1.movementsDates[0]));
+
+console.log(new Date(2037, 10, 19, 15, 23, 5)); // 년 월 일 시간 분 초
+console.log(new Date(2037, 10, 31)); // Tue Dec 01 2037 00:00:00 GMT+0900 (한국
+
+console.log(new Date(0)); // Thu Jan 01 1970 09:00:00 GMT+0900 (한국 표준시)
+console.log(new Date(3 * 24 * 60 * 60 * 1000)); // Sun Jan 04 1970 09:00:00 GMT+0900 (한국 표준시)
+//                   3번 ,하루는 24시간 ,시간은 60분, 분은 60초,초는 1000밀리초 (1초)
+
+const future = new Date(2037, 10, 19, 15, 23);
+console.log(future);
+console.log(future.getFullYear()); // 2037
+console.log(future.getMonth()); // 10
+console.log(future.getDate()); // 19
+console.log(future.getDay()); // 4... (이건 요일을 나타냄 0은 일요일 4느,ㄴ 목요일)
+console.log(future.getHours()); // 15
+console.log(future.getMinutes()); // 23
+console.log(future.getSeconds()); // 0
+
+console.log(future.toISOString()); //2037-11-19T06:23:00.000Z
+console.log(future.getTime()); //2142224580000 << 이건타임스탬프
+console.log(new Date(2142224580000)); //Thu Nov 19 2037 15:23:00 GMT+0900 (한국 표준시)
+
+console.log(Date.now()); // 현재시간 타임스탬프
