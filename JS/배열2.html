@@ -6,14 +6,14 @@
   console.log(friends);
   console.log(newLength);
 
-  friends.unshift('김주영');
+  friends.unshift('ddd');
   //첫번째 추가 unshift
   console.log(friends);
 
   //배열삭제
 
   friends.pop(); // last
-  const popped = friends.pop(); 
+  const popped = friends.pop();
   console.log(popped);
   console.log(friends);
 
@@ -25,14 +25,11 @@
   console.log(friends.includes('steven'));
 
   const calcTip = function (bill) {
-    return bill >= 50 && bill <= 300 ? bill * 0.15: bill * 0.2;
-  }
+    return bill >= 50 && bill <= 300 ? bill * 0.15 : bill * 0.2;
+  };
   // const calcTip = bill =>
 
-  const bils = [125,555,44];
-  const tips = [calcTip(bills[0]), calcTip(bills[1]),calcTip(bills[2])];
+  const bils = [125, 555, 44];
+  const tips = [calcTip(bills[0]), calcTip(bills[1]), calcTip(bills[2])];
   console.log(bils.tips);
-
-
-
 </script>

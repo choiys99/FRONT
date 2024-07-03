@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Typing Text</title>
+    <link rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: lightcoral;
+      }
+      .wrap {
+        position: absolute; /* 부모 기준으로 고정 */
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #fff;
+        text-align: center;
+      }
+      .material-symbols-outlined {
+        font-size: 10rem;
+      }
+      .ig-text {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      .sm-text {
+        font-size: 1.5rem;
+      }
+      #dynamic {
+        position: relative; /* 자신 기준으로 고정 */
+        display: inline-block;
+      }
+      #dynamic::after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        right: -10px;
+        width: 4px;
+        height: 100%;
+        background: #fff;
+      }
+
+      /* js 로 작업할부분*/
+
+      #dynamic.active::after {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>
+        <span class="material-symbols-outlined"> favorite </span>
+      </h1>
+      <p id="dynamic" class="ig-text">Choi Ye Sung</p>
+      <p class="sm-text">show me the money</p>
+    </div>
+  </body>
+</html>
+
+<script>
+  const target = document.querySelector("#dynamic");
+  target.textContent = "";
+
+  // console.log(selectStringArr);
+
+  //다시 랜덤출력
+  function randomString() {
+    const stringArr = [
+      "Choi Ye Sung",
+      "Ye Sung Choi",
+      "Sung Choi Ye",
+      "Ye Choi Sung",
+    ];
+    const selectString =
+      stringArr[Math.floor(Math.random() * stringArr.length)];
+    const selectStringArr = selectString.split(""); // 단어하나하나 배열로 쪼갬
+    return selectStringArr;
+  }
+
+  //타이핑 리셋
+  function resetTyping() {
+    target.textContent = "";
+    dynamic(randomString());
+  }
+
+  //한글자씩 텍스트 출력 함수
+  function dynamic(randomArr) {
+    if (randomArr.length > 0) {
+      // 0보다 크면
+      target.textContent += randomArr.shift(); //타겟에 첫번째 글자 부터 붙여줌
+      setTimeout(() => {
+        dynamic(randomArr);
+      }, 80);
+    } else {
+      setTimeout(resetTyping, 3000);
+    }
+  }
+  dynamic(randomString());
+
+  function blink() {
+    target.classList.toggle("active"); // togle = 있으면 제거 없으면 추가
+  }
+  setInterval(blink, 500);
+</script>
