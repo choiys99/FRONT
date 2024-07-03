@@ -16,14 +16,14 @@ const account1 = {
   pin: 1111,
 
   movementsDates: [
-    '2019-11-18T21:31:17.178Z',
-    '2019-12-23T07:42:02.383Z',
-    '2020-01-28T09:15:04.904Z',
-    '2020-04-01T10:17:24.185Z',
-    '2020-05-08T14:11:59.604Z',
-    '2020-05-27T17:01:17.194Z',
-    '2020-07-11T23:36:17.929Z',
-    '2020-07-12T10:51:36.790Z',
+    '2024-11-18T21:31:17.178Z',
+    '2024-12-23T07:42:02.383Z',
+    '2024-01-28T09:15:04.904Z',
+    '2024-04-01T10:17:24.185Z',
+    '2024-06-28T14:11:59.604Z',
+    '2024-07-01T17:01:17.194Z',
+    '2024-07-02T23:36:17.929Z',
+    '2024-07-03T10:51:36.790Z',
   ],
   currency: 'EUR',
   locale: 'pt-PT', // de-DE
@@ -81,20 +81,53 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // Functions
 
-const displayMovements = function (movements, sort = false) {
+const formatMovement = function (date) {
+  const calcDayspassed = (date1, date2) =>
+    Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
+
+  const daysPassed = calcDayspassed(new Date(), date);
+  console.log(daysPassed);
+
+  if (daysPassed === 0) return 'Today';
+  if (daysPassed === 1) return 'Yesterday';
+  if (daysPassed <= 7) return `${daysPassed} days ago`;
+  else {
+    const day = `${date.getDate()}`.padStart(2, 0); // 문자열길이, 0 채울꺼 >> 한자리수면 0n 이렇게
+    const month = `${date.getMonth() + 1}`.padStart(2, 0);
+    const year = date.getFullYear();
+
+    return `${day}/${month}/${year}`;
+  }
+};
+
+const formatCur = function (value, locale, currency) {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: currency,
+  }).format(value);
+};
+
+const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = ''; //HTML 요소의 내부 HTML을 빈 문자열(‘’)로 설정합니다. 즉, 해당 요소의 모든 내용을 제거
 
-  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+  const movs = sort
+    ? acc.movements.slice().sort((a, b) => a - b)
+    : acc.movements;
 
   movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
+    const date = new Date(acc.movementsDates[i]);
+    const displayDate = formatMovement(date);
+
+    const formattedMov = formatCur(mov, acc.locale, acc.currency);
 
     const html = `
         <div class="movements__row">
           <div class="movements__type movements__type--${type}">
           ${i + 1} ${type}
           </div>
-          <div class="movements__value">${mov.toFixed(2)}€</div>
+          <div class="movements__date">${displayDate}</div>
+          <div class="movements__value">${formattedMov}</div>
         </div>
         `;
     containerMovements.insertAdjacentHTML('afterbegin', html);
@@ -102,7 +135,7 @@ const displayMovements = function (movements, sort = false) {
 
   // const html = ``
 };
-displayMovements(account1.movements);
+// displayMovements(account1.movements);
 
 const createUsernames = function (accs) {
   accs.forEach(function (acc) {
@@ -121,7 +154,7 @@ console.log(account1);
 const calcDisplayBalance = function (acc) {
   const balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
   acc.balance = balance;
-  labelBalance.textContent = `${acc.balance.toFixed(2)} €`;
+  labelBalance.textContent = formatCur(acc.balance, acc.locale, acc.currency);
 };
 
 // calcDisplayBalance(account1);
@@ -135,8 +168,8 @@ const calcDisplaySummary = function (acc) {
     .filter(mov => mov < 0)
     .reduce((acc, arr) => acc + arr, 0);
 
-  labelSumOut.textContent = `${Math.abs(out).toFixed(2)}`;
-  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
+  labelSumOut.textContent = formatCur(Math.abs(out), acc.locale, acc.currency);
+  labelSumIn.textContent = formatCur(incomes, acc.locale, acc.currency);
 
   const interest = acc.movements
     .filter(mov => mov > 0)
@@ -146,18 +179,68 @@ const calcDisplaySummary = function (acc) {
       return int >= 1;
     })
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
+  labelSumInterest.textContent = formatCur(interest, acc.locale, acc.currency);
 };
 // calcDisplaySummary(account1);
 
 //업데이트
 const updateUi = function (acc) {
-  displayMovements(acc.movements);
+  displayMovements(acc);
   calcDisplaySummary(acc);
   calcDisplayBalance(acc);
 };
 
-let currentAccount;
+const startLogOutTimer = function () {
+  let time = 10;
+
+  const tick = function () {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const set = String(time % 60).padStart(2, 0);
+
+    labelTimer.textContent = `${min}:${set}`;
+
+    if (time === 0) {
+      clearInterval(timer);
+      labelWelcome.textContent = 'Log in to get started';
+      containerApp.style.opacity = 0;
+    }
+    time--;
+  };
+
+  tick();
+  const timer = setInterval(tick, 1000);
+
+  return timer;
+};
+// 이벤트 핸들러
+let currentAccount, timer;
+
+// 로그인 임시
+// currentAccount = account1;
+// updateUi(currentAccount);
+// containerApp.style.opacity = 100;
+
+//국제화 api
+const now = new Date();
+const options = {
+  // 사용자 설정
+  hour: 'numeric',
+  minute: 'numeric',
+  day: 'numeric',
+  month: 'numeric',
+  year: 'numeric',
+  // weekday: 'long',
+};
+
+const locale = (labelDate.textContent = new Intl.DateTimeFormat(
+  'ko-KR',
+  options
+).format(now));
+// 개쩌네.. iso language code table << google 검색
+const locale2 = navigator.language;
+console.log(locale2);
+
+//day/month/year
 
 btnLogin.addEventListener('click', function (e) {
   e.preventDefault(); // 기본동작방지
@@ -174,9 +257,40 @@ btnLogin.addEventListener('click', function (e) {
     labelWelcome.textContent = `Welcome back, ${
       currentAccount.owner.split(' ')[0]
     }`;
-    containerApp.style.opacity = 1;
+    containerApp.style.opacity = 100;
+
+    // 로그인시 현재 날짜 생성
+    // const now = new Date(); // 현재날짜
+    // const day = `${now.getDate()}`.padStart(2, 0); // 문자열길이, 0 채울꺼 >> 한자리수면 0n 이렇게
+    // const month = `${now.getMonth() + 1}`.padStart(2, 0);
+    // const year = now.getFullYear();
+    // const hour = `${now.getHours()}`.padStart(2, 0);
+    // const min = `${now.getMinutes()}`.padStart(2, 0);
+
+    // labelDate.textContent = `${day}/${month}/${year},${hour}:${min}`;
+
+    const options = {
+      // 사용자 설정
+      hour: 'numeric',
+      minute: 'numeric',
+      day: 'numeric',
+      month: 'numeric',
+      year: 'numeric',
+      // weekday: 'long',
+    };
+    // const locale = navigator.language;
+
+    labelDate.textContent = new Intl.DateTimeFormat(
+      currentAccount.locale,
+      options
+    ).format(now);
+    // 개쩌네.. iso language code table << google 검색
+
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
+
+    if (timer) clearInterval(timer);
+    timer = startLogOutTimer();
 
     updateUi(currentAccount);
   }
@@ -186,11 +300,15 @@ btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
 
   const amount = Math.floor(inputLoanAmount.value);
-  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-    currentAccount.movements.push(amount);
 
-    updateUi(currentAccount);
+  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+    setTimeout(function () {
+      currentAccount.movements.push(amount);
+      currentAccount.movementsDates.push(new Date().toISOString());
+      updateUi(currentAccount);
+    }, 2500);
   }
+  inputLoanAmount.value = '';
 });
 
 btnTransfer.addEventListener('click', function (e) {
@@ -212,6 +330,14 @@ btnTransfer.addEventListener('click', function (e) {
     // console.log('이체완료');
     currentAccount.movements.push(-amount); //로그인 유저
     receiverAcc.movements.push(amount); // 상대방
+
+    //전송날짜
+    currentAccount.movementsDates.push(new Date().toISOString());
+    receiverAcc.movementsDates.push(new Date().toISOString());
+
+    //시간 초기화
+    clearInterval(timer);
+    timer = startLogOutTimer();
 
     updateUi(currentAccount);
   }
@@ -245,6 +371,10 @@ btnSort.addEventListener('click', function (e) {
   displayMovements(currentAccount.movements, !sorted); //true 전달해서 정렬
   sorted = !sorted;
 });
+
+//
+
+//
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -377,32 +507,69 @@ console.log(10 / 3); //3.333
 
 //js 날짜 생성
 
-const now = new Date();
-console.log(now); //Tue Jul 02 2024 21:04:39 GMT+0900 (한국 표준시)
-console.log(new Date('Tue Jul 02 2024 21:04:39')); // 자동으로 시간을 구문 분석
-console.log(new Date('December 24,2015'));
+// // const now = new Date();
+// console.log(now); //Tue Jul 02 2024 21:04:39 GMT+0900 (한국 표준시)
+// console.log(new Date('Tue Jul 02 2024 21:04:39')); // 자동으로 시간을 구문 분석
+// console.log(new Date('December 24,2015'));
 
-console.log(new Date(account1.movementsDates[0]));
+// console.log(new Date(account1.movementsDates[0]));
 
-console.log(new Date(2037, 10, 19, 15, 23, 5)); // 년 월 일 시간 분 초
-console.log(new Date(2037, 10, 31)); // Tue Dec 01 2037 00:00:00 GMT+0900 (한국
+// console.log(new Date(2037, 10, 19, 15, 23, 5)); // 년 월 일 시간 분 초
+// console.log(new Date(2037, 10, 31)); // Tue Dec 01 2037 00:00:00 GMT+0900 (한국
 
-console.log(new Date(0)); // Thu Jan 01 1970 09:00:00 GMT+0900 (한국 표준시)
-console.log(new Date(3 * 24 * 60 * 60 * 1000)); // Sun Jan 04 1970 09:00:00 GMT+0900 (한국 표준시)
-//                   3번 ,하루는 24시간 ,시간은 60분, 분은 60초,초는 1000밀리초 (1초)
+// console.log(new Date(0)); // Thu Jan 01 1970 09:00:00 GMT+0900 (한국 표준시)
+// console.log(new Date(3 * 24 * 60 * 60 * 1000)); // Sun Jan 04 1970 09:00:00 GMT+0900 (한국 표준시)
+// //                   3번 ,하루는 24시간 ,시간은 60분, 분은 60초,초는 1000밀리초 (1초)
 
-const future = new Date(2037, 10, 19, 15, 23);
-console.log(future);
-console.log(future.getFullYear()); // 2037
-console.log(future.getMonth()); // 10
-console.log(future.getDate()); // 19
-console.log(future.getDay()); // 4... (이건 요일을 나타냄 0은 일요일 4느,ㄴ 목요일)
-console.log(future.getHours()); // 15
-console.log(future.getMinutes()); // 23
-console.log(future.getSeconds()); // 0
+// const future = new Date(2037, 10, 19, 15, 23);
+// console.log(future);
+// console.log(future.getFullYear()); // 2037
+// console.log(future.getMonth()); // 10
+// console.log(future.getDate()); // 19
+// console.log(future.getDay()); // 4... (이건 요일을 나타냄 0은 일요일 4느,ㄴ 목요일)
+// console.log(future.getHours()); // 15
+// console.log(future.getMinutes()); // 23
+// console.log(future.getSeconds()); // 0
 
-console.log(future.toISOString()); //2037-11-19T06:23:00.000Z
-console.log(future.getTime()); //2142224580000 << 이건타임스탬프
-console.log(new Date(2142224580000)); //Thu Nov 19 2037 15:23:00 GMT+0900 (한국 표준시)
+// console.log(future.toISOString()); //2037-11-19T06:23:00.000Z
+// console.log(future.getTime()); //2142224580000 << 이건타임스탬프
+// console.log(new Date(2142224580000)); //Thu Nov 19 2037 15:23:00 GMT+0900 (한국 표준시)
 
-console.log(Date.now()); // 현재시간 타임스탬프
+// console.log(Date.now()); // 현재시간 타임스탬프
+
+// const future2 = new Date(2037, 10, 19, 15, 23);
+// console.log(+future2);
+
+// const calcDayspassed = (date1, date2) =>
+//   Math.abs(date2 - date1) / (1000 * 60 * 60 * 24);
+
+// const day1 = calcDayspassed(new Date(2037, 3, 14), new Date(2037, 3, 4));
+// console.log(day1);
+
+const num2 = 3884764.23;
+const optinoss = {
+  style: 'currency',
+  // unit: 'celsius',
+  currency: 'EUR',
+  useGrouping: false,
+};
+console.log('미국:', new Intl.NumberFormat('en-us', optinoss).format(num2));
+console.log('독일:', new Intl.NumberFormat('de-DE', optinoss).format(num2));
+console.log('시리아:', new Intl.NumberFormat('ar-SY', optinoss).format(num2));
+
+// 타이머 설정
+const ingredients = ['olives', 'spinach'];
+
+const pizzaTimer = setTimeout(
+  (ing1, ing2) => console.log(`피자 ${ing1}ㅈㄴ ${ing2}먹고싶다`),
+  3000,
+  ...ingredients
+); // 3초후 발생
+
+if (ingredients.includes('spinach')) clearTimeout(pizzaTimer); // << spinach 포함되어있으면 무시
+
+//setInterval
+setInterval(function () {
+  const now = new Date();
+  console.log(now);
+}, 100000000000); // 1초마다 실행
