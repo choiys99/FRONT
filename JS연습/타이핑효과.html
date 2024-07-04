@@ -76,7 +76,6 @@
 
   // console.log(selectStringArr);
 
-  //다시 랜덤출력
   function randomString() {
     const stringArr = [
       "Choi Ye Sung",
@@ -87,12 +86,12 @@
     const selectString =
       stringArr[Math.floor(Math.random() * stringArr.length)];
     const selectStringArr = selectString.split(""); // 단어하나하나 배열로 쪼갬
-    return selectStringArr;
+    return selectStringArr; // 단어를 배열로 쪼갠걸 리턴
   }
 
   //타이핑 리셋
   function resetTyping() {
-    target.textContent = "";
+    target.textContent = ""; // 빈공백으로 채움
     dynamic(randomString());
   }
 
@@ -100,18 +99,21 @@
   function dynamic(randomArr) {
     if (randomArr.length > 0) {
       // 0보다 크면
-      target.textContent += randomArr.shift(); //타겟에 첫번째 글자 부터 붙여줌
+      target.textContent += randomArr.shift(); //타겟에 첫번째 배열부터 붙여줌
+
       setTimeout(() => {
-        dynamic(randomArr);
-      }, 80);
+        // 타이머
+        dynamic(randomArr); // 재귀함수 다시 dynamic 호출
+      }, 110); // 1.1초 단위
     } else {
-      setTimeout(resetTyping, 3000);
+      setTimeout(resetTyping, 3000); // 타이머 종료(타이핑리셋,3초후)
     }
   }
-  dynamic(randomString());
+
+  dynamic(randomString()); // 실행 (단어추출)
 
   function blink() {
     target.classList.toggle("active"); // togle = 있으면 제거 없으면 추가
   }
-  setInterval(blink, 500);
+  setInterval(blink, 500); // 무한반복 0.5초
 </script>
