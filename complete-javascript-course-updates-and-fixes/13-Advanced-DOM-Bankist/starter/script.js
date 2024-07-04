@@ -131,18 +131,19 @@ logo.classList.contains('c');
 //이건사용하지마셈.. 기존 클래스를 모두 재정의
 // logo.className = 'jonas'
 
-const btnScrollTo = document.querySelector('.btn--scroll-to');
+const btnScrollTo = document.querySelector('.btn--scroll-to'); // 화면 Learn more 이거
 const section1 = document.querySelector('#section--1');
 
 btnScrollTo.addEventListener('click', function (e) {
+  // 클릭시 실행
   const s1coores = section1.getBoundingClientRect();
-  console.log(s1coores.left, s1coores.top);
-
+  // console.log(s1coores.left, s1coores.top);
   console.log(e.target.getBoundingClientRect()); // e.target = btnScrollTo 가르킴
   //getBoundingClientRect = HTML 요소(Element)의 크기와 현재 뷰포트에서의 요소의 상대적인 위치 정보를 반환합니다.
+  // (left, top) 순서인듯?
 
   // console.log('현재 스크롤(X//y)', window.pageXOffset, pageYOffset); << 사용하지말래..오래된거
-  console.log('현재 스크롤(X/Y)', window.screenX, screenY);
+  console.log('현재 스크롤(X/Y)', window.scrollX, scrollY);
 
   console.log(
     '높이/가로',
@@ -155,9 +156,23 @@ btnScrollTo.addEventListener('click', function (e) {
   //   s1coores.left + window.pageXOffset,
   //   s1coores.top + window.pageYOffset
   // );
+
+  // pageXOffset = 현재 보이는 화면 왼쪽 가장자리 사이의 거리를 픽셀단위로 나타냄 하지만 오래된거 그래서  scrollX 권장
   window.scrollTo({
-    left: s1coores.left + window.pageXOffset,
-    top: s1coores.top + window.pageYOffset,
+    left: s1coores.left + window.scrollX,
+    top: s1coores.top + window.scrollY,
     behavior: 'smooth',
   });
 });
+
+// 마우스이벤트
+
+const h1 = document.querySelector('h1');
+h1.addEventListener('mouseenter', function (e) {
+  // css :hover 비슷 마우스가 특정요소에 들어갈때마다 실행
+  alert('제목 보는중');
+});
+
+h1.onmouseenter = function (e) {
+  alert('제목 보는중2');
+}; // 이건 구식방법 위에는 최신방법
