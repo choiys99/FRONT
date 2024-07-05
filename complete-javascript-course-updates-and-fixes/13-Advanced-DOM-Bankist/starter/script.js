@@ -168,11 +168,46 @@ btnScrollTo.addEventListener('click', function (e) {
 // 마우스이벤트
 
 const h1 = document.querySelector('h1');
-h1.addEventListener('mouseenter', function (e) {
-  // css :hover 비슷 마우스가 특정요소에 들어갈때마다 실행
-  alert('제목 보는중');
+
+// h1.addEventListener('mouseenter', function (e) {
+//   // css :hover 비슷 마우스가 특정요소에 들어갈때마다 실행
+//   alert('제목 보는중');
+// });
+
+// const alertH1 = function (e) {
+//   alert('test'); // (2) 결과 그리고
+//   h1.removeEventListener('mouseenter', alertH1); // (3) 이벤트 제거 .... 한번만 알림창이 뜨고 이제 안뜸
+// };
+// h1.addEventListener('mouseenter', alertH1); // h1 이벤트 추가 (1)
+
+// h1.onmouseenter = function (e) {
+//   alert('제목 보는중2');
+// }; // 이건 구식방법 위에는 최신방법
+
+//버블링
+
+const randomInt = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1) + min);
+
+// console.log(randomInt(0, 255));
+
+const randomColor = () =>
+  `rgb(${randomInt(0, 255)},${randomInt(0, 255)},${randomInt(0, 255)})`;
+
+document.querySelector('.nav__link').addEventListener('click', function (e) {
+  console.log('LINK');
+  this.style.backgroundColor = randomColor();
 });
 
-h1.onmouseenter = function (e) {
-  alert('제목 보는중2');
-}; // 이건 구식방법 위에는 최신방법
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  // e.defaultPrevented();
+  console.log('LINK');
+  this.style.backgroundColor = randomColor();
+});
+
+document.querySelector('.nav').addEventListener('click', function (e) {
+  // e.defaultPrevented();
+  this.style.backgroundColor = randomColor();
+
+  console.log('LINK');
+});
