@@ -41,6 +41,76 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
+////////////////// 페이지 스크롤 이벤트 작업  ///////////////////////
+
+const btnScrollTo = document.querySelector('.btn--scroll-to'); // 화면 Learn more 이거
+
+btnScrollTo.addEventListener('click', function (e) {});
+// 클릭시 실행
+// const s1coores = section1.getBoundingClientRect();
+// console.log(s1coores.left, s1coores.top);
+// console.log(e.target.getBoundingClientRect()); // e.target = btnScrollTo 가르킴
+//getBoundingClientRect = HTML 요소(Element)의 크기와 현재 뷰포트에서의 요소의 상대적인 위치 정보를 반환합니다.
+// (left, top) 순서인듯?
+
+// console.log('현재 스크롤(X//y)', window.pageXOffset, pageYOffset); << 사용하지말래..오래된거
+console.log('현재 스크롤(X/Y)', window.scrollX, scrollY);
+
+console.log(
+  '높이/가로',
+  document.documentElement.clientHeight, //창의 내부 높이 패딩까지포함
+  document.documentElement.clientWidth // 창의 가로너비 패딩까지포함
+);
+
+//스크롤 위치 px단위
+// window.scrollTo(
+//   s1coores.left + window.pageXOffset,
+//   s1coores.top + window.pageYOffset
+// );
+
+// pageXOffset = 현재 보이는 화면 왼쪽 가장자리 사이의 거리를 픽셀단위로 나타냄 하지만 오래된거 그래서  scrollX 권장
+
+//   window.scrollTo({
+//     left: s1coores.left + window.scrollX,
+//     top: s1coores.top + window.scrollY,
+//     behavior: 'smooth',
+//   });
+// });
+
+// document.querySelectorAll('.nav__link').forEach(function (el) {
+//   el.addEventListener('click', function (e) {
+//     e.preventDefault();
+// const id = this.getAttribute('href');
+// console.log(id);
+// document.querySelector(id).scrollIntoView({ // scrollIntoView  = 선택한 요소를 기준으로 이동
+//   behavior: 'smooth',
+//     });
+//   });
+// });
+
+// 1. 공통 상위 요소에 이벤트 추가
+//2. 요소확인
+
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  e.preventDefault();
+  //매칭
+  if (e.target.classList.contains('nav__link')) {
+    const id = e.target.getAttribute('href');
+    document.querySelector(id).scrollIntoView({
+      // scrollIntoView  = 선택한 요소를 기준으로 이동
+      behavior: 'smooth',
+    });
+  }
+});
+
+///////////// dom 횡단
+
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
@@ -75,6 +145,11 @@ header.append(message); //부모 요소의 첫 번째 자식으로 새로운 노
 header.before(message); // 요소 앞에 컨텐츠 삽입
 header.after(message); // 요소 뒤에 삽입
 
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
 //삭제
 document
   .querySelector('.btn--close-cookie')
@@ -97,10 +172,16 @@ message.style.height =
 //Number.parseFloat= 문자열을 부동 소수점 숫자로 변환
 console.log(getComputedStyle(message).height); // 이렇게하면 height 볼수있음
 
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
 //css 변수
 
 document.documentElement.style.setProperty('--color-primary', 'orangered');
 //('대상','변경')
+
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 
 //속성
 const logo = document.querySelector('.nav__logo');
@@ -121,7 +202,11 @@ console.log(link.getAttribute('href'));
 //epdlxj thrtjd
 console.log(logo.dataset.versionNumber);
 
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
 //클래스
+
 logo.classList.add('c', 'j');
 // console.log(logo.cl);
 logo.classList.remove('c', 'j');
@@ -131,39 +216,10 @@ logo.classList.contains('c');
 //이건사용하지마셈.. 기존 클래스를 모두 재정의
 // logo.className = 'jonas'
 
-const btnScrollTo = document.querySelector('.btn--scroll-to'); // 화면 Learn more 이거
 const section1 = document.querySelector('#section--1');
 
-btnScrollTo.addEventListener('click', function (e) {
-  // 클릭시 실행
-  const s1coores = section1.getBoundingClientRect();
-  // console.log(s1coores.left, s1coores.top);
-  console.log(e.target.getBoundingClientRect()); // e.target = btnScrollTo 가르킴
-  //getBoundingClientRect = HTML 요소(Element)의 크기와 현재 뷰포트에서의 요소의 상대적인 위치 정보를 반환합니다.
-  // (left, top) 순서인듯?
-
-  // console.log('현재 스크롤(X//y)', window.pageXOffset, pageYOffset); << 사용하지말래..오래된거
-  console.log('현재 스크롤(X/Y)', window.scrollX, scrollY);
-
-  console.log(
-    '높이/가로',
-    document.documentElement.clientHeight, //창의 내부 높이 패딩까지포함
-    document.documentElement.clientWidth // 창의 가로너비 패딩까지포함
-  );
-
-  //스크롤 위치 px단위
-  // window.scrollTo(
-  //   s1coores.left + window.pageXOffset,
-  //   s1coores.top + window.pageYOffset
-  // );
-
-  // pageXOffset = 현재 보이는 화면 왼쪽 가장자리 사이의 거리를 픽셀단위로 나타냄 하지만 오래된거 그래서  scrollX 권장
-  window.scrollTo({
-    left: s1coores.left + window.scrollX,
-    top: s1coores.top + window.scrollY,
-    behavior: 'smooth',
-  });
-});
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 
 // 마우스이벤트
 
@@ -186,28 +242,28 @@ const h1 = document.querySelector('h1');
 
 //버블링
 
-const randomInt = (min, max) =>
-  Math.floor(Math.random() * (max - min + 1) + min);
+// const randomInt = (min, max) =>
+//   Math.floor(Math.random() * (max - min + 1) + min);
 
-// console.log(randomInt(0, 255));
+// // console.log(randomInt(0, 255));
 
-const randomColor = () =>
-  `rgb(${randomInt(0, 255)},${randomInt(0, 255)},${randomInt(0, 255)})`;
+// const randomColor = () =>
+//   `rgb(${randomInt(0, 255)},${randomInt(0, 255)},${randomInt(0, 255)})`;
 
-document.querySelector('.nav__link').addEventListener('click', function (e) {
-  console.log('LINK');
-  this.style.backgroundColor = randomColor();
-});
+// document.querySelector('.nav__link').addEventListener('click', function (e) {
+//   console.log('LINK');
+//   this.style.backgroundColor = randomColor();
+// });
 
-document.querySelector('.nav__links').addEventListener('click', function (e) {
-  // e.defaultPrevented();
-  console.log('LINK');
-  this.style.backgroundColor = randomColor();
-});
+// document.querySelector('.nav__links').addEventListener('click', function (e) {
+//   // e.defaultPrevented();
+//   console.log('LINK');
+//   this.style.backgroundColor = randomColor();
+// });
 
-document.querySelector('.nav').addEventListener('click', function (e) {
-  // e.defaultPrevented();
-  this.style.backgroundColor = randomColor();
+// document.querySelector('.nav').addEventListener('click', function (e) {
+//   // e.defaultPrevented();
+//   this.style.backgroundColor = randomColor();
 
-  console.log('LINK');
-});
+//   console.log('LINK');
+// });
