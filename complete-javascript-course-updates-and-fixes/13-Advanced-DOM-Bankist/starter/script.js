@@ -7,6 +7,9 @@ const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+
+const nav = document.querySelector('.nav'); // nav 맨위
+
 // console.log(btnsOpenModal.length);
 
 // hiden 삭제
@@ -103,7 +106,66 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
   }
 });
 
-///////////// dom 횡단
+///////////// dom 횡단 //////////////////
+const h1 = document.querySelector('h1');
+// 내려간다잉 : 하위요소부터
+console.log(h1.querySelectorAll('.highlight')); // h1 하위 요소 highlight 선택
+console.log(h1.childNodes); // 모든 하위요소 볼 수 있음 주석,텍스트 포함되어잇ㅇ므
+console.log(h1.children); // 주석,텍스트 포함안됨
+h1.firstElementChild.style.color = 'white';
+h1.lastElementChild.style.color = 'white';
+
+// 이제 올라간다잉 : 부모로
+console.log(h1.parentNode);
+console.log(h1.parentElement);
+
+h1.closest('.header').style.background = 'var(--gradient-secondary)'; // 헤더요소에 모든 스타일 적용
+
+console.log(h1.previousElementSibling); //특정요소의 이전 형제를 반환하는 읽기 전용
+console.log(h1.nextElementSibling); // 다음요소를 가져옴
+
+console.log(h1.parentElement.children); // 부모요소를 가져오고 그 부모요소의 자식들을 html컬렉션 (배열은아닌데 배열처럼 사용가능)
+
+// [...h1.parentElement.children].forEach(function (el) {
+//   if (el !== h1) {
+//     el.style.transform = 'scale(0.5)'; //h1.요소의 부모요소의 자식들을 돌면서 h1요소가 아닌 모든 요소 스타일 변경
+//   }
+// });
+
+//  탭 구성 요소
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+
+// tabs.forEach(t => t.addEventListener('click', () => console.log('tab'))); << 좋은거 아님.. 양이 많으면 페이지 느려짐
+
+tabsContainer.addEventListener('click', function (e) {
+  const clicked = e.target.closest('.operations__tab'); //closest < 가장가까운 상위요소 찾음
+  console.log(clicked);
+
+  // 가드
+  if (!clicked) return; // 상위 요소가 존재하지 않는다면 아무행동안함
+
+  tabs.forEach(t => t.classList.remove('operations__tab--active')); // 먼저 모든 요소에서 제거
+  tabsContent.forEach(c => c.classList.remove('operations__content--active')); // 요소 삭제
+
+  //active 탭
+  clicked.classList.add('operations__tab--active'); // 클릭한 요소만 추가
+
+  //active 영역
+  document
+    .querySelector(`.operations__content--${clicked.dataset.tab}`)
+    .classList.add('operations__content--active');
+});
+
+//메뉴 애니메이션
+
+nav.addEventListener('mouseover', function (e) {
+  if (e.target.classList.contains('nav__link')) {
+  }
+});
+
+nav.addEventListener('mouseout', function (e) {});
 
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
@@ -223,7 +285,7 @@ const section1 = document.querySelector('#section--1');
 
 // 마우스이벤트
 
-const h1 = document.querySelector('h1');
+// const h1 = document.querySelector('h1');
 
 // h1.addEventListener('mouseenter', function (e) {
 //   // css :hover 비슷 마우스가 특정요소에 들어갈때마다 실행
