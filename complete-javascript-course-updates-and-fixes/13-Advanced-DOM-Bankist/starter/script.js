@@ -10,6 +10,8 @@ const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 
 const nav = document.querySelector('.nav'); // nav 맨위
 
+const section1 = document.querySelector('#section--1'); // 세션1
+
 // console.log(btnsOpenModal.length);
 
 // hiden 삭제
@@ -73,23 +75,23 @@ console.log(
 
 // pageXOffset = 현재 보이는 화면 왼쪽 가장자리 사이의 거리를 픽셀단위로 나타냄 하지만 오래된거 그래서  scrollX 권장
 
-//   window.scrollTo({
-//     left: s1coores.left + window.scrollX,
-//     top: s1coores.top + window.scrollY,
-//     behavior: 'smooth',
-//   });
+// window.scrollTo({
+//   left: s1coores.left + window.scrollX,
+//   top: s1coores.top + window.scrollY,
+//   behavior: 'smooth',
 // });
 
-// document.querySelectorAll('.nav__link').forEach(function (el) {
-//   el.addEventListener('click', function (e) {
-//     e.preventDefault();
-// const id = this.getAttribute('href');
-// console.log(id);
-// document.querySelector(id).scrollIntoView({ // scrollIntoView  = 선택한 요소를 기준으로 이동
-//   behavior: 'smooth',
-//     });
-//   });
-// });
+document.querySelectorAll('.nav__link').forEach(function (el) {
+  el.addEventListener('click', function (e) {
+    e.preventDefault();
+    const id = this.getAttribute('href');
+    console.log(id);
+    document.querySelector(id).scrollIntoView({
+      // scrollIntoView  = 선택한 요소를 기준으로 이동
+      behavior: 'smooth',
+    });
+  });
+});
 
 // 1. 공통 상위 요소에 이벤트 추가
 //2. 요소확인
@@ -119,7 +121,7 @@ h1.lastElementChild.style.color = 'white';
 console.log(h1.parentNode);
 console.log(h1.parentElement);
 
-h1.closest('.header').style.background = 'var(--gradient-secondary)'; // 헤더요소에 모든 스타일 적용
+h1.closest('.header').style.background = 'var(white)'; // 헤더요소에 모든 스타일 적용
 
 console.log(h1.previousElementSibling); //특정요소의 이전 형제를 반환하는 읽기 전용
 console.log(h1.nextElementSibling); // 다음요소를 가져옴
@@ -160,13 +162,35 @@ tabsContainer.addEventListener('click', function (e) {
 
 //메뉴 애니메이션
 
-nav.addEventListener('mouseover', function (e) {
+const handleHover = function (e) {
   if (e.target.classList.contains('nav__link')) {
+    const link = e.target;
+    const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+    const logo = link.closest('.nav').querySelector('img');
+
+    siblings.forEach(el => {
+      if (el !== link) el.style.opacity = this; // this는 함수를 호출한 객체를 가르키는데 여기서는 bind로 강제설정함
+    });
+    logo.style.opacity = this;
+  }
+};
+
+nav.addEventListener('mouseover', handleHover.bind(0.5)); //bind는 this의 값을 영구적으로 설정
+nav.addEventListener('mouseout', handleHover.bind(1));
+
+// 스크롤 이벤트
+const initialCoords = section1.getBoundingClientRect();
+console.log(initialCoords); // 뷰 포트 기준으로 거리를 알 수 잇음
+
+window.addEventListener('scroll', function () {
+  // console.log(this.window.scrollY);
+  if (this.window.scrollY > initialCoords.top) {
+    // 이거 별로래
+    nav.classList.add('sticky');
+  } else {
+    nav.classList.remove('sticky');
   }
 });
-
-nav.addEventListener('mouseout', function (e) {});
-
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
@@ -277,8 +301,6 @@ logo.classList.contains('c');
 
 //이건사용하지마셈.. 기존 클래스를 모두 재정의
 // logo.className = 'jonas'
-
-const section1 = document.querySelector('#section--1');
 
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
