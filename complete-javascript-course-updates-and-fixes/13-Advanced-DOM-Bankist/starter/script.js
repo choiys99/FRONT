@@ -250,7 +250,7 @@ const allSections = document.querySelectorAll('.section'); // 모든 .section �
 
 const revealSection = function (entries, observer) {
   const [entry] = entries; // entries 배열에서 첫 번째 요소를 추출합니다.
-  console.log(entry); // 현재 관찰 중인 섹션의 정보를 콘솔에 출력합니다.
+  // console.log(entry); // 현재 관찰 중인 섹션의 정보를 콘솔에 출력합니다.
   if (!entry.isIntersecting) {
     // 섹션이 화면에 보이지 않으면 함수를 종료합니다.
     return;
@@ -269,6 +269,33 @@ allSections.forEach(function (section) {
   sectionObserver.observe(section); // 각 섹션을 sectionObserver에 등록하여 관찰하도록 합니다.
   section.classList.add('section--hidden'); // 모든 섹션에 'section--hidden' 클래스를 추가하여 초기에 숨겨둡니다.
 });
+
+// 레이지로딩 이미지
+const imgTargets = document.querySelectorAll('img[data-src]');
+// console.log(imgTargets);
+
+const loadImg = function (entries, observer) {
+  const [entry] = entries;
+  console.log(entry);
+  if (!entry.isIntersecting) {
+    // 섹션이 화면에 보이지 않으면 함수를 종료합니다.
+    return;
+  }
+  // 그렇지 않으면 src 속성을 data src로 변경
+  entry.target.src = entry.target.dataset.src;
+
+  entry.target.addEventListener('load', function () {
+    entry.target.classList.remove('lazy-img');
+  });
+};
+
+const imgObserver = new IntersectionObserver(loadImg, {
+  root: null,
+  threshold: 0,
+  rootMargin: '200px',
+});
+
+imgTargets.forEach(img => imgObserver.observe(img));
 
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
