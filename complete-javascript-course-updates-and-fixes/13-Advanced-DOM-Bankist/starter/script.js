@@ -12,6 +12,8 @@ const nav = document.querySelector('.nav'); // nav 맨위
 
 const section1 = document.querySelector('#section--1'); // 세션1
 
+const header = document.querySelector('.header'); // 단일(중복이라도 첫번째 요소만 선택)
+
 // console.log(btnsOpenModal.length);
 
 // hiden 삭제
@@ -52,7 +54,7 @@ const btnScrollTo = document.querySelector('.btn--scroll-to'); // 화면 Learn m
 
 btnScrollTo.addEventListener('click', function (e) {});
 // 클릭시 실행
-// const s1coores = section1.getBoundingClientRect();
+const s1coores = section1.getBoundingClientRect();
 // console.log(s1coores.left, s1coores.top);
 // console.log(e.target.getBoundingClientRect()); // e.target = btnScrollTo 가르킴
 //getBoundingClientRect = HTML 요소(Element)의 크기와 현재 뷰포트에서의 요소의 상대적인 위치 정보를 반환합니다.
@@ -179,18 +181,95 @@ nav.addEventListener('mouseover', handleHover.bind(0.5)); //bind는 this의 값�
 nav.addEventListener('mouseout', handleHover.bind(1));
 
 // 스크롤 이벤트
-const initialCoords = section1.getBoundingClientRect();
-console.log(initialCoords); // 뷰 포트 기준으로 거리를 알 수 잇음
 
-window.addEventListener('scroll', function () {
-  // console.log(this.window.scrollY);
-  if (this.window.scrollY > initialCoords.top) {
-    // 이거 별로래
+// const initialCoords = section1.getBoundingClientRect();
+// console.log(initialCoords); // 뷰 포트 기준으로 거리를 알 수 잇음
+
+// window.addEventListener('scroll', function () {
+//   // console.log(this.window.scrollY);
+//   if (this.window.scrollY > initialCoords.top) {
+//     // 이거 별로래
+//     nav.classList.add('sticky');
+//   } else {
+//     nav.classList.remove('sticky');
+//   }
+// });  <<<<<<<<<<<<<<<<< 이거 구식방법 꾸짐
+
+// 교차 관찰자 api
+
+// const obsCallback = function (entries, observer) {
+//   // 가시성 변화가 생겼을때 호출되는 콜백 로직
+//   entries.forEach(entry => {
+//     console.log(entry);
+//     // 각 entry는 가시성 변화가 감지될 때마다 발생하고 그 context를 나타냅니다.
+//     // target element:
+//     //   entry.boundingClientRect
+//     //   entry.intersectionRatio
+//     //   entry.intersectionRect
+//     //   entry.isIntersecting
+//     //   entry.rootBounds
+//     //   entry.target
+//     //   entry.time
+//   });
+// };
+// const obsOptions = {
+//   // << 콜백이 호출되는상황을 정의
+//   root: null, // null , 설정하지 않으면 기본값으로 브라우저 뷰포트 기준
+//   //            , 타겟요소보다 상위요소,조상요소이어만함
+
+//   // threshold: 0.1, // 가시성 설정 10%     배열로도 가능
+//  threshold: [0, 0.25, 0.5, 0.75, 1],
+// };
+
+// const observer = new IntersectionObserver(obsCallback, obsOptions); //(노출여부가변경될때마다 호출, 옵션객체)
+// observer.observe(section1); // (관찰대상dom요소를 등록)
+
+const navHeight = nav.getBoundingClientRect().height;
+// console.log(navHeight);
+
+const stickyNav = function (entries) {
+  const [entry] = entries;
+  // console.log(entry);
+  if (!entry.isIntersecting) {
     nav.classList.add('sticky');
   } else {
     nav.classList.remove('sticky');
   }
+};
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight}px`,
 });
+
+headerObserver.observe(header);
+
+//세션 나타나게하는 애니메이션 효과
+
+const allSections = document.querySelectorAll('.section'); // 모든 .section 클래스를 가진 요소들을 선택하여 allSections 변수에 저장합니다.
+
+const revealSection = function (entries, observer) {
+  const [entry] = entries; // entries 배열에서 첫 번째 요소를 추출합니다.
+  console.log(entry); // 현재 관찰 중인 섹션의 정보를 콘솔에 출력합니다.
+  if (!entry.isIntersecting) {
+    // 섹션이 화면에 보이지 않으면 함수를 종료합니다.
+    return;
+  }
+  entry.target.classList.remove('section--hidden'); // 섹션이 화면에 보이면 'section--hidden' 클래스를 제거하여 섹션을 표시합니다.
+  observer.unobserve(entry.target); // observer가 더이상 타겟을 감시하지않도록설정
+};
+
+const sectionObserver = new IntersectionObserver(revealSection, {
+  // IntersectionObserver 객체를 생성하여 섹션을 관찰하도록 설정합니다.
+  root: null, // 섹션의 부모 요소를 지정하지 않아 viewport를 기준으로 관찰합니다.
+  threshold: 0.15, // 섹션이 화면에 15% 이상 표시되면 revealSection 함수를 호출합니다.
+});
+
+allSections.forEach(function (section) {
+  sectionObserver.observe(section); // 각 섹션을 sectionObserver에 등록하여 관찰하도록 합니다.
+  section.classList.add('section--hidden'); // 모든 섹션에 'section--hidden' 클래스를 추가하여 초기에 숨겨둡니다.
+});
+
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
@@ -205,8 +284,6 @@ console.log(document.documentElement);
 console.log(document.head);
 console.log(document.body);
 
-const header = document.querySelector('.header'); // 단일(중복이라도 첫번째 요소만 선택)
-const allSections = document.querySelectorAll('.section'); // 복수
 console.log(allSections);
 
 document.getElementById('section--1'); // id 지정
