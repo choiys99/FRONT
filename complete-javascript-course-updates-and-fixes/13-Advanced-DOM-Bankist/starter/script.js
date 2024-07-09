@@ -547,3 +547,24 @@ logo.classList.contains('c');
 
 //   console.log('LINK');
 // });
+
+///////////////////
+
+document.addEventListener('DOMContentLoaded', function (e) {
+  // HTML document를 전부 읽고 DOM트리를 완성하는 즉시 이벤트가 호출
+  console.log(e);
+});
+
+window.addEventListener('load', function (e) {
+  // load는 모든 리소스가 다운로드된 다음에 이벤트를 호출
+  console.log('page fully loaded', e);
+});
+
+// window.addEventListener('beforeunload', function (e) {
+//   //화면갱신,웹페이즈를 벗어나려고 할 때 알림창
+//   e.preventDefault();
+//   console.log(e);
+//   e.returnValue = ''; // 옛날에는 알림창 뭘로 할껀지 가능했는데 개발자들이 남용해서 막아버림..
+// });
+
+// 언제사용하나면 사용자가 작성한 데이터를 잃어버릴수잇을지? 그럴 때? 저장하셨나요? 이런거
