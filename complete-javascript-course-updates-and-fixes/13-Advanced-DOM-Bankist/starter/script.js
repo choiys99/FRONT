@@ -568,3 +568,5 @@ window.addEventListener('load', function (e) {
 // });
 
 // 언제사용하나면 사용자가 작성한 데이터를 잃어버릴수잇을지? 그럴 때? 저장하셨나요? 이런거
+
+// defer와 async = js 실행속도 조절  191 https://www.youtube.com/watch?v=TVQc7qu5Z90&list=PLOmL3sL-afbRVTvedkIrQcDwg2UY0JGTF&index=191
