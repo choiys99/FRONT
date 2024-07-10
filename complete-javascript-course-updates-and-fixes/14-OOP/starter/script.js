@@ -74,4 +74,38 @@ const mercedes = new Car('Mercedes', 95);
 bmw.accelerate();
 bmw.accelerate();
 bmw.accelerate();
+////////////////////////////////////////////////
+////////////////////////////////////////////////
+////////////////////////////////////////////////
 //ES6클래스
+
+//클래스 표현식
+// const PersonCl2 = class {}
+
+//클래스 선언식
+class PersonCl {
+  constructor(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  }
+  calcAge() {
+    // 생성자 외부가 개체의 프로토타입에 있다
+    console.log(2037 - this.birthYear);
+  }
+  greet() {
+    console.log(`hey${this.firstName}`);
+  }
+}
+
+const jessica = new PersonCl('Jessica', 1999); //생성자 내부의 this 키워드도 새로 생성된 빈 개체로 설정
+console.log(jessica.__proto__ === PersonCl.prototype);
+
+// PersonCl.prototype.greet = function () {
+//   console.log(`hey${this.firstName}`);
+// };
+
+jessica.greet();
+
+// 1. 클래스는 호이스팅안됨
+// 2. 첫글자는 대문자
+// 3. 항상 엄격모드로 실행(클래스가 존재하면 자동?)
