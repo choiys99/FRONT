@@ -84,16 +84,39 @@ bmw.accelerate();
 
 //클래스 선언식
 class PersonCl {
-  constructor(firstName, birthYear) {
-    this.firstName = firstName;
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
     this.birthYear = birthYear;
   }
+
+  // Instance methods
+  // Methods will be added to .prototype property
   calcAge() {
-    // 생성자 외부가 개체의 프로토타입에 있다
     console.log(2037 - this.birthYear);
   }
+
   greet() {
-    console.log(`hey${this.firstName}`);
+    console.log(`Hey ${this.fullName}`);
+  }
+
+  get age() {
+    return 2037 - this.birthYear;
+  }
+
+  // Set a property that already exists
+  set fullName(name) {
+    if (name.includes(' ')) this._fullName = name;
+    // else alert(`${name} is not a full name!`);
+  }
+
+  get fullName() {
+    return this._fullName;
+  }
+
+  // Static method
+  static hey() {
+    console.log('Hey there 👋');
+    console.log(this);
   }
 }
 
@@ -109,3 +132,102 @@ jessica.greet();
 // 1. 클래스는 호이스팅안됨
 // 2. 첫글자는 대문자
 // 3. 항상 엄격모드로 실행(클래스가 존재하면 자동?)
+
+//// get set
+
+const account = {
+  owner: 'jonas',
+  movements: [200, 530, 120, 300],
+
+  get latest() {
+    return this.movements.slice(-1).pop();
+  },
+};
+// console.log(PersonCl.hey);
+PersonCl.hey();
+
+// Object.create
+
+const PersonProto = {
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  },
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  },
+};
+
+const steven = Object.create(PersonProto); // PersonProto 를 부모로 하는(상속받은) 새로운객체 스티븐
+console.log(steven);
+steven.name = 'Steven';
+steven.birthYear = '2002';
+steven.calcAge();
+
+console.log(steven.__proto__);
+
+console.log(steven.__proto__ === PersonProto);
+
+const sarah = Object.create(PersonProto);
+sarah.init('Sarah', 1979);
+sarah.calcAge();
+
+//문제해결
+class CarCl {
+  constructor(make, speed) {
+    this.make = make;
+    this.speed = speed;
+  }
+  accelerate() {
+    this.speed += 10;
+    console.log(`${this.make} is going at ${this.speed} km/h`);
+  }
+
+  brake() {
+    this.speed -= 10;
+    console.log(`${this.make} is going at ${this.speed} km/h`);
+  }
+  get speedUs() {
+    return this.speed / 1.6;
+  }
+  set speedUs(speed) {
+    this.speed = speed * 1.6;
+  }
+}
+const ford = new CarCl('Ford', 120);
+
+console.log(ford.speedUs);
+ford.accelerate();
+ford.speedUs = 50;
+console.log(ford);
+
+const Student = function (firstName, birthYear, course) {
+  this.firstName = firstName;
+  this.birthYear = birthYear;
+  this.course = course;
+};
+
+Student.prototype = Object.create(Person.prototype);
+// Student.prototype = Person.prototype; << 이게 맞아보이긴하는데 실제로 작동안함
+//Student 객체가 Person 객체의 모든 메소드를 상속
+//Student가 Person의 '하위 클래스’처럼 동작
+Student.prototype.includes = function () {
+  // 여기서 includes는 배열의 요소가 포함되어있는지 확인할려고 사용하는게 아니라
+  //prototype에 includes 메소드를 추가할려고 사용
+  console.log(`My name is ${this.firstName} and I study ${this.course}`);
+};
+
+const mike = new Student('mike', 2020, 'Computerseince');
+console.log(mike);
+mike.includes();
+
+console.log(mike.__proto__);
+console.log(mike.__proto__.__proto__);
+
+console.log(mike instanceof Student); // mike 가 Student 거나 Student를 상속받는 클래스라면 true
+console.log(mike instanceof Person);
+
+Student.prototype.constructor = Student;
+console.log(Student.prototype.constructor);
+
+console.dir(mike.__proto__.__proto__.constructor);
