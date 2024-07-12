@@ -398,10 +398,12 @@ class Account {
   }
   deposit(val) {
     this.#movements.push(val); // 입금 금액을 movements 배열에 추가
+    return this;
   }
 
   withdraw(val) {
     this.deposit(-val); // 출금 금액을 음수로 deposit 메서드 호출
+    return this;
   }
 
   requestLoan(val) {
@@ -409,6 +411,7 @@ class Account {
       // 대출 승인 여부 확인
       this.deposit(val); // 대출 금액을 입금
       console.log('화긴요'); // 대출 승인 메시지 출력
+      return this; // 자신을 호출한 객체인스턴스를 반환 > 메서드 체이닝할라구
     }
   }
 
@@ -437,3 +440,6 @@ Account.helper();
 // console.log(acc1.#movements); << 에러발생!! 찾을수없ㄷ!! 외부에서 접근이 불가능하다!
 
 // console.log(acc1.#approveLoan(100));
+
+//Chanining
+acc1.deposit(300).deposit(500).withdraw(35).requestLoan(25000).withdraw(4000); // 메서드체이닝
