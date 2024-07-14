@@ -42,10 +42,12 @@ if (navigator.geolocation) {
     }
   );
 }
+
 form.addEventListener('submit', function (e) {
+  // < 이벤트 제출시 실행
   e.preventDefault();
 
-  //지우기 입력 필드
+  //입력필드 초기화
   inputDistance.value =
     inputDuration.value =
     inputCadence.value =
@@ -65,7 +67,7 @@ form.addEventListener('submit', function (e) {
         minWidth: 100,
         autoClose: false, // 팝업이 열릴때 다른 팝업이 닫히는 동작
         closeOnClick: false, //지도 클릭 할 때 마다 팝업이 닫히는 동작
-        className: 'running-popup',
+        className: 'running-popup', // < css 사용자 정의 css
       })
     )
     .setPopupContent('운동') // text 작업
@@ -73,6 +75,7 @@ form.addEventListener('submit', function (e) {
 });
 
 inputType.addEventListener('change', function () {
+  // 토글처리
   inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
   inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
 });
