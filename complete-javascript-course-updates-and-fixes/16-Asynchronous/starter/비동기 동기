@@ -1,0 +1,41 @@
+const p = document.querySelector('.p');
+p.textContent = '저는 동기의 동기입니다 ';
+alert('에아ㅃ~');
+p.style.color = 'blue';
+
+// 동기식 코드 : 코드에서 정의된 순서대로 실행
+// 각 코드 줄은 이전 줄의 실행이 완료 될 때 까지 기다림
+// 하나의 코드가 실행되는데 시간이 오래 걸리면 전체 속도가 느리짐
+// 위에 alert 경고창은 코드실행을 멈추게한다.. 확인 누르기전까지 멈춤
+// 코드 실행을 멈춰주는 완벽한 장기실행작업의 예다
+
+//////////////////////////////////////////////////////////
+const pp = document.querySelector('.p');
+setTimeout(function () {
+  //setTimeout는 기본코드가 실행되는 것을 방해하지않고 타이머가 기본적으로 백그라운드에서 실행된다는 것을 의미
+  //콜백함수인 펑션도 지금 실행하지 않고 타이머가 실행이 완료된 이후에 실행  비동기 대표적
+  p.textContent = '에아~set timeout는 비동기~';
+}, 5000);
+p.style.color = 'red';
+/////////////////////////////////////////////////////////
+const img = document.querySelector('.dog'); 
+img.src = 'dog.jpn';  // 이미지실행로딩 = 비동기 , 소스설정자체는 동기
+img.addEventListener('load', function () {  //이미지 로딩이 완료되면 실행되는 콜백함수로 비동기
+  img.classList.add('fadeIn');
+});
+p.style.width = '300px'; //동기
+
+// ajax 는 비동기 js 및 xml
+// 비동기방식으로 원격 웹서버 연결
+// api 는 기본적으로 응용프로그래밍이 서로 대화하고 정보를 교환할 수 있도록 하는 소프트웨어
+
+//dom api,geolocation api.. 등
+// 다른 소프트웨어가 상호작용 할 수 있도록 하는 독립적인 소프트웨어
+
+// 온라인 api
+// 기본적으로 웹서버에서 실행되는 어플 데이터에 대한 요청을 받은다음 db에서 다시 클라이언트로 보냄
+
+
+
+ajax json html 상세정보? 한번 봐야함 스킵해도 괜찮다해서 일단함
+https://www.youtube.com/watch?v=3kmU3hC1CyY&list=PLOmL3sL-afbRVTvedkIrQcDwg2UY0JGTF&index=233 

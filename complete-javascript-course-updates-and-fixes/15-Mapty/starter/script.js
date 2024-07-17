@@ -36,7 +36,7 @@ class Running extends Workout {
     super(coords, distance, duration);
     this.cadence = cadence;
     this.calcPace();
-    this._setDescription();
+    this._setDescription(); // 메서드 재정의
   }
   calcPace() {
     // 속도 계산
@@ -84,7 +84,7 @@ class App {
     this._getLocalStorage();
 
     //attach event handlers
-    form.addEventListener('submit', this._newWorkout.bind(this)); // < 이벤트 (엔터?)제출시 실행
+    form.addEventListener('submit', this._newWorkout.bind(this)); // < 이벤트 (엔터?)제출시 실행 입력필드
     inputType.addEventListener('change', this._toogleElevationField);
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
   }
