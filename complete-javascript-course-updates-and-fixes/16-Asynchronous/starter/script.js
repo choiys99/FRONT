@@ -219,3 +219,34 @@ const getCountryData = function (country) {
 btn.addEventListener('click', function () {
   getCountryData('japan');
 });
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
+
+const whereAmI = function (lat, lng) {
+  fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+    .then(res => {
+      console.log(res);
+      if (!res.ok) {
+        throw new Error(`지오코딩에서 문제 생김 ${res.status}`);
+      }
+      return res.json();
+    })
+    .then(data => {
+      console.log(`넌지금 ${data.city},${data.country}`);
+
+      return fetch(`https://restcountries.com/v3.1/name/${data.country}`);
+    })
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`에러에러에러${res.status}`);
+      }
+      return res.json();
+    })
+    .then(data => renderCountry(data[0]))
+    .catch(err =>
+      console.error(`${err.message} 에러에러에러에러에러에러에러전역`)
+    );
+};
+whereAmI(52.508, 13.381);
+// whereAmI(19.037, 72.873);
+// whereAmI(-33.933, 18.474);
