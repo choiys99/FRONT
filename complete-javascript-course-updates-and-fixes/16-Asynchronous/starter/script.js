@@ -223,16 +223,22 @@ btn.addEventListener('click', function () {
 ////////////////////////////////////////////////////
 
 const whereAmI = function (lat, lng) {
-  fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+  // 위도 경도를인자로 받아 사용자의 현재 위치 정보를 파악
+  fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`) // ai를 사용하여 현재 위치 정보가져옴
     .then(res => {
-      console.log(res);
+      // api 응답이 성공적으로 받아졌을때 실행되는 코드
       if (!res.ok) {
+        // 실패시 코드
         throw new Error(`지오코딩에서 문제 생김 ${res.status}`);
       }
-      return res.json();
+      // console.log(res);
+      return res.json(); //Response 객체에서 제공하는 메서드로, 응답 본문을 JSON으로 파싱하여 Promise 객체
+      // 이렇게 반환된 객체는 다음 than에서 사용가능
     })
     .then(data => {
-      console.log(`넌지금 ${data.city},${data.country}`);
+      console.log(data);
+      //위에 then이 성공적으로 이루어졌을때 실행되는 코드
+      console.log(`넌지금 ${data.city},${data.country}`); //도시,국가 정보를 콘솔에 출력
 
       return fetch(`https://restcountries.com/v3.1/name/${data.country}`);
     })
