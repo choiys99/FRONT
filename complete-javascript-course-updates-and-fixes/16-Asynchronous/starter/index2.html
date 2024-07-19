@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    'use strict';
+
+    // const lotteryPromise = new Promise((resolve, reject) => {
+    //   console.log('start!!');
+    //   setTimeout(() => {
+    //     // Promise 객체 생성
+    //     //Promise 객체는 비동기 작업의 결과를 나타냄
+    //     if (Math.random() >= 0.5) {
+    //       resolve('승리'); //성공시
+    //     } else {
+    //       reject(new Error('패배')); //실패시
+    //     }
+    //   }, 2000);
+    // });
+    // lotteryPromise
+    //   .then(res => console.log(res)) //Promise가 성공적으로 완료되었을때 실행되는 콜백함수
+    //   .catch(err => console.error(err)); // Promise 실패했을때 실행되는 콜백함수
+    // // Promise 를 사용하여 비동기 작업의 결과를 처리
+
+    // // Promisifying setTimeout
+
+    // // wait 함수 정의
+    // const wait = function (seconds) {
+    //   // Promise 객체 생성
+    //   return new Promise(function (resolve) {
+    //     // setTimeout을 사용하여 seconds 초 동안 대기
+    //     setTimeout(resolve, seconds * 1000);
+    //   });
+    // };
+
+    // // wait(2)를 호출하여 2초 동안 대기
+    // wait(2)
+    //   .then(() => {
+    //     // 2초 대기 후 실행되는 콜백 함수
+    //     console.log('i waited for 2 sec');
+    //     // 다시 1초 동안 대기하는 Promise 객체 반환
+    //     return wait(1);
+    //   })
+    //   .then(() => console.log('I waited for 1 sec'));
+
+    // Promise.resolve('aaaaaa~').then(x => console.log(x));
+    // Promise.reject(new Error('bbbbbb~')).catch(x => console.error(x));
+
+    // ///////////
+
+    // console.log('처음');
+
+    // setTimeout(() => {
+    //   console.log('setTimeout - 태스크 큐');
+    // }, 0);
+
+    // Promise.resolve()
+    //   .then(() => {
+    //     console.log('promise1 - 마이크로 태스크 큐');
+    //   })
+    //   .then(() => {
+    //     console.log('promise2 - 마이크로 태스크 큐');
+    //   });
+
+    // requestAnimationFrame(() => {
+    //   console.log('requestAnimationFrame - rAF 큐');
+    // });
+
+    // console.log('마지막');
+
+    /*
+    처음
+    마지막
+    promise1 - 마이크로 태스크 큐
+    promise2 - 마이크로 태스크 큐
+    requestAnimationFrame - rAF 큐
+    setTimeout - 태스크 큐
+    */
+
+    const getPosition = function () {
+      return new Promise((resolve, reject) => {
+        // navigator.geolocation.getCurrentPosition(
+        //   position => resolve(position), //성공시 얻는 값
+        //   err => reject(err) // 실패시 에러값
+        // );
+        navigator.geolocation.getCurrentPosition(resolve, reject); //위랑ㄱ랕음..
+      });
+    };
+
+    getPosition().then(pos => console.log(pos));
+  </script>
+</html>

@@ -285,3 +285,5 @@ js는 싱글 스레드언어 = 하나의 작업만가능하다는것
 https://www.youtube.com/watch?v=zi-IG6VHBh8
  
 */
+
+// const lotteryProm
