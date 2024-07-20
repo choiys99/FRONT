@@ -253,7 +253,7 @@ const whereAmI = function (lat, lng) {
       console.error(`${err.message} 에러에러에러에러에러에러에러전역`)
     );
 };
-whereAmI(52.508, 13.381);
+// whereAmI(52.508, 13.381);
 // whereAmI(19.037, 72.873);
 // whereAmI(-33.933, 18.474);
 
@@ -283,7 +283,106 @@ js는 싱글 스레드언어 = 하나의 작업만가능하다는것
 
 
 https://www.youtube.com/watch?v=zi-IG6VHBh8
- 
+
 */
 
 // const lotteryProm
+
+const wait = function (seconds) {
+  // Promise 객체 생성
+  return new Promise(function (resolve) {
+    // setTimeout을 사용하여 seconds 초 동안 대기
+    setTimeout(resolve, seconds * 1000);
+  });
+};
+
+const imgContainer = document.querySelector('.images'); // html 선택
+
+const createImage = function (imgPath) {
+  //  imgpath파라미터 받음
+  return new Promise(function (resolve, reject) {
+    // 리턴으로 promise 객채 생성
+    const img = document.createElement('img'); // img 태그 생성
+    img.src = imgPath; //img. src(이미지 주소)
+
+    img.addEventListener('load', function () {
+      // 이미지 로드 대기
+      imgContainer.append(img); // 로드되면실행 앞에 넣음
+      resolve(img); // 성공시 img 반환
+    });
+    img.addEventListener('error', function () {
+      //실패시
+      reject(new Error('이미지를 찾을 수 없습니다.')); // 에러 메시지
+    });
+  });
+};
+
+let currentImg;
+createImage('img/img-1.jpg') // createImage 파라미터에 이미지 주소 넣음
+  .then(img => {
+    //성공시
+    currentImg = img; // 주소값공유
+    console.log('이미지1'); // 콘솔로그
+    return wait(2); // 대기 2초
+  })
+  .then(() => {
+    //성공시
+    currentImg.style.display = 'none'; // 디스플레이 none으로설정
+    return createImage('img/img-2.jpg'); // 새로운 이미지 넣음
+  })
+  .then(img => {
+    //새로운 이미지 성공시
+    currentImg = img; //
+    console.log('이미지 2'); //콘솔로그
+    return wait(2); // 2초대기
+  })
+  .then(() => {
+    //성공시
+    currentImg.style.display = 'none'; // 디스플레이 none 으로 설정
+  }) // 최종적으로 2초이미지 보여주고 쉬다가 다시 2초 이미지 보여주고 더이상 안보여줌
+  .catch(err => console.error(err)); // 전체적인 에러메시지
+//
+//
+//
+//
+//
+//
+const getPosition = function () {
+  return new Promise((resolve, reject) => {
+    // navigator.geolocation.getCurrentPosition(
+    //   position => resolve(position), //성공시 얻는 값
+    //   err => reject(err) // 실패시 에러값
+    // );
+    navigator.geolocation.getCurrentPosition(resolve, reject); //위랑ㄱ랕음..
+  });
+};
+//
+//동기화 대기
+//
+const whereAmI2 = async function () {
+  // 지리적위치
+  const pos = await getPosition();
+  const { latitude: lat, longitude: lng } = pos.coords;
+  // console.log(pos);
+
+  //역방향 지리 코딩
+  const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+  // console.log(resGeo);
+  const dataGeo = await resGeo.json();
+  // console.log(dataGeo);
+  // 함수 앞에 async가 붙여저 해당 함수가 비동기 함수임을 나타냄.. 항상 promise를 반환
+  // 함수 내에 return없다면 암묵적으로 Promise.resolve(undefined) 반환
+
+  // 나라 데이터
+
+  const res = await fetch(
+    `https://restcountries.com/v3.1/name/${dataGeo.country}`
+  ); //프로미스가 처리 될 때까지 함수의 이 지점에서 실행을 중지
+  //처리되길 기다리는 동안 다른엔진(다른스크립트실행,이벤트처리) 등을 할 수 있기 때문에 cpu리소스가 낭비되지 않는다.
+  // console.log(res);
+  const data = await res.json();
+  console.log(data);
+  renderCountry(data[0]);
+};
+whereAmI2('');
+console.log('First');
