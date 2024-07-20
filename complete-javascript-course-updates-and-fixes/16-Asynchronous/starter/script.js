@@ -361,28 +361,52 @@ const getPosition = function () {
 //
 const whereAmI2 = async function () {
   // 지리적위치
-  const pos = await getPosition();
-  const { latitude: lat, longitude: lng } = pos.coords;
-  // console.log(pos);
+  try {
+    const pos = await getPosition();
+    const { latitude: lat, longitude: lng } = pos.coords;
+    // console.log(pos);
 
-  //역방향 지리 코딩
-  const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
-  // console.log(resGeo);
-  const dataGeo = await resGeo.json();
-  // console.log(dataGeo);
-  // 함수 앞에 async가 붙여저 해당 함수가 비동기 함수임을 나타냄.. 항상 promise를 반환
-  // 함수 내에 return없다면 암묵적으로 Promise.resolve(undefined) 반환
+    //역방향 지리 코딩
+    const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
 
-  // 나라 데이터
+    if (!resGeo.ok) {
+      throw new Error('위치 정보를 얻지 못했습니다.');
+    }
 
-  const res = await fetch(
-    `https://restcountries.com/v3.1/name/${dataGeo.country}`
-  ); //프로미스가 처리 될 때까지 함수의 이 지점에서 실행을 중지
-  //처리되길 기다리는 동안 다른엔진(다른스크립트실행,이벤트처리) 등을 할 수 있기 때문에 cpu리소스가 낭비되지 않는다.
-  // console.log(res);
-  const data = await res.json();
-  console.log(data);
-  renderCountry(data[0]);
+    // console.log(resGeo);
+    const dataGeo = await resGeo.json();
+    // console.log(dataGeo);
+    // 함수 앞에 async가 붙여저 해당 함수가 비동기 함수임을 나타냄.. 항상 promise를 반환
+    // 함수 내에 return없다면 암묵적으로 Promise.resolve(undefined) 반환
+
+    // 나라 데이터
+
+    const res = await fetch(
+      `https://restcountries.com/v3.1/name/${dataGeo.country}`
+    ); //프로미스가 처리 될 때까지 함수의 이 지점에서 실행을 중지
+    //처리되길 기다리는 동안 다른엔진(다른스크립트실행,이벤트처리) 등을 할 수 있기 때문에 cpu리소스가 낭비되지 않는다.
+    // console.log(res);
+
+    if (!res.ok) {
+      throw new Error('나라 정보를 얻지 못했습니다.');
+    }
+
+    const data = await res.json();
+    console.log(data);
+    renderCountry(data[0]);
+  } catch (err) {
+    // console.error(err);
+    renderError(`${err.message}`);
+  }
 };
 whereAmI2('');
 console.log('First');
+
+// try {
+//   let y = 1;
+//   const x = 2;
+//   x = 3;
+// } catch (err) {
+//   // 여기서 오류 잡아서 스크립트 사망안함
+//   alert(err.message);
+// }
