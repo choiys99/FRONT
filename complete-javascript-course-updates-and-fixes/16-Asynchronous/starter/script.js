@@ -394,13 +394,31 @@ const whereAmI2 = async function () {
     const data = await res.json();
     console.log(data);
     renderCountry(data[0]);
+
+    return `현재 위치는 ${dataGeo.city}, ${dataGeo.country}`;
   } catch (err) {
     // console.error(err);
     renderError(`${err.message}`);
+    throw err;
   }
 };
-whereAmI2('');
-console.log('First');
+console.log('11111');
+// const city = whereAmI2(''); //promise 반환
+// console.log(city);
+
+// whereAmI2()
+//   .then(city => console.log(city))
+//   .catch(err => console.error(`2:${err.message}`))
+//   .finally(() => console.log('3:33'));
+
+// (async function () {
+//   try {
+//     const city = await whereAmI2();
+//     console.log(`2:${city}`);
+//   } catch (err) {
+//     console.err(`2:err.message`);
+//   }
+// });
 
 // try {
 //   let y = 1;
@@ -410,3 +428,45 @@ console.log('First');
 //   // 여기서 오류 잡아서 스크립트 사망안함
 //   alert(err.message);
 // }
+
+console.log('==구분용==');
+console.log('==구분용==');
+console.log('==구분용==');
+
+const get3Countries = async function (c1, c2, c3) {
+  try {
+    // const [data1] = await getJSON(`https://restcountries.com/v3.1/name/${c1}`);
+    // const [data2] = await getJSON(`https://restcountries.com/v3.1/name/${c2}`);
+    // const [data3] = await getJSON(`https://restcountries.com/v3.1/name/${c3}`);
+
+    // Promise.all() //promise를 동시에 받아서 실행
+
+    const data = await Promise.all([
+      getJSON(`https://restcountries.com/v3.1/name/${c1}`),
+      getJSON(`https://restcountries.com/v3.1/name/${c2}`),
+      getJSON(`https://restcountries.com/v3.1/name/${c3}`),
+    ]);
+
+    console.log(data.map(d => d[0].capital));
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+get3Countries('portugal', 'canada', 'tanzania');
+
+/*
+Promise.allSettled()`는 제공된 모든 약속이 해결되거나 거부된 후에 해결되는 약속을 반환하며
+, 각 약속의 결과를 설명하는 객체 배열을 포함합니다. 각 객체에는 약속이 이행되었는지 거부되었는지를
+ 나타내는 `status` 속성과 결과에 대한 값 또는 이유가 있는 `value` 또는 `reason` 속성이 있습니다. 
+ 다음은 예입니다. const promises = 
+ [ Promise.resolve(1), 
+  Promise.reject("Error occured"), 
+  Promise.resolve(3) ]; 
+  Promise.allSettled(promises) 
+  .then(results => { results.forEach((result, index)
+   => { if (result.status === 'fulfilled')
+    { console.log(`Promise ${index + 1}이(가) 값으로 해결되었습니다:`
+     , result.value); } else 
+     { console.log(`Promise ${index + 1}이(가) 이유로 거부되었습니다:`, result.reason); } }); }); 
+*/
