@@ -455,18 +455,82 @@ const get3Countries = async function (c1, c2, c3) {
 
 get3Countries('portugal', 'canada', 'tanzania');
 
-/*
-Promise.allSettled()`는 제공된 모든 약속이 해결되거나 거부된 후에 해결되는 약속을 반환하며
-, 각 약속의 결과를 설명하는 객체 배열을 포함합니다. 각 객체에는 약속이 이행되었는지 거부되었는지를
- 나타내는 `status` 속성과 결과에 대한 값 또는 이유가 있는 `value` 또는 `reason` 속성이 있습니다. 
- 다음은 예입니다. const promises = 
- [ Promise.resolve(1), 
-  Promise.reject("Error occured"), 
-  Promise.resolve(3) ]; 
-  Promise.allSettled(promises) 
-  .then(results => { results.forEach((result, index)
-   => { if (result.status === 'fulfilled')
-    { console.log(`Promise ${index + 1}이(가) 값으로 해결되었습니다:`
-     , result.value); } else 
-     { console.log(`Promise ${index + 1}이(가) 이유로 거부되었습니다:`, result.reason); } }); }); 
-*/
+//Promise.rece : Promise 받고 가장 빠른 Promise 반환
+// (async function () {
+//   const res = await Promise.race([
+//     getJSON(`https://restcountries.com/v3.1/name/italy`),
+//     getJSON(`https://restcountries.com/v3.1/name/egypt`),
+//     getJSON(`https://restcountries.com/v3.1/name/mexico`),
+//   ]);
+//   console.log(res[0]);
+// })();
+
+const timeout = function (sec) {
+  return new Promise(function (_, reject) {
+    setTimeout(() => {
+      reject(new Error('요청 시간이 오래 걸렸습니다.'));
+    }, sec * 1000);
+  });
+};
+
+Promise.race([
+  getJSON(`https://restcountries.com/v3.1/name/italy`),
+  timeout(1),
+  // 두개의 promise를 배열로 전달 둘 중 먼저 완료되는 결과를 반환
+  // getjson vs timeout 대결 이라고 생각하면됨
+  // getjson이 1초이내에 응답하면 json 반환 아니라면 timeout 요청 시간이 오래 걸렸다 반환
+  // api 요청시간이 너무 오래 걸릴 경우를 대비하여 시간초과를 설정 하는예시
+]);
+//
+//
+//
+Promise.race([
+  getJSON(`https://restcountries.com/v3.1/name/italy`),
+  timeout(0.01),
+])
+  .then(res => console.log(res[0]))
+  .catch(err => console.error(err));
+
+// Promise.allSettled
+// 실패해도 넘어감 ,병렬적으로 처리
+// 성공여부와 상관없ㅇ ㅣ결과를 배열로 리턴
+
+// Promise.all 의 상위호환이 아닌 편의성을 위해 구현된 기능이기 때문에 필요한 기능을 적절한 판단
+// 출처: //inpa.tistory.com/entry/JS-📚-더이상-Promiseall-쓰지말고-PromiseallSettled-사용하자 [Inpa Dev 👨‍💻:티스토리]
+Promise.allSettled([
+  Promise.resolve('성공'),
+  Promise.reject(' 실패'),
+  Promise.resolve('성공 2'),
+]).then(res => console.log(res));
+
+// all 은 하나라도 실패하면 성공한 응답도 무시된채 catch로 빠지게됨
+Promise.all([
+  Promise.resolve('성공'),
+  Promise.reject(' 실패'),
+  Promise.resolve('성공 2'),
+])
+  .then(res => console.log(res))
+  .catch(err => console.error(err));
+
+//any es 2021
+// race와 비슷하며 다른점은 성공 실패 ㅕㅇ부 가리지 않음..
+// 가장먼저 (fulfilled)이행된 promise의 결고를 반환
+// 여러 비동기 작업중 하나라도 성공하면 그결과를 처리하고 모든 pro가 거부되면 오류 발생
+Promise.any([
+  Promise.resolve('성공'),
+  Promise.reject(' 실패'),
+  Promise.resolve('성공 2'),
+]).then(res => console.log(res));
+
+//문제풀이 2
+const loadNPause = async function () {
+  try {
+    //이미지 1
+    let img = await createImage('img/img-1.jpg');
+    console.log('이미지 1');
+    await wait(2);
+    img.style.display = 'none';
+  } catch (err) {
+    console.error(err);
+  }
+};
