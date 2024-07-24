@@ -522,7 +522,7 @@ Promise.any([
   Promise.resolve('성공 2'),
 ]).then(res => console.log(res));
 
-//문제풀이 2
+//문제풀이 2 파트1
 const loadNPause = async function () {
   try {
     //이미지 1
@@ -530,7 +530,30 @@ const loadNPause = async function () {
     console.log('이미지 1');
     await wait(2);
     img.style.display = 'none';
+
+    //이미지 2
+    img = await createImage('img/img-2.jpg');
+    console.log('이미지 2');
+    await wait(2);
+    img.style.display = 'none';
   } catch (err) {
     console.error(err);
   }
 };
+loadNPause();
+
+// 파트2
+
+const loadAll = async function (imgArr) {
+  try {
+    const imgs = imgArr.map(async img => await createImage(img));
+    // console.log(imgs);
+
+    const imgsEl = await Promise.all(imgs);
+    // console.log(imgsEl);
+    imgsEl.forEach(img => img.classList.add('parallel'));
+  } catch (err) {
+    console.error(err);
+  }
+};
+loadAll(['img/img-2.jpg', 'img/img-1.jpg', 'img/img-3.jpg']);

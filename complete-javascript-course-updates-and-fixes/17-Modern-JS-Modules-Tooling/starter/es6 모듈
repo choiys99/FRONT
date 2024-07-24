@@ -1,0 +1,145 @@
+
+js 프로젝트 모듈화 
+webpack 혹은 parcel =>
+트랜스파일링 및 폴리필링 작업 수행 = 최신 버전의 언어를 구형 버전의 언어로 변환하거나, 다른 언어로 변환하는 데 사용
+
+webpack = 오래됨 = 많이 사용 = 유연성이 좋음
+parcel = 복잡하지않음 = 간단함 = 상대적으로 작은 개인프로젝트에 사용하는게 좋음
+
+es6module 스크립트
+
+ES6 모듈 기능을 사용하지 않으면 분리된 자바스크립트 파일이 하나의 전역을 공유
+
+// foo.js
+var x = 'foo';
+// bar.js
+var x = 'bar';
+<!DOCTYPE html>
+<html>
+<body>
+  <script src="foo.js"></script>
+  <script src="bar.js"></script>
+</body>
+</html>
+
+이러한 파일이 있으면 자바스크립트는 하나의 전역을 공유하게되어서 foo.js에서 선언한 변수 x 와 bar.js에서
+선언한 변수 x는 중복 선언되며 x의값이 덮어씌여진다.
+
+ES6 모듈은 파일 자체의 스코프를 제공한다. 즉 독자적인 모듈 스코프를 갖는다.
+모듈 내에서 var 키워드로 선언한 변수는 더 이상 전역변수가 아니며 window객체의 프로퍼티도 아니다.
+따라서 모듈 내에서 선언한 변수는 모듈 외부에서 참조할 수 없다.
+
+
+// foo.mjs
+var x = 'foo';
+console.log(x); // foo
+// 변수 x는 전역 변수가 아니며 window 객체의 프로퍼티도 아니다.
+console.log(window.x); // undefined
+// bar.mjs
+// 변수 x는 foo.mjs에서 선언한 변수 x와 스코프가 다른 변수이다.
+var x = 'bar';
+console.log(x); // bar
+// 변수 x는 전역 변수가 아니며 window 객체의 프로퍼티도 아니다.
+console.log(window.x); // undefined
+<!DOCTYPE html>
+<html>
+<body>
+  <script type="module" src="foo.mjs"></script>
+  <script type="module" src="bar.mjs"></script>
+</body>
+</html>
+
+모듈을 사용하게 되면 자동으로 '엄격모드'를 수동으로 선언할 필요가 없음 (자동)
+--
+--
+--
+--
+----export 키워드
+모듈은 독자적인 모듈 스코프를 가지기 때문에 모듈 안에서 선언한 모든 식별자는 기본적으로 해당 모듈 내에서만 참조할 수 있다.
+만약 모듈 안에 선언한 식별자를 외부에 공개하여 다른 모듈들이 참조할 수 있게 하려면 
+export 키워드를 사용하며 선언된 변수, 함수, 클래스 모두 export할 수 있다.
+
+선언문 앞에 export키워드를 사용하거나 export 대상을 하나의 객체로 구성하여 한 번에 export 한다.
+
+// lib.mjs
+// 변수의 공개
+export const pi = Math.PI;
+
+// 함수의 공개
+export function square(x) {
+	return x*x;
+}
+
+// 클래스의 공개
+export class Person {
+	constroctor(name) {
+    this.name = name;
+    }
+}
+// 변수, 함수, 클래스를 하나의 객체로 구성하여 공개
+export { pi, sqaure, Person };
+
+--
+--
+--
+--
+----import 키워드
+
+모듈에서 공개(export)한 대상을 로드할 때 사용한다.
+모듈이 export한 식별자로 import하며 ES6 모듈의 파일 확장자를 생략할 수 없다.
+
+// app.mjs
+// 같은 폴더 내의 lib.mjs 모듈을 로드한다.
+import { pi, square, Person } from './lib.mjs';
+
+console.log(pi);
+
+// 모듈이 export한 식별자를 각각 지정하지 않고 하나의 이름으로 한꺼번에 import
+// 이 때 import 되는 식별자는 as 뒤에 지정한 이름의 객체 프로퍼티로 할당된다.
+import * as lib from './lib.mjs';
+
+console.log(lib.pi); 
+
+// 이름을 변경하여 import 할 수 도 있다.
+import { pi as PI, square as sq, Person as P } from './lib.mjs';
+
+console.log(lib.pi);  
+--
+--
+--
+--
+----default 키워드
+모듈에서 하나만을 export할 때 사용 가능하다. 단 default를 사용하는 경우 var, let, const는 사용할 수 없다.
+
+export default square // O
+export default const foo = () => {}; // SyntaxError: Unexpected token 'const'
+default 키워드와 함께 export한 모듈은 {} 없이 임의의 이름으로 import 한다.
+
+import square from './lib.mjs';
+
+console.log(sqaure(3));
+
+--
+--
+--
+
+as를 사용하면 이름을 바꿔서 모듈을 가져올 수 있슴 (db할때 그거 as ) Export ‘as’ && import ‘as’
+
+// 📁 main.js
+import {sayHi as hi, sayBye as bye} from './say.js';
+
+hi('John'); // Hello, John!
+bye('John'); // Bye, John!
+--
+📁 say.js
+...
+export {sayHi as hi, sayBye as bye};
+이제 다른 모듈에서 이 함수들을 가져올 때 이름은 hi와 bye가 됩니다.
+
+📁 main.js
+import * as say from './say.js';
+
+say.hi('John'); // Hello, John!
+say.bye('John'); // Bye, John!
+
+; https://ncase.me/crowds/ko.html // 네트워크 군중 지혜
