@@ -14,11 +14,11 @@
 // // add('pizza', 2);
 // // console.log(price);
 
-// import addd, { cart } from './shoppingCart.js';
-// addd('빵', 2);
-// addd('과자', 4);
-// addd('피자', 5);
-// console.log(cart);
+import addd, { cart } from "./shoppingCart.js";
+addd("빵", 2);
+addd("과자", 4);
+addd("피자", 5);
+console.log(cart);
 
 // //es2022 top-level await
 // /*
@@ -52,30 +52,74 @@
 
 // 모듈패턴
 
-const ShoppingCart2 = (function () {
-  const cart = [];
-  const shoppingCost = 10;
-  const totalPrice = 237;
-  const totalQuantity = 23;
-  const addToCart = function (product, quantity) {
-    cart.push({ product, quantity });
-    console.log(`${quantity},${product} 넣다 빵 죽 빵 `);
-  };
+// const ShoppingCart2 = (function () {
+//   const cart = [];
+//   const shoppingCost = 10;
+//   const totalPrice = 237;
+//   const totalQuantity = 23;
+//   const addToCart = function (product, quantity) {
+//     cart.push({ product, quantity });
+//     console.log(`${quantity},${product} 넣다 빵 죽 빵 `);
+//   };
 
-  const orderStock = function (product, quantity) {
-    cart.push({ product, quantity });
-    console.log(`${quantity},${product} 주문 `);
-  };
+//   const orderStock = function (product, quantity) {
+//     cart.push({ product, quantity });
+//     console.log(`${quantity},${product} 주문 `);
+//   };
 
-  return {
-    addToCart,
-    cart,
-    totalPrice,
-    totalQuantity,
-  };
-})(); // iife = 한번만 실행 = 재사용안함
+//   return {
+//     addToCart,
+//     cart,
+//     totalPrice,
+//     totalQuantity,
+//   };
+// })(); // iife = 한번만 실행 = 재사용안함
 
-ShoppingCart2.addToCart('사과', 4);
-ShoppingCart2.addToCart('피자', 4);
-console.log(ShoppingCart2);
-console.log(ShoppingCart2.shoppingCost);
+// ShoppingCart2.addToCart("사과", 4);
+// ShoppingCart2.addToCart("피자", 4);
+// // console.log(ShoppingCart2);
+// console.log(ShoppingCart2.shoppingCost); // 못찾는 이유 리턴값반환안됨
+
+//
+//
+// CommonJs 모듈
+//
+
+//내보내기의 경우 exports 및 module.exports,
+// export. addToCart = function (product, quantity) {
+//   cart.push({ product, quantity });
+//   console.log(`${quantity},${product} 넣다 빵 죽 빵 `);
+// };
+// //가져오기의 경우 require
+// const { addToCart } = require('./shoppingCart.js');
+
+// 명령어 다루기
+//https://www.youtube.com/watch?v=Af2qal0xdG4&list=PLOmL3sL-afbRVTvedkIrQcDwg2UY0JGTF&index=259
+
+// import cloneDeep from "./node_modules/lodash-es/cloneDeep.js";
+import cloneDeep from "lodash-es"; // 이렇게만해도 parcel이 알아서 경로 찾아감
+
+const state = {
+  cart: [
+    { product: "빵", quantity: 5 },
+    { product: "피자", quantity: 5 },
+  ],
+  user: { loggedin: true },
+};
+
+const stateClone = Object.assign({}, state); // Object.assign(초기값, ...객체) 얖은복사.. 주소값만 복사
+const stateDeepClone = cloneDeep(state); // 깊은복사.. 통째로 따로 하나 더만듬..
+
+console.log(stateClone);
+state.user.loggedin = false; // 동일한 객체를 참조하고있기 때문에 콘솔로그 값 변경됨 false로
+console.log(stateDeepClone); // 깊은 복사라서 초기 값ture 그대로 가지고있음
+
+//parcel만 알아들음
+//새로고침하지않아도 모듈을 업데이트할수있게 해줌 개발중 코드변경시 즉시 반영
+if (module.hot) {
+  // 현재 모듈이 hmr을 지원하는지 확인 활성화된 경우 실행
+  module.hot.accept();
+  // 모듈이 업데이트되었을때 해당 모듈을다시로드하도록 설정
+  // 이거 없으면 모듈이 변경될 때 전체페이지가 새로고침
+  // 쉽게 말하면 새로고침해도 데이터 유지한다.
+}

@@ -1,10 +1,10 @@
 //내보내기
-console.log('exporting module');
+console.log("exporting module");
 
-//블로킹
-console.log('Start fetching users');
-await fetch('https://jsonplaceholder.typicode.com/posts');
-console.log('finish');
+// //블로킹
+// console.log("Start fetching users");
+// // await fetch('https://jsonplaceholder.typicode.com/posts');
+// console.log("finish");
 
 const shoppingCose = 10;
 export const cart = [];
