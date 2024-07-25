@@ -123,3 +123,30 @@ if (module.hot) {
   // 이거 없으면 모듈이 변경될 때 전체페이지가 새로고침
   // 쉽게 말하면 새로고침해도 데이터 유지한다.
 }
+
+//babel
+
+class Person {
+  greeting = "Hey";
+  constructor(name) {
+    this.name = name;
+    console.log(`${this.greeting},${this.name}`);
+  }
+}
+const jonas = new Person("예성");
+
+// console.log("zzzz");
+
+console.log("jonas" ?? null); // 널 병합 연산자 왼쪽 피연산자가 null 일경우 오른쪽 반환 jonase 반환 주로 기본값 설정할때
+console.log(cart.find((el) => el.quantity >= 2)); //find는 중복된값많아도 첫번째 요소만
+console.log(cart.filter((el) => el.quantity >= 2)); // filter로 여러개 찾앗음
+
+import "core-js/stable"; // 얜 다 때려박음 용량많음
+// import "core-js/stable/array/find.js"; // 일부만 용략적음
+// import "core-js/stable/promise"; // 얘두 일부만 용량적음
+
+//마지막으로 폴리필도지않는 기능 하나 더잇어서 npm install regenerator-runtime
+// 하나더 설치
+import "regenerator-runtime/runtime.js"; // 얘는 비동기 함수를 폴리필
+
+// 일반적으로는 맨위에 작성하지만 호이스팅되기때문에 여기서는 일단 밑에 작성
