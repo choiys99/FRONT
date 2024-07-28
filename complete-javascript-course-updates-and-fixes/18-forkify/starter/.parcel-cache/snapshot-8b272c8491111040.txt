@@ -9681,6 +9681,6 @@
 116C:\Users\82102\Desktop\FRONT\complete-javascript-course-updates-and-fixes\18-forkify\starter\dist\icons.dfd7a6db.svg133665511951223606 0
 115C:\Users\82102\Desktop\FRONT\complete-javascript-course-updates-and-fixes\18-forkify\starter\dist\index.62406edb.js133664675495752377 0
 119C:\Users\82102\Desktop\FRONT\complete-javascript-course-updates-and-fixes\18-forkify\starter\dist\index.62406edb.js.map133664675495772333 0
-120C:\Users\82102\Desktop\FRONT\complete-javascript-course-updates-and-fixes\18-forkify\starter\dist\index.f7626f62.css.map133665511950964294 0
 115C:\Users\82102\Desktop\FRONT\complete-javascript-course-updates-and-fixes\18-forkify\starter\dist\index.e37f48ea.js133665522640838382 0
 119C:\Users\82102\Desktop\FRONT\complete-javascript-course-updates-and-fixes\18-forkify\starter\dist\index.e37f48ea.js.map133665522640858329 0
+120C:\Users\82102\Desktop\FRONT\complete-javascript-course-updates-and-fixes\18-forkify\starter\dist\index.f7626f62.css.map133665511950964294 0
