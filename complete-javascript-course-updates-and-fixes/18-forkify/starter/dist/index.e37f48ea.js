@@ -593,8 +593,12 @@ var _searchViewJs = require("./views/searchView.js");
 var _searchViewJsDefault = parcelHelpers.interopDefault(_searchViewJs);
 var _resultsViewJs = require("./views/resultsView.js");
 var _resultsViewJsDefault = parcelHelpers.interopDefault(_resultsViewJs);
+var _paginationViewJs = require("./views/paginationView.js");
+var _paginationViewJsDefault = parcelHelpers.interopDefault(_paginationViewJs);
 var _runtime = require("regenerator-runtime/runtime");
-if (module.hot) module.hot.accept();
+// if (module.hot) {
+//   module.hot.accept();
+// }
 // https://forkify-api.herokuapp.com/v2
 ///////////////////////////////////////
 // 레시피
@@ -603,11 +607,13 @@ const controlRecipes = async function() {
         const id = window.location.hash.slice(1); // 주소창 #뒤에 오는 부분
         if (!id) return;
         (0, _recipwViewJsDefault.default).renderSpinner();
-        // 레시피
+        // 0 선택한 검색 결과
+        (0, _resultsViewJsDefault.default).update(_modelJs.getSearchResultsPage());
+        //1 레시피
         await _modelJs.loadRecipe(id);
         //2) 렌더링 레시피
         (0, _recipwViewJsDefault.default).render(_modelJs.state.recipe);
-    // const recipeView = new recipwView(model.state.recipe)
+    // controlServings();
     } catch (err) {
         (0, _recipwViewJsDefault.default).renderError();
     }
@@ -622,18 +628,46 @@ const controlSearchResults = async function() {
         await _modelJs.loadSearchResults(query);
         // 3) 성공 결과
         console.log(_modelJs.state.search.results);
-        (0, _resultsViewJsDefault.default).render(_modelJs.state.search.results);
+        (0, _resultsViewJsDefault.default).render(_modelJs.getSearchResultsPage(2)); //페이징
+        // resultsView.render(model.state.search.results);
+        // 4 ) 페이지 버튼
+        (0, _paginationViewJsDefault.default).render(_modelJs.state.search);
     } catch (err) {
         console.log(err);
     }
 };
+//버튼
+const controlPagination = function(goToPage) {
+    //성공시
+    (0, _resultsViewJsDefault.default).render(_modelJs.getSearchResultsPage(goToPage));
+    //페이지 변경 버튼
+    (0, _paginationViewJsDefault.default).render(_modelJs.state.search);
+};
+//레시피 성분 조절? 제공량 업데이트
+const controlServings = function(newServings) {
+    // 기본데이터 업데이트
+    _modelJs.updateServings(newServings);
+    // 레시피보기 업데이트 why? 제공량 영향받음
+    // recipwView.render(model.state.recipe);
+    (0, _recipwViewJsDefault.default).update(_modelJs.state.recipe);
+};
+const controlAddBookmark = function() {
+    if (!_modelJs.state.recipe.bookmarked) _modelJs.addBookmark(_modelJs.state.recipe);
+    else _modelJs.deleteBookmark(_modelJs.state.recipe.id);
+    _modelJs.addBookmark(_modelJs.state.recipe);
+    console.log(_modelJs.state.bookmarks);
+    (0, _recipwViewJsDefault.default).update(_modelJs.state.recipe);
+};
 const init = function() {
     (0, _recipwViewJsDefault.default).addHandlerRender(controlRecipes); // 레시피 정보
-    (0, _searchViewJsDefault.default).addHandlerSearch(controlSearchResults); //검색 정보
+    (0, _recipwViewJsDefault.default).addHandlerUpdateServings(controlServings); // 레시피 정보 업데이트
+    (0, _recipwViewJsDefault.default).addHandlerAddBokmark(controlAddBookmark);
+    (0, _searchViewJsDefault.default).addHandlerSearch(controlSearchResults); // 검색 정보
+    (0, _paginationViewJsDefault.default).addHandlerClick(controlPagination); // 버튼
 };
 init();
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","core-js/modules/web.immediate.js":"49tUX","regenerator-runtime/runtime":"dXNgZ","./model.js":"Y4A21","./views/recipwView.js":"cIPkO","./views/searchView.js":"9OQAM","./views/resultsView.js":"cSbZE"}],"gkKU3":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","core-js/modules/web.immediate.js":"49tUX","regenerator-runtime/runtime":"dXNgZ","./model.js":"Y4A21","./views/recipwView.js":"cIPkO","./views/searchView.js":"9OQAM","./views/resultsView.js":"cSbZE","./views/paginationView.js":"6z7bi"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -2487,6 +2521,10 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
 parcelHelpers.export(exports, "loadRecipe", ()=>loadRecipe);
 parcelHelpers.export(exports, "loadSearchResults", ()=>loadSearchResults);
+parcelHelpers.export(exports, "getSearchResultsPage", ()=>getSearchResultsPage);
+parcelHelpers.export(exports, "updateServings", ()=>updateServings);
+parcelHelpers.export(exports, "addBookmark", ()=>addBookmark);
+parcelHelpers.export(exports, "deleteBookmark", ()=>deleteBookmark);
 var _regeneratorRuntime = require("regenerator-runtime");
 var _configJs = require("../js/views/config.js");
 var _helpersJs = require("../js/views/helpers.js");
@@ -2494,12 +2532,16 @@ const state = {
     recipe: {},
     search: {
         query: "",
-        results: []
-    }
+        results: [],
+        page: 1,
+        resultsPerPage: (0, _configJs.RES_PER_PAGE)
+    },
+    bookmarks: []
 };
 const loadRecipe = async function(id) {
     try {
         const data = await (0, _helpersJs.getJSON)(`${(0, _configJs.API_URL)}${id}`);
+        console.log(data);
         const { recipe } = data.data;
         state.recipe = {
             id: recipe.id,
@@ -2509,8 +2551,11 @@ const loadRecipe = async function(id) {
             image: recipe.image_url,
             servings: recipe.servings,
             cookingTime: recipe.cooking_time,
-            ingredints: recipe.ingredients
+            ingredients: recipe.ingredients
         };
+        if (state.bookmarks.some((bookmark)=>bookmark.id === id)) // some = 주어진 요소중 하나라도 함수 통과 하면 true
+        state.recipe.bookmarked = true;
+        else state.recipe.bookmarked = false;
         console.log(state.recipe);
     } catch (err) {
         console.error(`${err} \u{C5D0}\u{B801}\u{B7EC}\u{B7EC}\u{B7EC}`);
@@ -2530,10 +2575,37 @@ const loadSearchResults = async function(query) {
                 image: rec.image_url
             };
         });
+        state.search.page = 1;
     } catch (err) {
         console.error(`${err} \u{C5D0}\u{B801}\u{B7EC}\u{B7EC}\u{B7EC}`);
         throw err;
     }
+};
+const getSearchResultsPage = function(page = state.search.page) {
+    state.search.page = page;
+    const start = (page - 1) * state.search.resultsPerPage; // 0;
+    const end = page * state.search.resultsPerPage; // 9
+    return state.search.results.slice(start, end);
+};
+const updateServings = function(newServings) {
+    state.recipe.ingredients.forEach((ing)=>{
+        ing.quantity = ing.quantity * newServings / state.recipe.servings;
+    // 새수량 = 이전 수량에 * 새 제공량을 이전 제공량으로 나눈 값과 같다?
+    // newQt = oldQt * newServings / oldServings // 2 * 8 / 4 = 4
+    });
+    state.recipe.servings = newServings;
+};
+const addBookmark = function(recipe) {
+    // 북마크 추가
+    state.bookmarks.push(recipe);
+    // 현재 레시피 북마크 추가
+    if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
+};
+const deleteBookmark = function(id) {
+    const index = state.bookmarks.findIndex((el)=>el.id === id);
+    state.bookmarks.splice(index, 1);
+    // 현재 레시피 북마크 해제
+    if (id === state.recipe.id) state.recipe.bookmarked = false;
 };
 
 },{"regenerator-runtime":"dXNgZ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../js/views/config.js":"cTvCx","../js/views/helpers.js":"YS2Ox"}],"cTvCx":[function(require,module,exports) {
@@ -2541,8 +2613,10 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "API_URL", ()=>API_URL);
 parcelHelpers.export(exports, "TIMEOUT_SEC", ()=>TIMEOUT_SEC);
+parcelHelpers.export(exports, "RES_PER_PAGE", ()=>RES_PER_PAGE);
 const API_URL = "https://forkify-api.herokuapp.com/api/v2/recipes/"; //기본적으로 변하지 않는 상수 = 대문자 사용
-const TIMEOUT_SEC = 10;
+const TIMEOUT_SEC = 10; // 타임
+const RES_PER_PAGE = 10; // 페이징처리
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"YS2Ox":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -2587,10 +2661,27 @@ class RecipeView extends (0, _viewJsDefault.default) {
     _errorMessage = "\uD574\uB2F9 \uB808\uC2DC\uD53C\uB97C \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.";
     _message = "";
     addHandlerRender(handler) {
+        // 해쉬 체인지
         [
             "hashchange",
             "load"
         ].forEach((ev)=>window.addEventListener(ev, handler));
+    }
+    addHandlerUpdateServings(handler) {
+        // 레시피 체인지?
+        this._parentElement.addEventListener("click", function(e) {
+            const btn = e.target.closest(".btn--update-servings");
+            if (!btn) return;
+            const { updateTo } = btn.dataset;
+            if (+updateTo > 0) handler(+updateTo);
+        });
+    }
+    addHandlerAddBokmark(handler) {
+        this._parentElement.addEventListener("click", function(e) {
+            const btn = e.target.closest(".btn--bookmark");
+            if (!btn) return;
+            handler();
+        });
     }
     _generateMarkup() {
         // const markup = `
@@ -2619,12 +2710,12 @@ class RecipeView extends (0, _viewJsDefault.default) {
             <span class="recipe__info-text">servings</span>
 
             <div class="recipe__info-buttons">
-              <button class="btn--tiny btn--increase-servings">
+              <button class="btn--tiny btn--update-servings" data-update-to="${this._data.servings - 1}">
                 <svg>
                   <use href="${0, _iconsSvgDefault.default}#icon-minus-circle"></use>
                 </svg>
               </button>
-              <button class="btn--tiny btn--increase-servings">
+              <button class="btn--tiny btn--update-servings" data-update-to="${this._data.servings + 1}">
                 <svg>
                   <use href="${0, _iconsSvgDefault.default}#icon-plus-circle"></use>
                 </svg>
@@ -2637,9 +2728,9 @@ class RecipeView extends (0, _viewJsDefault.default) {
               <use href="${0, _iconsSvgDefault.default}#icon-user"></use>
             </svg>
           </div>
-          <button class="btn--round">
+          <button class="btn--round btn--bookmark">
             <svg class="">
-              <use href="${0, _iconsSvgDefault.default}#icon-bookmark-fill"></use>
+              <use href="${0, _iconsSvgDefault.default}#icon-bookmark${this._data.bookmarked ? "-fill" : ""}"></use>
             </svg>
           </button>
         </div>
@@ -2647,7 +2738,7 @@ class RecipeView extends (0, _viewJsDefault.default) {
         <div class="recipe__ingredients">
           <h2 class="heading--2">Recipe ingredients</h2>
           <ul class="recipe__ingredient-list">
-          ${this._data.ingredints.map(this._generateMarkupIngredient).join("")}
+          ${this._data.ingredients.map(this._generateMarkupIngredient).join("")}
         </div>
 
         <div class="recipe__directions">
@@ -2987,6 +3078,8 @@ var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
 class View {
     _data;
     render(data) {
+        if (!data || Array.isArray(data) && data.length === 0) return this.renderErrorMessage();
+        // 데이터가 있지만 배열이면서 안에 배열의 길이가 0이라면 종료하면서 에러 호출
         this._data = data;
         const markup = this._generateMarkup();
         this._clear();
@@ -2994,6 +3087,27 @@ class View {
     }
     _clear() {
         this._parentElement.innerHTML = "";
+    }
+    update(data) {
+        if (!data || Array.isArray(data) && data.length === 0) return this.renderErrorMessage();
+        // 데이터가 있지만 배열이면서 안에 배열의 길이가 0이라면 종료하면서 에러 호출
+        this._data = data;
+        const newMarkup = this._generateMarkup();
+        const newDOM = document.createRange().createContextualFragment(newMarkup);
+        // createRange = range 객체 생성 = dom 특정 부분정의 조작
+        // createContextualFragment = range객체에서 사용할 수 있는 메서드 = html 문자열 파싱 하여 DOM 변환
+        const newElements = Array.from(newDOM.querySelectorAll("*")); //  Array.from 배열로
+        const curElemens = Array.from(this._parentElement.querySelectorAll("*"));
+        newElements.forEach((newEl, i)=>{
+            const curEl = curElemens[i];
+            // console.log(curEl, newEl.isEqualNode(curEl));
+            //updates changed TEXT
+            if (!newEl.isEqualNode(curEl) && // 비교 대상이 다르면 true 실행
+            newEl.firstChild?.nodeValue.trim() !== "") // console.log(newEl.firstChild.nodeValue.trim());
+            curEl.textContent = newEl.textContent;
+            //updates changed ATTRIBUES
+            if (!newEl.isEqualNode(curEl)) Array.from(newEl.attributes).forEach((attr)=>curEl.setAttribute(attr.name, attr.value));
+        });
     }
     // 로딩 스피너
     renderSpinner() {
@@ -3069,13 +3183,16 @@ var _iconsSvg = require("url:../../img/icons.svg"); // Parce2 파일의 url.. �
 var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
 class ResultsView extends (0, _viewJsDefault.default) {
     _parentElement = document.querySelector(".results");
+    _errorMessage = "\uD574\uB2F9 \uB808\uC2DC\uD53C\uB97C \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.";
+    _message = "";
     _generateMarkup() {
         return this._data.map(this._generateMarkupPreview).join("");
     }
     _generateMarkupPreview(result) {
+        const id = window.location.hash.slice(1);
         return `
       <li class="preview">
-        <a class="preview__link " href="#${result.id}">
+        <a class="preview__link ${result.id === id ? "preview__link--active" : ""} " href="#${result.id}">
           <figure class="preview__fig">
             <img src="${result.image}" alt="${result.title}" />
           </figure>
@@ -3090,6 +3207,65 @@ class ResultsView extends (0, _viewJsDefault.default) {
 }
 exports.default = new ResultsView();
 
-},{"../views/View.js":"5cUXS","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","url:../../img/icons.svg":"loVOp"}]},["hycaY","aenu9"], "aenu9", "parcelRequire3a11")
+},{"../views/View.js":"5cUXS","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","url:../../img/icons.svg":"loVOp"}],"6z7bi":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("../views/View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+var _iconsSvg = require("url:../../img/icons.svg"); // Parce2 파일의 url.. 해당 이미지 파일의 경로를 문자열로 가져온다.
+var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
+class PaginationView extends (0, _viewJsDefault.default) {
+    _parentElement = document.querySelector(".pagination");
+    addHandlerClick(handler) {
+        this._parentElement.addEventListener("click", function(e) {
+            const btn = e.target.closest(".btn--inline");
+            if (!btn) return;
+            const goToPage = +btn.dataset.goto;
+            handler(goToPage);
+        });
+    }
+    _generateMarkup() {
+        const curPage = this._data.page;
+        const numPages = Math.ceil(this._data.results.length / this._data.resultsPerPage);
+        // 1) 현재 페이지 1 다른페이지는 있는 상황
+        if (curPage === 1 && numPages > 1) return `
+      <button data-goto="${curPage + 1}" class="btn--inline pagination__btn--next">
+            <span>${curPage + 1}</span>
+            <svg class="search__icon">
+              <use href="${0, _iconsSvgDefault.default}#icon-arrow-right"></use>
+            </svg>
+          </button>
+      `;
+        // 3) 마지막페이지
+        if (curPage === numPages && numPages > 1) return `
+        <button data-goto="${curPage - 1}" class="btn--inline pagination__btn--prev">
+          <svg class="search__icon">
+            <use href="${0, _iconsSvgDefault.default}#icon-arrow-left"></use>
+          </svg>
+          <span>${curPage - 1}</span>
+        </button>
+      `;
+        // 4) 나머지 페이지
+        if (curPage < numPages) return `
+        <button data-goto="${curPage - 1}" class="btn--inline pagination__btn--prev">
+          <svg class="search__icon">
+            <use href="${0, _iconsSvgDefault.default}#icon-arrow-left"></use>
+          </svg>
+          <span>${curPage - 1}</span>
+        </button>
+        <button data-goto="${curPage + 1}" class="btn--inline pagination__btn--next">
+            <span>${curPage + 1}</span>
+            <svg class="search__icon">
+              <use href="${0, _iconsSvgDefault.default}#icon-arrow-right"></use>
+            </svg>
+          </button>
+      `;
+        // 2) 현재 페이지 1 다른페이지는 없는 상황
+        return "";
+    }
+}
+exports.default = new PaginationView();
+
+},{"../views/View.js":"5cUXS","url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["hycaY","aenu9"], "aenu9", "parcelRequire3a11")
 
 //# sourceMappingURL=index.e37f48ea.js.map
