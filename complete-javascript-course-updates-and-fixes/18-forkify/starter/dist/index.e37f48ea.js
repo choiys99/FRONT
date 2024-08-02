@@ -593,6 +593,8 @@ var _searchViewJs = require("./views/searchView.js");
 var _searchViewJsDefault = parcelHelpers.interopDefault(_searchViewJs);
 var _resultsViewJs = require("./views/resultsView.js");
 var _resultsViewJsDefault = parcelHelpers.interopDefault(_resultsViewJs);
+var _bookmarksViewJs = require("./views/bookmarksView.js");
+var _bookmarksViewJsDefault = parcelHelpers.interopDefault(_bookmarksViewJs);
 var _paginationViewJs = require("./views/paginationView.js");
 var _paginationViewJsDefault = parcelHelpers.interopDefault(_paginationViewJs);
 var _runtime = require("regenerator-runtime/runtime");
@@ -609,14 +611,20 @@ const controlRecipes = async function() {
         (0, _recipwViewJsDefault.default).renderSpinner();
         // 0 선택한 검색 결과
         (0, _resultsViewJsDefault.default).update(_modelJs.getSearchResultsPage());
-        //1 레시피
+        // 1) 업데이트 북마크
+        (0, _bookmarksViewJsDefault.default).update(_modelJs.state.bookmarks);
+        // 2 레시피
         await _modelJs.loadRecipe(id);
-        //2) 렌더링 레시피
+        // 3) 렌더링 레시피
         (0, _recipwViewJsDefault.default).render(_modelJs.state.recipe);
     // controlServings();
     } catch (err) {
-        (0, _recipwViewJsDefault.default).renderError();
+        (0, _recipwViewJsDefault.default).renderErrorMessage();
+        console.error(err);
     }
+};
+const controlBookmarks = function() {
+    (0, _bookmarksViewJsDefault.default).render(_modelJs.state.bookmarks);
 };
 const controlSearchResults = async function() {
     try {
@@ -652,13 +660,16 @@ const controlServings = function(newServings) {
     (0, _recipwViewJsDefault.default).update(_modelJs.state.recipe);
 };
 const controlAddBookmark = function() {
+    // 1) 북마크 추가/ 제거
     if (!_modelJs.state.recipe.bookmarked) _modelJs.addBookmark(_modelJs.state.recipe);
     else _modelJs.deleteBookmark(_modelJs.state.recipe.id);
-    _modelJs.addBookmark(_modelJs.state.recipe);
-    console.log(_modelJs.state.bookmarks);
+    // 2) 레시피 업데이트
     (0, _recipwViewJsDefault.default).update(_modelJs.state.recipe);
+    // 3) 북마크
+    (0, _bookmarksViewJsDefault.default).render(_modelJs.state.bookmarks);
 };
 const init = function() {
+    (0, _bookmarksViewJsDefault.default).addHandlerRender(controlBookmarks);
     (0, _recipwViewJsDefault.default).addHandlerRender(controlRecipes); // 레시피 정보
     (0, _recipwViewJsDefault.default).addHandlerUpdateServings(controlServings); // 레시피 정보 업데이트
     (0, _recipwViewJsDefault.default).addHandlerAddBokmark(controlAddBookmark);
@@ -667,7 +678,7 @@ const init = function() {
 };
 init();
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","core-js/modules/web.immediate.js":"49tUX","regenerator-runtime/runtime":"dXNgZ","./model.js":"Y4A21","./views/recipwView.js":"cIPkO","./views/searchView.js":"9OQAM","./views/resultsView.js":"cSbZE","./views/paginationView.js":"6z7bi"}],"gkKU3":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","core-js/modules/web.immediate.js":"49tUX","regenerator-runtime/runtime":"dXNgZ","./model.js":"Y4A21","./views/recipwView.js":"cIPkO","./views/searchView.js":"9OQAM","./views/resultsView.js":"cSbZE","./views/paginationView.js":"6z7bi","./views/bookmarksView.js":"4Lqzq"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -2595,18 +2606,37 @@ const updateServings = function(newServings) {
     });
     state.recipe.servings = newServings;
 };
+//로컬스토리지 저장
+const persistBookmarks = function() {
+    localStorage.setItem("bookmarks", JSON.stringify(state.bookmarks));
+};
 const addBookmark = function(recipe) {
     // 북마크 추가
     state.bookmarks.push(recipe);
     // 현재 레시피 북마크 추가
-    if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
+    if (recipe.id === state.recipe.id) {
+        state.recipe.bookmarked = true;
+        persistBookmarks();
+    }
 };
 const deleteBookmark = function(id) {
     const index = state.bookmarks.findIndex((el)=>el.id === id);
     state.bookmarks.splice(index, 1);
     // 현재 레시피 북마크 해제
-    if (id === state.recipe.id) state.recipe.bookmarked = false;
+    if (id === state.recipe.id) {
+        state.recipe.bookmarked = false;
+        persistBookmarks();
+    }
 };
+const init = function() {
+    const storage = localStorage.getItem("bookmarks");
+    if (storage) state.bookmarks = JSON.parse(storage);
+};
+init(); // console.log(state.bookmarks);
+ // const clearBookmarks = function () {
+ //   localStorage.clear('bookmarks');
+ // };
+ // clearBookmarks();
 
 },{"regenerator-runtime":"dXNgZ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../js/views/config.js":"cTvCx","../js/views/helpers.js":"YS2Ox"}],"cTvCx":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -3077,11 +3107,12 @@ var _iconsSvg = require("url:../../img/icons.svg"); // Parce2 파일의 url.. �
 var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
 class View {
     _data;
-    render(data) {
+    render(data, render = true) {
         if (!data || Array.isArray(data) && data.length === 0) return this.renderErrorMessage();
         // 데이터가 있지만 배열이면서 안에 배열의 길이가 0이라면 종료하면서 에러 호출
         this._data = data;
         const markup = this._generateMarkup();
+        if (!render) return markup;
         this._clear();
         this._parentElement.insertAdjacentHTML("afterbegin", markup);
     }
@@ -3179,6 +3210,8 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("../views/View.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+var _previewViewJs = require("./previewView.js");
+var _previewViewJsDefault = parcelHelpers.interopDefault(_previewViewJs);
 var _iconsSvg = require("url:../../img/icons.svg"); // Parce2 파일의 url.. 해당 이미지 파일의 경로를 문자열로 가져온다.
 var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
 class ResultsView extends (0, _viewJsDefault.default) {
@@ -3186,28 +3219,41 @@ class ResultsView extends (0, _viewJsDefault.default) {
     _errorMessage = "\uD574\uB2F9 \uB808\uC2DC\uD53C\uB97C \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.";
     _message = "";
     _generateMarkup() {
-        return this._data.map(this._generateMarkupPreview).join("");
+        console.log(this._data);
+        return this._data.map((result)=>(0, _previewViewJsDefault.default).render(result, false)).join("");
     }
-    _generateMarkupPreview(result) {
+}
+exports.default = new ResultsView();
+
+},{"../views/View.js":"5cUXS","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","url:../../img/icons.svg":"loVOp","./previewView.js":"1FDQ6"}],"1FDQ6":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("../views/View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+var _iconsSvg = require("url:../../img/icons.svg"); // Parce2 파일의 url.. 해당 이미지 파일의 경로를 문자열로 가져온다.
+var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
+class PreviewView extends (0, _viewJsDefault.default) {
+    _parentElement = "";
+    _generateMarkup() {
         const id = window.location.hash.slice(1);
         return `
       <li class="preview">
-        <a class="preview__link ${result.id === id ? "preview__link--active" : ""} " href="#${result.id}">
+        <a class="preview__link ${this._data.id === id ? "preview__link--active" : ""} " href="#${this._data.id}">
           <figure class="preview__fig">
-            <img src="${result.image}" alt="${result.title}" />
+            <img src="${this._data.image}" alt="${this._data.title}" />
           </figure>
           <div class="preview__data">
-            <h4 class="preview__title">${result.title}}</h4>
-            <p class="preview__publisher">${result.publisher}</p>            
+            <h4 class="preview__title">${this._data.title}}</h4>
+            <p class="preview__publisher">${this._data.publisher}</p>            
           </div>
         </a>
       </li>
     `;
     }
 }
-exports.default = new ResultsView();
+exports.default = new PreviewView();
 
-},{"../views/View.js":"5cUXS","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","url:../../img/icons.svg":"loVOp"}],"6z7bi":[function(require,module,exports) {
+},{"../views/View.js":"5cUXS","url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6z7bi":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("../views/View.js");
@@ -3266,6 +3312,29 @@ class PaginationView extends (0, _viewJsDefault.default) {
 }
 exports.default = new PaginationView();
 
-},{"../views/View.js":"5cUXS","url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["hycaY","aenu9"], "aenu9", "parcelRequire3a11")
+},{"../views/View.js":"5cUXS","url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4Lqzq":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("../views/View.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+var _previewViewJs = require("./previewView.js");
+var _previewViewJsDefault = parcelHelpers.interopDefault(_previewViewJs);
+var _iconsSvg = require("url:../../img/icons.svg"); // Parce2 파일의 url.. 해당 이미지 파일의 경로를 문자열로 가져온다.
+var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
+class BookmarksView extends (0, _viewJsDefault.default) {
+    _parentElement = document.querySelector(".bookmarks__list");
+    _errorMessage = "\uC990\uACA8\uCC3E\uAE30 \uBAA9\uB85D\uC774 \uC5C6\uC2B5\uB2C8\uB2E4. :)";
+    _message = "";
+    addHandlerRender(handler) {
+        window.addEventListener("load", handler);
+    }
+    _generateMarkup() {
+        console.log(this._data);
+        return this._data.map((bookmark)=>(0, _previewViewJsDefault.default).render(bookmark, false)).join("");
+    }
+}
+exports.default = new BookmarksView();
+
+},{"../views/View.js":"5cUXS","url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./previewView.js":"1FDQ6"}]},["hycaY","aenu9"], "aenu9", "parcelRequire3a11")
 
 //# sourceMappingURL=index.e37f48ea.js.map

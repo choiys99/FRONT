@@ -85,6 +85,11 @@ export const updateServings = function (newServings) {
   state.recipe.servings = newServings;
 };
 
+//로컬스토리지 저장
+const persistBookmarks = function () {
+  localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
+};
+
 // 북마크 추가
 export const addBookmark = function (recipe) {
   // 북마크 추가
@@ -92,6 +97,8 @@ export const addBookmark = function (recipe) {
   // 현재 레시피 북마크 추가
   if (recipe.id === state.recipe.id) {
     state.recipe.bookmarked = true;
+
+    persistBookmarks();
   }
 };
 
@@ -103,5 +110,19 @@ export const deleteBookmark = function (id) {
 
   if (id === state.recipe.id) {
     state.recipe.bookmarked = false;
+
+    persistBookmarks();
   }
 };
+
+const init = function () {
+  const storage = localStorage.getItem('bookmarks');
+  if (storage) state.bookmarks = JSON.parse(storage);
+};
+init();
+// console.log(state.bookmarks);
+
+// const clearBookmarks = function () {
+//   localStorage.clear('bookmarks');
+// };
+// clearBookmarks();

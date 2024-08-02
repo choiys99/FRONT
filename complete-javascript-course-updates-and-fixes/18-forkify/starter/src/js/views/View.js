@@ -2,13 +2,16 @@ import icons from 'url:../../img/icons.svg'; // Parce2 파일의 url.. 해당 �
 
 export default class View {
   _data;
-  render(data) {
+  render(data, render = true) {
     if (!data || (Array.isArray(data) && data.length === 0))
       return this.renderErrorMessage();
     // 데이터가 있지만 배열이면서 안에 배열의 길이가 0이라면 종료하면서 에러 호출
 
     this._data = data;
     const markup = this._generateMarkup();
+
+    if (!render) return markup;
+
     this._clear();
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
