@@ -4,6 +4,7 @@ import searchView from './views/searchView.js';
 import resultsView from './views/resultsView.js';
 import bookmarksView from './views/bookmarksView.js';
 import paginationView from './views/paginationView.js';
+import addRecipeView from './views/addRecipeView.js';
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
@@ -104,13 +105,18 @@ const controlAddBookmark = function () {
   bookmarksView.render(model.state.bookmarks);
 };
 
+const controlAddRecipe = function (newRecipe) {
+  console.log(newRecipe);
+};
+
 const init = function () {
-  bookmarksView.addHandlerRender(controlBookmarks);
+  bookmarksView.addHandlerRender(controlBookmarks); //  북마크 정보
   recipeView.addHandlerRender(controlRecipes); // 레시피 정보
   recipeView.addHandlerUpdateServings(controlServings); // 레시피 정보 업데이트
-  recipeView.addHandlerAddBokmark(controlAddBookmark);
+  recipeView.addHandlerAddBokmark(controlAddBookmark); // 북마크 추가
   searchView.addHandlerSearch(controlSearchResults); // 검색 정보
   paginationView.addHandlerClick(controlPagination); // 버튼
+  addRecipeView.addHandlerUpload(controlAddRecipe); // 레시피 작성
 };
 
 init(); // 실행
