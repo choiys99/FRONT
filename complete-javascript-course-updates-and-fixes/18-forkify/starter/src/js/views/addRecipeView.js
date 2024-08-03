@@ -3,6 +3,7 @@ import icons from 'url:../../img/icons.svg'; // Parce2 파일의 url.. 해당 �
 
 class AddRecipeView extends View {
   _parentElement = document.querySelector('.upload');
+  _message = '성공적으로 업로드 했슴다';
 
   _window = document.querySelector('.add-recipe-window');
   _overlay = document.querySelector('.overlay');

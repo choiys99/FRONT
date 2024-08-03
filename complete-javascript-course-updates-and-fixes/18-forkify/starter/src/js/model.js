@@ -1,6 +1,7 @@
 import { async } from 'regenerator-runtime';
-import { API_URL, RES_PER_PAGE } from '../js/views/config.js';
-import { getJSON } from '../js/views/helpers.js';
+import { API_URL, RES_PER_PAGE, KEY } from '../js/views/config.js';
+import { AJAX } from '../js/views/helpers.js';
+// import { getJSON, sendJSON } from '../js/views/helpers.js';
 export const state = {
   recipe: {},
   search: {
@@ -12,23 +13,33 @@ export const state = {
   bookmarks: [],
 };
 
+const createRecipeObject = function (data) {
+  if (!data || !data.data) {
+    throw new Error('Invalid dd: data or data.data is undefined');
+  }
+
+  const { recipe } = data.data;
+
+  return {
+    id: recipe.id,
+    title: recipe.title,
+    publisher: recipe.publisher,
+    sourceUrl: recipe.source_url,
+    image: recipe.image_url,
+    servings: recipe.servings,
+    cookingTime: recipe.cooking_time,
+    ingredients: recipe.ingredients,
+    ...(recipe.key && { key: recipe.key }), // 레시피 키가존재할경우  key: recipe.key 생성 없으면 false 반환
+    // && 논리 연산자 사용 왼쪽 조건이 참일경우 오른쪽 반환 아닐경우 왼쪽 반환
+  };
+};
+
 // 레시피 정보
 export const loadRecipe = async function (id) {
   try {
-    const data = await getJSON(`${API_URL}${id}`);
-    console.log(data);
+    const data = await AJAX(`${API_URL}${id}?key=${KEY}`);
 
-    const { recipe } = data.data;
-    state.recipe = {
-      id: recipe.id,
-      title: recipe.title,
-      publisher: recipe.publisher,
-      sourceUrl: recipe.source_url,
-      image: recipe.image_url,
-      servings: recipe.servings,
-      cookingTime: recipe.cooking_time,
-      ingredients: recipe.ingredients,
-    };
+    state.recipe = createRecipeObject(data);
 
     if (state.bookmarks.some(bookmark => bookmark.id === id)) {
       // some = 주어진 요소중 하나라도 함수 통과 하면 true
@@ -49,7 +60,7 @@ export const loadSearchResults = async function (query) {
   try {
     state.search.query = query;
 
-    const data = await getJSON(`${API_URL}?search=${query}`);
+    const data = await AJAX(`${API_URL}?search=${query}&key=${KEY}`);
     // console.log(data);
 
     state.search.results = data.data.recipes.map(rec => {
@@ -126,3 +137,38 @@ init();
 //   localStorage.clear('bookmarks');
 // };
 // clearBookmarks();
+
+//레시피 업로드
+export const uploadRecipe = async function (newRecipe) {
+  try {
+    const ingredients = Object.entries(newRecipe)
+      .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
+      .map(ing => {
+        const ingArr = ing[1].replaceAll(' ', '').split(',');
+
+        if (ingArr.length !== 3) {
+          throw new Error('형식이 잘못 되었습니다 다시 시도해 주세요 :)');
+        }
+        const [quantity, unit, description] = ingArr;
+
+        return { quantity: quantity ? +quantity : null, unit, description };
+      });
+
+    const recipe = {
+      title: newRecipe.title,
+      source_url: newRecipe.sourceUrl,
+      image_url: newRecipe.image,
+      publisher: newRecipe.publisher,
+      cooking_time: +newRecipe.cookingTime,
+      servings: +newRecipe.servings,
+      ingredients,
+    };
+
+    const data = await AJAX(`${API_URL}?key=${KEY}`, recipe);
+    console.log(data);
+    state.recipe = createRecipeObject(data);
+    addBookmark(state.recipe);
+  } catch (err) {
+    throw err;
+  }
+};

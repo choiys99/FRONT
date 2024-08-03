@@ -1,4 +1,5 @@
 import * as model from './model.js';
+import { MODAL_CLOSE_SEC } from './views/config.js';
 import recipeView from './views/recipwView.js';
 import searchView from './views/searchView.js';
 import resultsView from './views/resultsView.js';
@@ -105,8 +106,37 @@ const controlAddBookmark = function () {
   bookmarksView.render(model.state.bookmarks);
 };
 
-const controlAddRecipe = function (newRecipe) {
-  console.log(newRecipe);
+const controlAddRecipe = async function (newRecipe) {
+  try {
+    // show loading
+
+    addRecipeView.renderSpinner();
+
+    await model.uploadRecipe(newRecipe);
+    console.log(model.state.recipe);
+
+    //레시피 업데이트
+    recipeView.render(model.state.recipe);
+
+    // 성공 메시지
+    addRecipeView.renderMessage();
+
+    // 북마크 등록
+    bookmarksView.render(model.state.bookmarks);
+
+    // url 변경
+    // 페이지 로드하지않고 가능
+    window.history.pushState(null, '', `${model.state.recipe.id}`);
+    // window.history.back();
+
+    //창 닫기
+    setTimeout(function () {
+      addRecipeView.toggleWindow();
+    }, MODAL_CLOSE_SEC * 1000);
+  } catch (err) {
+    console.error('a', err, 'a');
+    addRecipeView.renderErrorMessage(err.message);
+  }
 };
 
 const init = function () {
