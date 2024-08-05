@@ -638,8 +638,7 @@ const controlSearchResults = async function() {
         // 2) 검색 성공
         await _modelJs.loadSearchResults(query);
         // 3) 성공 결과
-        console.log(_modelJs.state.search.results);
-        (0, _resultsViewJsDefault.default).render(_modelJs.getSearchResultsPage(2)); //페이징
+        (0, _resultsViewJsDefault.default).render(_modelJs.getSearchResultsPage()); //페이징
         // resultsView.render(model.state.search.results);
         // 4 ) 페이지 버튼
         (0, _paginationViewJsDefault.default).render(_modelJs.state.search);
@@ -685,7 +684,7 @@ const controlAddRecipe = async function(newRecipe) {
         (0, _bookmarksViewJsDefault.default).render(_modelJs.state.bookmarks);
         // url 변경
         // 페이지 로드하지않고 가능
-        window.history.pushState(null, "", `${_modelJs.state.recipe.id}`);
+        window.history.pushState(null, "", `${_modelJs.state.recipe.id}`); // (null,'', 얘만 중요 나머지는 null 공백가능)
         // window.history.back();
         //창 닫기
         setTimeout(function() {
@@ -2619,7 +2618,10 @@ const loadSearchResults = async function(query) {
                 id: rec.id,
                 title: rec.title,
                 publisher: rec.publisher,
-                image: rec.image_url
+                image: rec.image_url,
+                ...rec.key && {
+                    key: rec.key
+                }
             };
         });
         state.search.page = 1;
@@ -2672,7 +2674,8 @@ init();
 const uploadRecipe = async function(newRecipe) {
     try {
         const ingredients = Object.entries(newRecipe).filter((entry)=>entry[0].startsWith("ingredient") && entry[1] !== "").map((ing)=>{
-            const ingArr = ing[1].replaceAll(" ", "").split(",");
+            const ingArr = ing[1].split(",").map((el)=>el.trim());
+            // const ingArr = ing[1].replaceAll(' ', '').split(',');
             if (ingArr.length !== 3) throw new Error("\uD615\uC2DD\uC774 \uC798\uBABB \uB418\uC5C8\uC2B5\uB2C8\uB2E4 \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694 :)");
             const [quantity, unit, description] = ingArr;
             return {
@@ -2734,6 +2737,7 @@ const AJAX = async function(url, uploadData) {
             },
             body: JSON.stringify(uploadData)
         }) : fetch(url);
+        // uploadData의 값이 없으면 단순히 get 요청을 보냄
         const res = await Promise.race([
             fetchPro,
             timeout((0, _configJs.TIMEOUT_SEC))
@@ -2903,7 +2907,7 @@ class RecipeView extends (0, _viewJsDefault.default) {
 exports.default = new RecipeView(); // 인스턴스를 한번만 생성 해당 모듈이 로드될때 메모리에 저장되고 이후에는 이 인스턴스가 계속사용
  //다른 모듈에서 이 인스턴스를 가져와 사용하더라도 #parentElement와 같은 private field에 직접 접근 할 수 없음.
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","url:../../img/icons.svg":"loVOp","fractional":"3SU56","../views/View.js":"5cUXS"}],"loVOp":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","url:../../img/icons.svg":"loVOp","../views/View.js":"5cUXS","fractional":"3SU56"}],"loVOp":[function(require,module,exports) {
 module.exports = require("9bcc84ee5d265e38").getBundleURL("hWUTQ") + "icons.dfd7a6db.svg" + "?" + Date.now();
 
 },{"9bcc84ee5d265e38":"lgJ39"}],"lgJ39":[function(require,module,exports) {
@@ -2941,7 +2945,96 @@ exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
 exports.getOrigin = getOrigin;
 
-},{}],"3SU56":[function(require,module,exports) {
+},{}],"5cUXS":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _iconsSvg = require("url:../../img/icons.svg"); // Parce2 파일의 url.. 해당 이미지 파일의 경로를 문자열로 가져온다.
+var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
+class View {
+    _data;
+    /**
+   * Render the received object to the DOM
+   * @param {Object | Object[]} data 간단한 설명 (예 . 레시피)
+   * @param {boolean} [render = true] if, false , 마크업만듬
+   * @returns {undefined | string} undefined = render = false
+   * @this {Object}View object
+   * @author Choi YeSung
+   *
+   */ render(data, render = true) {
+        if (!data || Array.isArray(data) && data.length === 0) return this.renderErrorMessage();
+        // 데이터가 있지만 배열이면서 안에 배열의 길이가 0이라면 종료하면서 에러 호출
+        this._data = data;
+        const markup = this._generateMarkup();
+        if (!render) return markup;
+        this._clear();
+        this._parentElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    _clear() {
+        this._parentElement.innerHTML = "";
+    }
+    update(data) {
+        this._data = data;
+        const newMarkup = this._generateMarkup();
+        const newDOM = document.createRange().createContextualFragment(newMarkup);
+        // createRange = range 객체 생성 = dom 특정 부분정의 조작
+        // createContextualFragment = range객체에서 사용할 수 있는 메서드 = html 문자열 파싱 하여 DOM 변환
+        const newElements = Array.from(newDOM.querySelectorAll("*")); //  Array.from 배열로
+        const curElemens = Array.from(this._parentElement.querySelectorAll("*"));
+        newElements.forEach((newEl, i)=>{
+            const curEl = curElemens[i];
+            // console.log(curEl, newEl.isEqualNode(curEl));
+            //updates changed TEXT
+            if (!newEl.isEqualNode(curEl) && // 비교 대상이 다르면 true 실행
+            newEl.firstChild?.nodeValue.trim() !== "") // console.log(newEl.firstChild.nodeValue.trim());
+            curEl.textContent = newEl.textContent;
+            //updates changed ATTRIBUES
+            if (!newEl.isEqualNode(curEl)) Array.from(newEl.attributes).forEach((attr)=>curEl.setAttribute(attr.name, attr.value));
+        });
+    }
+    // 로딩 스피너
+    renderSpinner() {
+        const markup = `
+    <div class="spinner">
+      <svg>
+        <use href="${(0, _iconsSvgDefault.default)}#icon-loader"></use>
+      </svg>
+    </div> 
+  `;
+        this._clear();
+        this._parentElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    renderMessage(message = this._message) {
+        const markup = `
+      <div class="message">
+        <div>
+          <svg>
+            <use href="${(0, _iconsSvgDefault.default)}#icon-alert-triangle"></use>
+          </svg>
+        </div>
+        <p>${message}</p>
+      </div>
+    `;
+        this._clear();
+        this._parentElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    renderErrorMessage(message = this._errorMessage) {
+        const markup = `
+      <div class="error">
+        <div>
+          <svg>
+            <use href="${(0, _iconsSvgDefault.default)}#icon-alert-triangle"></use>
+          </svg>
+        </div>
+        <p>${message}</p>
+      </div>
+    `;
+        this._clear();
+        this._parentElement.insertAdjacentHTML("afterbegin", markup);
+    }
+}
+exports.default = View;
+
+},{"url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3SU56":[function(require,module,exports) {
 /*
 fraction.js
 A Javascript fraction library.
@@ -3194,104 +3287,21 @@ Fraction.primeFactors = function(n) {
 };
 module.exports.Fraction = Fraction;
 
-},{}],"5cUXS":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _iconsSvg = require("url:../../img/icons.svg"); // Parce2 파일의 url.. 해당 이미지 파일의 경로를 문자열로 가져온다.
-var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
-class View {
-    _data;
-    render(data, render = true) {
-        if (!data || Array.isArray(data) && data.length === 0) return this.renderErrorMessage();
-        // 데이터가 있지만 배열이면서 안에 배열의 길이가 0이라면 종료하면서 에러 호출
-        this._data = data;
-        const markup = this._generateMarkup();
-        if (!render) return markup;
-        this._clear();
-        this._parentElement.insertAdjacentHTML("afterbegin", markup);
-    }
-    _clear() {
-        this._parentElement.innerHTML = "";
-    }
-    update(data) {
-        if (!data || Array.isArray(data) && data.length === 0) return this.renderErrorMessage();
-        // 데이터가 있지만 배열이면서 안에 배열의 길이가 0이라면 종료하면서 에러 호출
-        this._data = data;
-        const newMarkup = this._generateMarkup();
-        const newDOM = document.createRange().createContextualFragment(newMarkup);
-        // createRange = range 객체 생성 = dom 특정 부분정의 조작
-        // createContextualFragment = range객체에서 사용할 수 있는 메서드 = html 문자열 파싱 하여 DOM 변환
-        const newElements = Array.from(newDOM.querySelectorAll("*")); //  Array.from 배열로
-        const curElemens = Array.from(this._parentElement.querySelectorAll("*"));
-        newElements.forEach((newEl, i)=>{
-            const curEl = curElemens[i];
-            // console.log(curEl, newEl.isEqualNode(curEl));
-            //updates changed TEXT
-            if (!newEl.isEqualNode(curEl) && // 비교 대상이 다르면 true 실행
-            newEl.firstChild?.nodeValue.trim() !== "") // console.log(newEl.firstChild.nodeValue.trim());
-            curEl.textContent = newEl.textContent;
-            //updates changed ATTRIBUES
-            if (!newEl.isEqualNode(curEl)) Array.from(newEl.attributes).forEach((attr)=>curEl.setAttribute(attr.name, attr.value));
-        });
-    }
-    // 로딩 스피너
-    renderSpinner() {
-        const markup = `
-    <div class="spinner">
-      <svg>
-        <use href="${(0, _iconsSvgDefault.default)}#icon-loader"></use>
-      </svg>
-    </div> 
-  `;
-        this._clear();
-        this._parentElement.insertAdjacentHTML("afterbegin", markup);
-    }
-    renderMessage(message = this._message) {
-        const markup = `
-      <div class="message">
-        <div>
-          <svg>
-            <use href="${(0, _iconsSvgDefault.default)}#icon-alert-triangle"></use>
-          </svg>
-        </div>
-        <p>${message}</p>
-      </div>
-    `;
-        this._clear();
-        this._parentElement.insertAdjacentHTML("afterbegin", markup);
-    }
-    renderErrorMessage(message = this._errorMessage) {
-        const markup = `
-      <div class="error">
-        <div>
-          <svg>
-            <use href="${(0, _iconsSvgDefault.default)}#icon-alert-triangle"></use>
-          </svg>
-        </div>
-        <p>${message}</p>
-      </div>
-    `;
-        this._clear();
-        this._parentElement.insertAdjacentHTML("afterbegin", markup);
-    }
-}
-exports.default = View;
-
-},{"url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"9OQAM":[function(require,module,exports) {
+},{}],"9OQAM":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 class SearchView {
-    _parenEl = document.querySelector(".search");
+    _parentEl = document.querySelector(".search");
     getQuery() {
-        const query = this._parenEl.querySelector(".search__field").value; // 검색창
+        const query = this._parentEl.querySelector(".search__field").value;
         this._clearInput();
         return query;
     }
     _clearInput() {
-        this._parenEl.querySelector(".search__field").value = "";
+        this._parentEl.querySelector(".search__field").value = "";
     }
     addHandlerSearch(handler) {
-        this._parenEl.addEventListener("submit", function(e) {
+        this._parentEl.addEventListener("submit", function(e) {
             e.preventDefault();
             handler();
         });
@@ -3313,7 +3323,6 @@ class ResultsView extends (0, _viewJsDefault.default) {
     _errorMessage = "\uD574\uB2F9 \uB808\uC2DC\uD53C\uB97C \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.";
     _message = "";
     _generateMarkup() {
-        console.log(this._data);
         return this._data.map((result)=>(0, _previewViewJsDefault.default).render(result, false)).join("");
     }
 }

@@ -61,8 +61,7 @@ const controlSearchResults = async function () {
     await model.loadSearchResults(query);
 
     // 3) 성공 결과
-    console.log(model.state.search.results);
-    resultsView.render(model.getSearchResultsPage(2)); //페이징
+    resultsView.render(model.getSearchResultsPage()); //페이징
     // resultsView.render(model.state.search.results);
 
     // 4 ) 페이지 버튼
@@ -126,7 +125,7 @@ const controlAddRecipe = async function (newRecipe) {
 
     // url 변경
     // 페이지 로드하지않고 가능
-    window.history.pushState(null, '', `${model.state.recipe.id}`);
+    window.history.pushState(null, '', `${model.state.recipe.id}`); // (null,'', 얘만 중요 나머지는 null 공백가능)
     // window.history.back();
 
     //창 닫기

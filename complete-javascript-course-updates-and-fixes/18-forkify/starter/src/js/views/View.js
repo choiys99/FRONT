@@ -2,6 +2,15 @@ import icons from 'url:../../img/icons.svg'; // Parce2 파일의 url.. 해당 �
 
 export default class View {
   _data;
+  /**
+   * Render the received object to the DOM
+   * @param {Object | Object[]} data 간단한 설명 (예 . 레시피)
+   * @param {boolean} [render = true] if, false , 마크업만듬
+   * @returns {undefined | string} undefined = render = false
+   * @this {Object}View object
+   * @author Choi YeSung
+   *
+   */
   render(data, render = true) {
     if (!data || (Array.isArray(data) && data.length === 0))
       return this.renderErrorMessage();
@@ -21,10 +30,6 @@ export default class View {
   }
 
   update(data) {
-    if (!data || (Array.isArray(data) && data.length === 0))
-      return this.renderErrorMessage();
-    // 데이터가 있지만 배열이면서 안에 배열의 길이가 0이라면 종료하면서 에러 호출
-
     this._data = data;
     const newMarkup = this._generateMarkup();
 

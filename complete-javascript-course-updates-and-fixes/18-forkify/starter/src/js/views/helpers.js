@@ -19,6 +19,7 @@ export const AJAX = async function (url, uploadData = undefined) {
           body: JSON.stringify(uploadData),
         })
       : fetch(url);
+    // uploadData의 값이 없으면 단순히 get 요청을 보냄
 
     const res = await Promise.race([fetchPro, timeout(TIMEOUT_SEC)]);
     const data = await res.json();
