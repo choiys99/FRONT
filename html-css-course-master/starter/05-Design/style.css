@@ -106,6 +106,16 @@ img {
 
 /* FEATURES */
 .features-icon {
+  stroke: #087f5b;
+  /* svg의 stroke 속성
+    stroke : 선색 속성
+    stroke-width : 선 굵기 속성
+    stroke-linecap : 선의 양쪽 끝 모양 속성
+    stroke-dasharray : 점선처리 속성
+  */
+  width: 32px;
+  height: 32px;
+  margin-bottom: 16px;
 }
 
 .features-title {
@@ -169,6 +179,10 @@ h3 {
 }
 
 .chair-icon {
+  stroke: #087f5b;
+  /* fill: red; */
+  height: 24px;
+  width: 24px;
 }
 
 .chair-price {
