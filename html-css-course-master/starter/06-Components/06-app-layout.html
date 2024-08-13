@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: sans-serif;
+        color: #343a40;
+        font-size: 24px;
+        height: 100vh;
+        /*
+        세로 1fr 크기 받을려고 vh 사용
+        */
+
+        text-align: center;
+        font-weight: bold;
+
+        display: grid;
+        grid-template-columns: 80px 400px 1fr 250px;
+        grid-template-rows: 80px 1fr;
+      }
+      nav,
+      section,
+      main,
+      aside {
+        padding-top: 24px;
+      }
+      nav {
+        background-color: #343a40;
+        grid-row: 1 / -1;
+      }
+      menu {
+        background-color: #7048e8;
+        grid-column: 2 / -1;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        padding: 0 40px;
+      }
+      button {
+        display: inline-block;
+        font-size: 16px;
+        font-weight: bold;
+        background-color: #5f3dc4;
+        border: none;
+        cursor: pointer;
+        color: #fff;
+        padding: 8px 12px;
+      }
+      button:last-child {
+        background-color: red;
+        margin-left: auto;
+      }
+      section {
+        padding: 40px;
+
+        overflow: scroll;
+
+        background-color: #e9ecef;
+        display: flex;
+        flex-direction: column;
+
+        gap: 12px;
+      }
+      .email {
+        background-color: #adb5bd;
+        height: 96px;
+
+        flex-shrink: 0;
+        /* overflow로 인해 작아진 박스크기?를 원래크기로 기본값은 1이엿음 
+        width 크기 고정
+        flex 사용하고잇어서 생긴 현상
+        */
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      aside {
+        background-color: #e9ecef;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>Nav</nav>
+    <menu>
+      <button>버튼</button>
+      <button>버튼</button>
+      <button>버튼</button>
+      <button>버튼</button>
+      <button>버튼</button>
+    </menu>
+    <section>
+      <div class="email">이메일</div>
+      <div class="email">이메일</div>
+      <div class="email">이메일</div>
+      <div class="email">이메일</div>
+      <div class="email">이메일</div>
+      <div class="email">이메일</div>
+      <div class="email">이메일</div>
+      <div class="email">이메일</div>
+      <div class="email">이메일</div>
+      <div class="email">이메일</div>
+      <div class="email">이메일</div>
+      <div class="email">이메일</div>
+      <div class="email">이메일</div>
+      <div class="email">이메일</div>
+      <div class="email">이메일</div>
+      <div class="email">이메일</div>
+      <div class="email">이메일</div>
+      <div class="email">이메일</div>
+      <div class="email">이메일</div>
+      <div class="email">이메일</div>
+      <div class="email">이메일</div>
+    </section>
+    <main>Eamil view</main>
+    <aside>Additional info</aside>
+  </body>
+</html>
