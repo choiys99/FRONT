@@ -1,281 +1,210 @@
-/* 
---- 01 타이포그래피
-
-
-
-FONT SIZE SYSTEM(PX)
-10 / 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 / 52 / 62 / 74 / 86 / 98
-
-FONT WEIGHTS
-Default : 400
-500
-600
-Bold : 700
-
-LINE HEIGHTS
-Default : 1
-1.05
-1.6
-
----- 02 색상
-Primart : #e67e22
-Tints: #fdf2e9
-Shades: cf711f
-Accents:
-Greys:
-#555
-#333
-
-
----- 05 그림자
-
----- 06 테두리 
-
----- 07 간격
-
-SPACING SYSTEM (PX)
-2 / 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 80 /96 / 128
-
-*/
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    /* font-size: 10px; */
-    font-size: 62.5%;
-}
-
-body {
-    font-family: "Rubik", sans-serif;
-    line-height: 1;
-    font-weight: 400;
-    color: #555;
-}
-
-/* ================================== */
-/* GENRAL REUSABLE COMPONENTS */
-/* ================================== */
-
-.container {
-    width: 120rem;
-    margin: 0 auto;
-    padding: 0 3.2rem;
-}
-.grid{
-    display: grid;
-    gap: 9.6rem;
-}
-.grid--2-cols{
-    grid-template-columns: repeat(2,1fr);
-}
-
-.grid--3-cols{
-    grid-template-columns: repeat(3,1fr);
-}
-
-.heading-primary,
-.heading-secondary{
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    color: #333;
-    /* color: #2e1907; */
-}
-
-.heading-primary {
-    font-size: 5.2rem;
-    line-height: 1.05;
-    margin-bottom: 3.2rem;
-}
-
-.heading-secondary{
-    font-size: 4.4rem;
-    line-height: 1.2;
-}
-.subheading{
-    display: block;
-    font-size: 1.6rem;
-    font-weight: 500;
-    color: #cf711f;
-    text-transform: uppercase;
-    margin-bottom: 1.6rem;
-    letter-spacing: 0.75px;
-    
-}
-
-.btn:link,
-.btn:visited {
-    font-size: 2rem;
-    font-weight: 600;
-    padding: 1.6rem 3.2rem;
-    display: inline-block;
-    border-radius: 9px;
-    text-decoration: none;
-    transition: all 1s;
-}
-
-.btn--full:link,
-.btn--full:visited {
-    background-color: #e67e22;
-    color: #fff;
-}
-
-.btn--full:hover,
-.btn--full:active {
-    background-color: #cf711f;
-}
-
-.btn--outline:link,
-.btn--outline:visited {
-    background-color: #fff;
-    color: #555;
-}
-
-.btn--outline:hover,
-.btn--outline:active {
-    background-color: #fdf2e9;
-    /* border: 3px solid #fff; 테두리 추가시 전체 레이아웃이 위로 들림*/
-    box-shadow: inset 0 0 0 3px #fff;
-    /* 그림자효과로 같은 효과
-     inset를 통해 내부 그림자 */
-}
-
-.margin-right-sm {
-    margin-right: 1.6rem !important;
-}
-
-
 /* ================================== */
 /* HEADER */
 /* ================================== */
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #fdf2e9;
-    height: 9.6rem;
-    padding: 0 4.8rem;
-
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fdf2e9;
+  height: 9.6rem;
+  padding: 0 4.8rem;
 }
 
 .logo {
-    height: 2.2rem;
+  height: 2.2rem;
 }
 
 /* ================================== */
 /* 네비 */
 /* ================================== */
 .main-nav-list {
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: 3.2rem;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 3.2rem;
 }
 
 .main-nav-link:link,
 .main-nav-link:visited {
-    display: inline-block;
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-    font-size: 1.8rem;
+  display: inline-block;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  font-size: 1.8rem;
 
-    transition: all 0.3s;
+  transition: all 0.3s;
 }
 
 .main-nav-link:hover,
 .main-nav-link:active {
-    color: #cf711f;
+  color: #cf711f;
 }
 
 .main-nav-link.nav-cta:link,
 .main-nav-link.nav-cta:visited {
-    padding: 1.2rem, 2.4rem;
-    border-radius: 9px;
-    color: #fff;
-    background-color: #e67e22;
+  padding: 1.2rem, 2.4rem;
+  border-radius: 9px;
+  color: #fff;
+  background-color: #e67e22;
 }
 .main-nav-link.nav-cta:hover,
-.main-nav-link.nav-cta:active{
-    background-color: #cf711f;
+.main-nav-link.nav-cta:active {
+  background-color: #cf711f;
 }
 /* ================================== */
 /* HERO SECTION */
 /* ================================== */
 .section-hero {
-    background-color: #fdf2e9;
-    padding: 4.8rem 0 9.6rem 0;
+  background-color: #fdf2e9;
+  padding: 4.8rem 0 9.6rem 0;
 }
 
 .hero {
-    max-width: 130rem;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    gap: 9.6rem;
-    padding: 0 3.2rem;
-
+  max-width: 130rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 9.6rem;
+  padding: 0 3.2rem;
 }
 
-
-
 .hero-description {
-    font-size: 2rem;
-    line-height: 1.6;
-    margin-bottom: 4.8rem;
+  font-size: 2rem;
+  line-height: 1.6;
+  margin-bottom: 4.8rem;
 }
 
 .hero-img {
-    width: 100%;
+  width: 100%;
 }
 
 .delivered-meals {
-    display: flex;
-    align-items: center;
-    gap: 1.6rem;
-    margin-top: 8rem;
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  margin-top: 8rem;
 }
 
 .delivered-imgs {
-    display: flex;
+  display: flex;
 }
 
 .delivered-imgs img {
-    height: 4.8rem;
-    width: 4.8rem;
-    border-radius: 50%;
-    margin-right: -1.6rem;
-    /* 왼쪽으로 16 당겨진다. 시작점이 당겨짐 */
-    border: 3px solid #fdf2e9;
+  height: 4.8rem;
+  width: 4.8rem;
+  border-radius: 50%;
+  margin-right: -1.6rem;
+  /* 왼쪽으로 16 당겨진다. 시작점이 당겨짐 */
+  border: 3px solid #fdf2e9;
 }
 
 .delivered-imgs img:last-child {
-    margin: 0;
+  margin: 0;
 }
 
 .delivered-text {
-    font-size: 1.8rem;
-    font-weight: 600;
-
+  font-size: 1.8rem;
+  font-weight: 600;
 }
 
 .delivered-text span {
-    color: #cf711f;
-    font-weight: 700;
+  color: #cf711f;
+  font-weight: 700;
+}
+/* ===================== */
+
+.section-featured {
+  padding: 4.8rem 0 3.2rem 0;
+}
+
+.heading-featured-in {
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.75px;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 2.4rem;
+
+  color: #888;
+}
+
+.logos {
+  display: flex;
+  justify-content: space-around;
+}
+
+.logos img {
+  height: 3.2rem;
+  /* filter: grayscale(100%);  */
+  /* filter로 이미지를 그레이색으로 변경 */
+
+  filter: brightness(0);
+  /* 밝기 0으로 검정색으로 통일 */
+  opacity: 50%;
+  /* 불투명 속성으로 회색으로 변경 */
 }
 
 /* ======================= */
 
-.section-how{
-    padding: 9.6rem 0;
-    /* background-color: orangered; */
+.section-how {
+  padding: 9.6rem 0;
+  /* background-color: orangered; */
 }
-.step-img{
-    width: 50%;
+.step-number {
+  font-size: 8.6rem;
+  font-weight: 600;
+  color: #ccc;
+  margin-bottom: 1.2rem;
 }
 
+.step-description {
+  font-size: 1.8rem;
+  line-height: 1.8;
+}
+
+.step-img-box {
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.step-img-box::before,
+.step-img-box::after {
+  content: "";
+  display: block;
+
+  padding-bottom: 60%;
+
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  z-index: -9999;
+}
+
+.step-img-box::before {
+  width: 60%;
+  /* height: 60%; */
+
+  /* 부모 너비의 60% */
+  padding-bottom: 60%;
+  background-color: #fdf2e9;
+}
+
+.step-img-box::after {
+  width: 45%;
+  padding-bottom: 45%;
+  background-color: #fae5d3;
+}
+
+.step-img {
+  width: 35%;
+}
