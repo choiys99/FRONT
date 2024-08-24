@@ -12,6 +12,15 @@
 
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/general.css" />
+
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
   </head>
 
   <body>
@@ -147,6 +156,76 @@
               alt="아이폰 앱 기본 설정 선택 화면"
             />
           </div>
+        </div>
+      </section>
+
+      <section class="section-meals">
+        <div class="container">
+          <span class="subheading">식사</span>
+          <h2 class="heading-secondary">아무튼 뭐랄까....흠</h2>
+        </div>
+
+        <div class="container grid grid--3-cols">
+          <div class="meal">
+            <img src="img/meals/meal-1.jpg" class="meal-img" alt="일본 교자" />
+            <div class="meal-content">
+              <div class="meal-tags">
+                <span class="tag tag--vegetarian">채식주의자</span>
+              </div>
+              <p class="meal-title">니뽄쒹 교좌</p>
+              <ul class="meal-attributes">
+                <li class="meal-attribute">
+                  <ion-icon class="meal-icon" name="flame-outline"></ion-icon>
+                  <span> <strong>650</strong> calories </span>
+                </li>
+                <li class="meal-attribute">
+                  <ion-icon
+                    class="meal-icon"
+                    name="restaurant-outline"
+                  ></ion-icon>
+                  <span>NutriScore &reg; <strong>74</strong></span>
+                </li>
+                <li class="meal-attribute">
+                  <ion-icon class="meal-icon" name="star-outline"></ion-icon>
+                  <span>rating <strong>4.9</strong>(6974)</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="meal">
+            <div class="meal">
+              <img
+                src="img/meals/meal-2.jpg"
+                class="meal-img"
+                alt="일본 교자"
+              />
+              <div class="meal-content">
+                <div class="meal-tags">
+                  <span class="tag tag--vegan">채식주의자</span>
+                  <span class="tag tag--paleo">육식</span>
+                </div>
+                <p class="meal-title">아뽀카또쌜러드</p>
+                <ul class="meal-attributes">
+                  <li class="meal-attribute">
+                    <ion-icon class="meal-icon" name="flame-outline"></ion-icon>
+                    <span> <strong>400</strong> calories </span>
+                  </li>
+                  <li class="meal-attribute">
+                    <ion-icon
+                      class="meal-icon"
+                      name="restaurant-outline"
+                    ></ion-icon>
+                    <span>NutriScore &reg; <strong>92</strong></span>
+                  </li>
+                  <li class="meal-attribute">
+                    <ion-icon class="meal-icon" name="star-outline"></ion-icon>
+                    <span>rating <strong>4.9</strong>(441)</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="list">meals list</div>
         </div>
       </section>
     </main>
