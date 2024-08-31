@@ -25,7 +25,9 @@
 
   <body>
     <header class="header">
-      <img class="logo" alt="로고" src="img/omnifood-logo.png" />
+      <a href="#">
+        <img class="logo" alt="로고" src="img/omnifood-logo.png" />
+      </a>
       <nav class="main-nav">
         <ul class="main-nav-list">
           <li><a class="main-nav-link" href="#">세션 1</a></li>
@@ -531,16 +533,117 @@
               <p class="cta-text">
                 cta-text입니다cta-text입니다cta-text입니다cta-text입니다cta-text입니다cta-text입니다cta-text입니다
               </p>
-              <form class="cta-form">
-                <input type="text" />
-                <input type="eamil" />
-                <button class="btn">Sign up now</button>
+
+              <form class="cta-form" action="#">
+                <div>
+                  <label for="full-name">Full Name</label>
+                  <input
+                    id="full-name"
+                    type="text"
+                    placeholder="name"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label for="email">Email address</label>
+                  <input id="email" type="eamil" placeholder="email" required />
+                </div>
+
+                <div>
+                  <label for="select-where">Where did you hear from us?</label>
+                  <select id="select-where" required>
+                    <option value="">선택해주세요</option>
+                    <option value="friends">친구</option>
+                    <option value="youtube">유튜브</option>
+                    <option value="youtube">페이스북</option>
+                    <option value="youtube">트위터</option>
+                    <option value="youtube">기타</option>
+                  </select>
+                </div>
+
+                <button class="btn btn--form">Sign up now</button>
               </form>
             </div>
+
             <div class="cta-img-box" role="img" aria-label="음식과 계집"></div>
           </div>
         </div>
       </section>
     </main>
+
+    <footer class="footer">
+      <div class="container grid grid--footer">
+        <div class="logo-col">
+          <a href="#" class="footer-logo">
+            <img class="logo" alt="로고" src="img/omnifood-logo.png" />
+          </a>
+
+          <ul class="social-links">
+            <li>
+              <a class="footer-link" href="#"
+                ><ion-icon class="spcial-icon" name="logo-instagram"></ion-icon
+              ></a>
+            </li>
+            <li>
+              <a class="footer-link" href="#"
+                ><ion-icon class="spcial-icon" name="logo-twitter"></ion-icon
+              ></a>
+            </li>
+            <li>
+              <a class="footer-link" href="#"
+                ><ion-icon class="spcial-icon" name="logo-facebook"></ion-icon
+              ></a>
+            </li>
+          </ul>
+
+          <p class="copyright">
+            Copyright &copy; 2025 by Omnifood, inc. All rights reserved.
+          </p>
+        </div>
+        <div class="address-col">
+          <p class="footer-heading">Contact us</p>
+          <address class="contacts">
+            <p class="address">
+              623 Harrison St., 2nd Floor, San Francisco, CA 94107
+            </p>
+            <p>
+              <a class="footer-link" href="tel:415-201-6370">415-201-6370 </a
+              ><br />
+              <a class="footer-link" href="mailto:hello@omnifood.com"
+                >hello@omnifood.com</a
+              >
+            </p>
+          </address>
+        </div>
+        <nav class="nav-col">
+          <p class="footer-heading">Account</p>
+          <ul class="footer-nav">
+            <li><a class="footer-link" href="#">Create account</a></li>
+            <li><a class="footer-link" href="#">Sign in</a></li>
+            <li><a class="footer-link" href="#">IOS app</a></li>
+            <li><a class="footer-link" href="#">Create account</a></li>
+          </ul>
+        </nav>
+        <nav class="nav-col">
+          <p class="footer-heading">Account</p>
+          <ul class="footer-nav">
+            <li><a class="footer-link" href="#">About Omnifood Careers</a></li>
+            <li><a class="footer-link" href="#">For Business</a></li>
+            <li><a class="footer-link" href="#">Cooking partners</a></li>
+            <li><a class="footer-link" href="#">Caressrs</a></li>
+          </ul>
+        </nav>
+        <nav class="nav-col">
+          <p class="footer-heading">Account</p>
+          <ul class="footer-nav">
+            <li><a class="footer-link" href="#">Create account</a></li>
+            <li><a class="footer-link" href="#">Sign in</a></li>
+            <li><a class="footer-link" href="#">IOS app</a></li>
+            <li><a class="footer-link" href="#">Create account</a></li>
+          </ul>
+        </nav>
+      </div>
+    </footer>
   </body>
 </html>
