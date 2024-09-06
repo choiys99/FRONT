@@ -1,0 +1,38 @@
+.main {
+  display: grid;
+  grid-template-columns: 25% 75%;
+  height: 100vh;
+}
+
+.menu-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btns {
+  display: flex;
+  flex-direction: column;
+  gap: 7rem;
+  list-style: none;
+  font-size: 4.4rem;
+}
+.btns a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.season {
+  margin: 10px 0; /* 각 시즌 항목 간격 설정 */
+}
+
+.mainImg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mainImg img {
+  max-width: 100%;
+  height: auto;
+}
