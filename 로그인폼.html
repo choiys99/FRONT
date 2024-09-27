@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        width: 400px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid;
+      }
+      .mb-10px,
+      h1 {
+        margin-bottom: 10px;
+      }
+
+      .login-inputs {
+        display: flex;
+        flex-direction: column;
+      }
+      .login-checkbox {
+        display: flex;
+        align-items: center;
+      }
+      .auth-links {
+        display: flex;
+        align-items: center; /* 수직 중앙 정렬 */
+        justify-content: space-between; /* 양쪽 끝으로 정렬 */
+        width: 100%; /* 부모 요소의 너비를 기준으로 */
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Login</h1>
+    <div class="login-inputs mb-10px">
+      <input type="text" placeholder="아이디" />
+      <input type="password" placeholder="비밀번호" />
+    </div>
+
+    <div class="login-checkbox mb-10px">
+      <input type="checkbox" id="remember-me" />
+      <label for="remember-me">로그인 정보 저장하기</label>
+    </div>
+
+    <button type="submit">로그인</button>
+
+    <div class="auth-links">
+      <a href="#">회원가입</a>
+      <a href="#"><span>이메일 </span>또는 <span>비밀번호</span> 찾기</a>
+    </div>
+  </body>
+</html>

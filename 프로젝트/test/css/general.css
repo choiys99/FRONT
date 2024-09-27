@@ -37,3 +37,15 @@ body {
 .c-pageFrontDoor {
   background-color: black;
 }
+
+/* 세션 */
+
+.season-text {
+  font-size: 3.2rem;
+  margin-bottom: 3.4rem;
+}
+.flex {
+  display: flex;
+  flex-direction: row;
+  gap: 4.4rem;
+}

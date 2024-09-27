@@ -1,7 +1,9 @@
 .main {
+  max-width: 120rem;
   display: grid;
   grid-template-columns: 25% 75%;
-  height: 100vh;
+  margin-bottom: 3.2rem;
+  align-items: center;
 }
 
 .menu-item {
@@ -26,13 +28,27 @@
   margin: 10px 0; /* 각 시즌 항목 간격 설정 */
 }
 
-.mainImg {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 .mainImg img {
-  max-width: 100%;
-  height: auto;
+  width: 100%;
 }
+
+/* 세션 */
+.section-movie,.spring {
+  margin-bottom: 4.4rem;
+  text-align: center;
+}
+.player {
+  padding-top: 56.25%;
+  position: relative;
+  margin-bottom: 4.4rem ;
+}
+.player iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+
