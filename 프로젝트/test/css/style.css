@@ -1,54 +1,135 @@
-.main {
-  max-width: 120rem;
-  display: grid;
-  grid-template-columns: 25% 75%;
-  margin-bottom: 3.2rem;
-  align-items: center;
-}
-
-.menu-item {
+.header {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-}
+  height: 9.6rem;
+  padding: 0 4.8rem;
 
-.btns {
-  display: flex;
-  flex-direction: column;
-  gap: 7rem;
-  list-style: none;
-  font-size: 4.4rem;
-}
-.btns a {
-  text-decoration: none;
-  color: inherit;
-}
+  border-bottom: 1px solid lightblue;
 
-.season {
-  margin: 10px 0; /* 각 시즌 항목 간격 설정 */
-}
+  background-color: #fff;
 
-
-.mainImg img {
-  width: 100%;
-}
-
-/* 세션 */
-.section-movie,.spring {
-  margin-bottom: 4.4rem;
-  text-align: center;
-}
-.player {
-  padding-top: 56.25%;
-  position: relative;
-  margin-bottom: 4.4rem ;
-}
-.player iframe {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  right: 0;
+}
+
+.logo {
+  height: 2.2rem;
+}
+
+/* ================================== */
+/* 네비 */
+/* ================================== */
+.main-nav-list {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 3.2rem;
+}
+
+.main-nav-link:link,
+.main-nav-link:visited {
+  display: inline-block;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  font-size: 1.8rem;
+
+  transition: all 0.3s;
+}
+
+.main-nav-link:hover,
+.main-nav-link:active {
+  color: #cf711f;
+}
+
+.main-nav-link.nav-cta:link,
+.main-nav-link.nav-cta:visited {
+  padding: 1.2rem, 2.4rem;
+  border-radius: 9px;
+  color: #fff;
+  background-color: #e67e22;
+}
+.main-nav-link.nav-cta:hover,
+.main-nav-link.nav-cta:active {
+  background-color: #cf711f;
+}
+
+.layout-wrapper ::after {
+  content: "";
+  display: block;
+}
+
+.layout-wrapper-container {
+  max-width: 120rem;
+  padding-top: 13.6rem;
+  margin: 0 auto;
+}
+
+/* aside */
+
+.nav-aside {
+  background-color: #fff;
+  font-size: 4.4rem;
+  padding-left: 3.2rem;
+
+  position: fixed;
+  /* top: 9.6rem; */
+  left: 0;
+
+  width: 20%;
   height: 100%;
 }
 
+.nav-list {
+  list-style: none;
+  /* background-color: #cf711f; */
+}
 
+.nav-list a {
+  text-decoration: none; /* 밑줄 제거 */
+  color: lightgray;
+  display: block;
+  padding: 10px;
+}
+
+/* main */
+.test {
+  margin-left: 20%;
+  width: 100%;
+  z-index: -1;
+}
+
+.section-hero {
+}
+
+.section-hero::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 5.6rem;
+}
+
+.hero-img-box {
+  /* position: absolute; */
+  width: 100%; /* 가로폭을 100%로 설정 */
+}
+
+.hero-img {
+  width: 100%; /* 이미지가 박스의 가로폭에 맞게 조절 */
+  height: auto; /* 비율을 유지하며 높이를 자동으로 설정 */
+}
+
+.subtitle-container {
+  /* justify-content: center; */
+  align-items: center;
+  text-align: center;
+}
+
+/* product */
+
+.dddd > div > img {
+  width: 100%;
+}

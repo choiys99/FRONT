@@ -30,22 +30,12 @@ body {
   /* margin-bottom: 9.6rem; */
 }
 
+.grid--2-cols {
+  grid-template-columns: repeat(3, 1fr);
+}
+.grid--3-cols {
+  grid-template-columns: repeat(3, 1fr);
+}
 .grid--4-cols {
-  grid-template-columns: repeat(4, 1fr);
-}
-
-.c-pageFrontDoor {
-  background-color: black;
-}
-
-/* 세션 */
-
-.season-text {
-  font-size: 3.2rem;
-  margin-bottom: 3.4rem;
-}
-.flex {
-  display: flex;
-  flex-direction: row;
-  gap: 4.4rem;
+  grid-template-columns: repeat(3, 1fr);
 }

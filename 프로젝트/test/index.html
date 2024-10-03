@@ -3,67 +3,104 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>리틀포레스트</title>
+    <title>Document</title>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/general.css" />
   </head>
 
   <body>
-    <div class="main">
-      <div class="menu-item">
-        <ul class="btns">
-          <li class="season">
-            <a href="#" target="#">봄</a>
+    <!-- header -->
+    <header class="header">
+      <a href="#">
+        <img class="logo" alt="로고" src="img/omnifood-logo.png" />
+      </a>
+      <nav class="main-nav">
+        <ul class="main-nav-list">
+          <li><a class="main-nav-link" href="#">login</a></li>
+          <li><a class="main-nav-link" href="#">cart</a></li>
+          <li><a class="main-nav-link" href="#">my</a></li>
+          <li><a class="main-nav-link" href="#">search</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="layout-wrapper-container">
+      <!-- section -->
+      <aside class="nav-aside">
+        <ul class="nav-list">
+          <li class="nav-item">
+            <a href="#">메인</a>
           </li>
-          <li class="season">
-            <a href="#" target="#">여름</a>
+          <li class="nav-item">
+            <a href="#">설명</a>
           </li>
-          <li class="season">
-            <a href="#" target="#">가을</a>
+          <li class="nav-item">
+            <a href="#">작가</a>
           </li>
-          <li class="season">
-            <a href="#" target="#">겨울</a>
+          <li class="nav-item">
+            <a href="#">상품</a>
           </li>
         </ul>
-      </div>
+      </aside>
 
-      <div class="mainImg">
-        <img src="img/리틀포레스트메인.jpg" alt="리틀 포레트스" />
-      </div>
+      <main class="test">
+        <section class="section-hero">
+          <div class="hero-img-box">
+            <img
+              src="img/리틀포레스트메인.jpg"
+              class="hero-img"
+              alt="여자 음식 테이블 그릇"
+            />
+          </div>
+          <div class="subtitle-container grid">
+            <h2>부제목 입니다.</h2>
+            <p>작가이름</p>
+          </div>
+        </section>
+
+        <!-- product page 1 -->
+        <section class="section-featured">
+          <div class="container">
+            <h1>좋아하는 작품을 찾아보세요</h1>
+          </div>
+
+          <div class="grid grid--3-cols dddd">
+            <div>
+              <img src="img/리틀포레스트메인.jpg" />
+              <p>2024 best</p>
+              <p>가격</p>
+            </div>
+            <div>
+              <img src="img/리틀포레스트메인.jpg" />
+              <p>2024 best</p>
+              <p>가격</p>
+            </div>
+            <div>
+              <img src="img/리틀포레스트메인.jpg" />
+              <p>2024 best</p>
+              <p>가격</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-recommended">
+          <div class="container">
+            <h1>추천 컬렉션</h1>
+          </div>
+          <div class="container grid grid--2-cols">
+            <div>
+              <img src="img/리틀포레스트메인.jpg" />
+              <p>2024 best</p>
+              <p>가격</p>
+            </div>
+            <div></div>
+              <img src="img/리틀포레스트메인.jpg" />
+              <p>2024 best</p>
+              <p>가격</p>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
-
-    <section class="section-movie">
-      <div class="container">
-        <div class="player">
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/mHx-vc0vT6g?si=W5g_spPcil-EKGec"
-            title="YouTube video player"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen
-          ></iframe>
-        </div>
-        <p class="meassge">
-          간단한 메시지 에~ 이러한 저러한 이유로 하나 만들어 봣어요 좋은날
-          좋은날 좋게 보내자잉 간단한 메시지 에~ 이러한 저러한 이유로 하나
-          만들어 봣어요 좋은날 좋은날 좋게 보내자잉 편돌이 힘드러 !! 편돌이
-          힘드러 !!
-        </p>
-      </div>
-    </section>
-
-    <section class="section-season-cooking">
-      <div class="container">
-        <p class="season-text">봄</p>
-        <div class="flex">
-          <div class="gridtest">ㄴ</div>
-          <div class="gridtest">ㄴ</div>
-          <div class="gridtest">ㄴ</div>
-        </div>
-      </div>
-    </section>
   </body>
 </html>
