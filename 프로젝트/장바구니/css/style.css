@@ -1,0 +1,25 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.container {
+  max-width: 120rem;
+}
+
+.grid {
+  display: grid;
+}
+.flex {
+  display: flex;
+}
+
+.grid--2-cols {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* dd */
+.title {
+  text-align: center;
+}

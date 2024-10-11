@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            column-gap: 15px;
+        }
+
+        .grid {
+            display: grid;
+        }
+
+        .grid--4-cols {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .button {
+            width: 100%;
+            border: none;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .hero-img {
+            width: 100%;
+        }
+
+        .artwork-description>h1 {
+            border-bottom: 1px solid black;
+        }
+
+        .artwork-details {
+            border: 1px solid black;
+        }
+
+        .detail-item {
+            display: flex
+        }
+
+        .detail-label {
+            width: 25%;
+        }
+
+        .detail-value {
+            width: 100%;
+        }
+
+        .author-info {
+            justify-content: space-between;
+        }
+
+        .product-box {
+            justify-content: space-between;
+        }
+
+        .container {
+            max-width: 120rem;
+        }
+
+        .related-works {
+            justify-content: space-between;
+        }
+
+        .product-list {
+            gap: 6px;
+        }
+
+        .product-img img {
+            width: 100%;
+            /* 부모 요소의 너비에 맞춰 크기 조정 */
+            height: auto;
+            /* 비율 유지 */
+        }
+    </style>
+</head>
+
+<body>
+    <section class="product-info">
+        <div class="container">
+            <div class="hero">
+                <div class="product-pictures">
+                    <img src="img/last of earth guiter.jpg" class="hero-img" alt="여자 음식 테이블 그릇" />
+                    <!-- <ul class="thumb-img">
+                    <li><img src="img/last of earth guiter.jpg" data-target="img/last of earth guiter.jpg" ></li>
+                    <li><img src="img/last of earth guiter.jpg" data-target="img/last of earth guiter.jpg" ></li>
+                    <li><img src="img/last of earth guiter.jpg" data-target="img/last of earth guiter.jpg" ></li>
+                    <li><img src="img/last of earth guiter.jpg" data-target="img/last of earth guiter.jpg" ></li>
+                </ul> -->
+                </div>
+
+                <div class="product-info-container">
+                    <div class="product-header">
+                        <h1 class="product-title">작품제목작품제목작품제목<span class="work-year">2020</span></h1>
+                        <h3 class="product-author">ChoiYeSung</h3>
+                    </div>
+                    <div class="product-price">
+                        <h3>4억5천만원</h3>
+                    </div>
+
+                    <div class="product-details">
+                        <ul>
+                            <li>작업방식</li>
+                            <li>사이즈</li>
+                            <li>스타일</li>
+                        </ul>
+                        <!-- <div class="product-method">
+                        <h3>작업방식</h3>
+                    </div>
+
+                    <div class="product-size">
+                        <h3>사이즈</h3>
+                    </div> -->
+                    </div>
+
+
+
+                    <div class="product-action-buttons">
+                        <button class="buy-button button">구입</button>
+                        <button class="cart-button button">장바구니</button>
+                    </div>
+
+
+                </div>
+                <!-- 
+            <div class="좋아요 주소복사 flex">
+                <div>
+                    임시
+                </div>
+                <div>
+                    임시
+                </div>
+                <div>
+                    임시
+                </div>
+            </div> -->
+
+                <div>
+                    <div class="artwork-description">
+                        <h1>작품 정보</h1>
+                        <div class="artwork-details">
+                            <div class="detail-item">
+                                <p class="detail-label">재료</p>
+                                <p class="detail-value">유화 캔버스</p>
+                            </div>
+                            <div class="detail-item">
+                                <p class="detail-label">크기</p>
+                                <p class="detail-value">15 7/10 × 19 7/10 인치 | 40 × 50 cm</p>
+                            </div>
+                            <div class="detail-item">
+                                <p class="detail-label">진품 인증서</p>
+                                <p class="detail-value">포함 (갤러리 발행)</p>
+                            </div>
+                            <div class="detail-item">
+                                <p class="detail-label">액자</p>
+                                <p class="detail-value">포함되지 않음</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="artwork-description">
+                        <h1>작가</h1>
+                        <div class="artwork-details">
+                            <div class="detail-item">
+                                <p class="detail-label">재료</p>
+                                <p class="detail-value">유화 캔버스</p>
+                            </div>
+                            <div class="detail-item">
+                                <p class="detail-label">크기</p>
+                                <p class="detail-value">15 7/10 × 19 7/10 인치 | 40 × 50 cm</p>
+                            </div>
+                            <div class="detail-item">
+                                <p class="detail-label">진품 인증서</p>
+                                <p class="detail-value">포함 (갤러리 발행)</p>
+                            </div>
+                            <div class="detail-item">
+                                <p class="detail-label">액자</p>
+                                <p class="detail-value">포함되지 않음</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-benefits">
+                    <p>배송</p>
+                    <!-- <ul>
+                    <li>배송 설명</li>
+                    <li>배송 설명</li>
+                    <li>배송 설명</li>
+                </ul> -->
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="other-works">
+        <div class="container">
+
+            <div class="related-works flex">
+                <h3>최예성의 다른 작품</h3>
+                <button class="view-all">모두보기</button>
+            </div>
+
+            <div class="product-list flex">
+                <div class="product-box">
+                    <div class="product-img">
+                        <img src="img/last of earth guiter.jpg">
+                    </div>
+                    <div class="author-info flex">
+                        <div class="product-author-name">최예성</div>
+                        <div class="product-favorite">하트</div>
+                    </div>
+
+                    <div class="product-title">라스트오브어스</div>
+                    <div class="product-price">4억어어거걱</div>
+                </div>
+
+                <div class="product-box">
+                    <div class="product-img">
+                        <img src="img/last of earth guiter.jpg">
+                    </div>
+                    <div class="author-info flex">
+                        <div class="product-author-name">최예성</div>
+                        <div class="product-favorite">하트</div>
+                    </div>
+
+                    <div class="product-title">라스트오브어스</div>
+                    <div class="product-price">4억어어거걱</div>
+                </div>
+
+                <div class="product-box">
+                    <div class="product-img">
+                        <img src="img/last of earth guiter.jpg">
+                    </div>
+                    <div class="author-info flex">
+                        <div class="product-author-name">최예성</div>
+                        <div class="product-favorite">하트</div>
+                    </div>
+
+                    <div class="product-title">라스트오브어스</div>
+                    <div class="product-price">4억어어거걱</div>
+                </div>
+
+                <div class="product-box">
+                    <div class="product-img">
+                        <img src="img/last of earth guiter.jpg">
+                    </div>
+                    <div class="author-info flex">
+                        <div class="product-author-name">최예성</div>
+                        <div class="product-favorite">하트</div>
+                    </div>
+
+                    <div class="product-title">라스트오브어스</div>
+                    <div class="product-price">4억어어거걱</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+</body>
+
+</html>

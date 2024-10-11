@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            border-bottom: 1px solid black;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        body {
+            width: 400px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid;
+        }
+
+        .mb-10px {
+            margin-bottom: 10px;
+        }
+
+        .login-inputs {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            border: none;
+        }
+
+        input[type=text],
+        input[type=password] {
+            padding: 4px 4px;
+        }
+
+        .login-checkbox {
+            display: inline-block;
+            align-items: center;
+            justify-items: flex-start;
+            width: 100%;
+
+        }
+
+        button {
+            width: 100%;
+            background-color: black;
+            color: #fff;
+            border: none;
+            padding: 4px 4px;
+        }
+
+        .auth-links {
+            display: flex;
+            align-items: center;
+            /* 수직 중앙 정렬 */
+            justify-content: space-between;
+            /* 양쪽 끝으로 정렬 */
+            width: 100%;
+            /* 부모 요소의 너비를 기준으로 */
+        }
+
+        .auth-links a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .line-through {
+            display: flex;
+            align-items: center;
+            color: black;
+            font-size: 12px;
+            /* margin: 8px 0; */
+            width: 100%;
+            margin-bottom: 8px;
+            /* 부모 요소에 맞춤 */
+        }
+
+        .line-through::before,
+        .line-through::after {
+            content: "";
+            flex: 1;
+            background: black;
+            height: 1px;
+            margin: 0 8px;
+            /* 줄 사이의 여백 조정 */
+        }
+    </style>
+</head>
+
+<body>
+    <h1>로그인</h1>
+    <div class="login-inputs mb-10px">
+        <input type="text" placeholder="아이디" />
+        <input type="password" placeholder="비밀번호" />
+    </div>
+
+    <div class="login-checkbox mb-10px">
+        <input type="checkbox" id="remember-me" />
+        <label for="remember-me">로그인 정보 저장하기</label>
+    </div>
+
+    <button type="submit">로그인</button>
+
+    <div class="auth-links">
+        <a href="#">회원가입</a>
+        <a href="#">이메일 . 비밀번호 찾기</a>
+    </div>
+    <div class="line-through">
+        <span>또는</span>
+    </div>
+
+
+    <button type="submit">비회원 주문배송 조회</button>
+
+</body>
+
+</html>
